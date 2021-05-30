@@ -10,12 +10,34 @@ using System.Windows.Forms;
 
 namespace MusicManager
 {
-    public partial class Form1 : Form
+    public partial class FormMain : Form
     {
-        public Form1()
+        
+        public FormMain()
         {
             InitializeComponent();
+            
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonPlay_Click(object sender, EventArgs e)
+        {
+            //UI feature to make pause and play buttons overlap
+            buttonPlay.Visible = false;
+            buttonPause.Visible = true;
+            
+        }
+
+
+        private void buttonPause_Click(object sender, EventArgs e)
+        {
+            //UI feature to make pause and play buttons overlap
+            buttonPause.Visible = false;
+            buttonPlay.Visible = true;
+        }
     }
 }
