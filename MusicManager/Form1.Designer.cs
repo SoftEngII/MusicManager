@@ -1,4 +1,4 @@
-﻿
+﻿using TagLib;
 namespace MusicManager
 {
     partial class FormMain
