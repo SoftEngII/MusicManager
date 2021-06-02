@@ -27,7 +27,7 @@ namespace MusicManager
             file.Save();
             return file;
         }
-        public TagLib.File GenreTagChanger(string[] tagName, string tagType)
+        public TagLib.File ArtistTagChanger(string[] tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("artist"))
@@ -47,7 +47,7 @@ namespace MusicManager
             file.Save();
             return file;
         }
-        public TagLib.File GenresTagChanger(string[] tagName, string tagType)
+        public TagLib.File GenreTagChanger(string[] tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("genre"))
