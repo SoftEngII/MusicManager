@@ -13,9 +13,10 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
+        WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
         string folderPath;
         List<AudioFile> songsInFolder = new List<AudioFile>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
-        
+
         public FormMain()
         {
             InitializeComponent();
@@ -32,15 +33,24 @@ namespace MusicManager
             //UI feature to make pause and play buttons overlap
             buttonPlay.Visible = false;
             buttonPause.Visible = true;
-            
-        }
 
+            if (folderPath != null) {
+                string playPath = string.Format(@"{0}\{1}.mp3", folderPath, listBoxSelectedFile.SelectedItem.ToString());
+
+                if (Player.URL != playPath)
+                { Player.URL = playPath; }
+            }
+            Player.controls.play();
+        }
+        // 
 
         private void buttonPause_Click(object sender, EventArgs e)
         {
             //UI feature to make pause and play buttons overlap
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
+
+            Player.controls.pause();
         }
 
         private void buttonFolder_Click(object sender, EventArgs e)
@@ -57,10 +67,10 @@ namespace MusicManager
 
                 //rippp
                 string[] files = Directory.GetFiles(folderPath);
-                foreach(string file in files)
+                foreach (string file in files)
                 {
-        // filter only mp3's
-                    string song = file.Substring(file.Length-3,3);
+                    // filter only mp3's
+                    string song = file.Substring(file.Length - 3, 3);
 
                     if (song.Contains("mp3"))
                     {
@@ -80,10 +90,11 @@ namespace MusicManager
 
                         // Potential improvement, listBox has multicollumn support. Thus, song, album, and artist can be split respectively
                     }
-}
+                }
+                
             }
-            
-
         }
+
+       
     }
 }
