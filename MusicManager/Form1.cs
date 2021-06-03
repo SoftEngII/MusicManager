@@ -13,9 +13,8 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
-        WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
-        string folderPath;
-        List<AudioFile> songsInFolder = new List<AudioFile>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
+        List<string> songsInFolder = new List<string>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
+        List<AudioFile> songStorage = new List<AudioFile>();
 
         public FormMain()
         {
@@ -33,68 +32,47 @@ namespace MusicManager
             //UI feature to make pause and play buttons overlap
             buttonPlay.Visible = false;
             buttonPause.Visible = true;
-
-            if (folderPath != null) {
-                string playPath = string.Format(@"{0}\{1}.mp3", folderPath, listBoxSelectedFile.SelectedItem.ToString());
-
-                if (Player.URL != playPath)
-                { Player.URL = playPath; }
-            }
-            Player.controls.play();
+            
         }
-        // 
+
 
         private void buttonPause_Click(object sender, EventArgs e)
         {
             //UI feature to make pause and play buttons overlap
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
-
-            Player.controls.pause();
         }
 
         private void buttonFolder_Click(object sender, EventArgs e)
         {
-            // future potentially required code.
-            // Clearing the previous list
-            listBoxSelectedFile.Items.Clear();
 
-        folderSelectDialogue = new FolderBrowserDialog();
-        DialogResult dr = folderSelectDialogue.ShowDialog();
+
+            listBoxSelectedFile.Items.Clear();
+            string folderpath;
+            folderSelectDialogue = new FolderBrowserDialog();
+            DialogResult dr = folderSelectDialogue.ShowDialog();
+
             if (dr == DialogResult.OK)
             {
-                folderPath = folderSelectDialogue.SelectedPath;
+                folderpath = folderSelectDialogue.SelectedPath;
 
-                //rippp
-                string[] files = Directory.GetFiles(folderPath);
+
+                string[] files = Directory.GetFiles(folderpath);
+
                 foreach (string file in files)
                 {
-                    // filter only mp3's
-                    string song = file.Substring(file.Length - 3, 3);
-
-                    if (song.Contains("mp3"))
+                    if (file.Contains(".mp3"))
                     {
-                        // adding reference to location of the song
-                        AudioFile mp3file =
-                            new AudioFile
-                            (
-                                file.Substring(
-                                file.LastIndexOf("\\") + 1,
-                                file.LastIndexOf(".") - (file.LastIndexOf("\\") + 1)
-                                )
-                            );
-                        songsInFolder.Add(mp3file);
-                        // add visual string of the song filename, splitter+1 removes file path, whereas after the comma removes .mp3
-                        listBoxSelectedFile.Items.Add(mp3file.name);
-
-
-                        // Potential improvement, listBox has multicollumn support. Thus, song, album, and artist can be split respectively
+                        var tfile = new AudioFile(file);
+                        songStorage.Add(tfile);
+                        listBoxSelectedFile.Items.Add(tfile.ToString());
                     }
-                }
-                
-            }
-        }
 
-       
+
+                }
+            }
+
+
+        }
     }
 }
