@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicManager
 {
-    public class AudioFile
+    public class AudioFile : IComparable<AudioFile>
     {
         private string _emPeeThree;
         private TagLib.File tagLibFile;
@@ -78,6 +78,20 @@ namespace MusicManager
         }
 
 
+        public int CompareTo(AudioFile song2)
+        {
+            for (int i = 0; i < this.tagLibFile.Tag.Title.Length; i++)
+            {
+                if (song2.ToString().Length > i)
+                {
+                    if (this.tagLibFile.Tag.Title[i] > song2.tagLibFile.Tag.Title[i])
+                    { return -1; }
+                    else if (this.tagLibFile.Tag.Title[i] < song2.tagLibFile.Tag.Title[i])
+                    { return 1; }
+                }
+            }
+            return 0;
+        }
     }
 
 }
