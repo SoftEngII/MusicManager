@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace MusicManager
 {
-    public class AudioFile : IDisposable
+    public class AudioFile
     {
         private string _emPeeThree;
-        public TagLib.File file;
+        public TagLib.File tagLibFile;
         public AudioFile(string emPeeThree)
         {
             _emPeeThree = emPeeThree;
-            file = TagLib.File.Create(_emPeeThree);
+            tagLibFile = TagLib.File.Create(_emPeeThree);
         }
 
         public TagLib.File TitleTagChanger(string tagName, string tagType)
@@ -22,50 +22,57 @@ namespace MusicManager
             tagType.ToLower();
             if (tagType.Equals("title"))
             {
-                file.Tag.Title = tagName;
+                tagLibFile.Tag.Title = tagName;
             }
-            file.Save();
-            return file;
+            tagLibFile.Save();
+            return tagLibFile;
         }
         public TagLib.File ArtistTagChanger(string[] tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("artist"))
             {
-                file.Tag.AlbumArtists = tagName;
+                tagLibFile.Tag.AlbumArtists = tagName;
             }
-            file.Save();
-            return file;
+            tagLibFile.Save();
+            return tagLibFile;
         }
         public TagLib.File AlbumTagChanger(string tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("album"))
             {
-                file.Tag.Album = tagName;
+                tagLibFile.Tag.Album = tagName;
             }
-            file.Save();
-            return file;
+            tagLibFile.Save();
+            return tagLibFile;
         }
         public TagLib.File GenreTagChanger(string[] tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("genre"))
             {
-                file.Tag.Genres = tagName;
+                tagLibFile.Tag.Genres = tagName;
             }
-            file.Save();
-            return file;
+            tagLibFile.Save();
+            return tagLibFile;
         }
-
-        public void Dispose()
+        public TagLib.File CommentTagChanger(string tagName, string tagType)
         {
-            throw new NotImplementedException();
+            tagType.ToLower();
+            if (tagType.Equals("comment"))
+            {
+                tagLibFile.Tag.Comment = tagName;
+            }
+            tagLibFile.Save();
+            return tagLibFile;
         }
 
+        public override string ToString()
+        {
+            return $"Artist: {tagLibFile.Tag.Performers}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
 
-
-        //var year = file.Tag.Year;
+        }
 
 
     }
