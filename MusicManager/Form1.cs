@@ -85,7 +85,7 @@ namespace MusicManager
                             );
                         songsInFolder.Add(mp3file);
                         // add visual string of the song filename, splitter+1 removes file path, whereas after the comma removes .mp3
-                        listBoxSelectedFile.Items.Add(mp3file.Name);
+                        listBoxSelectedFile.Items.Add(mp3file.name);
 
 
                         // Potential improvement, listBox has multicollumn support. Thus, song, album, and artist can be split respectively

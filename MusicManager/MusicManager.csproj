@@ -5,8 +5,10 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-
-  <ItemGroup>
+<ItemGroup>
+    <PackageReference Include="TagLibSharp" Version="2.2.0" />
+  </ItemGroup>
+	  <ItemGroup>
     <COMReference Include="WMPLib">
       <VersionMinor>0</VersionMinor>
       <VersionMajor>1</VersionMajor>
@@ -16,6 +18,9 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="TagLibSharp" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>

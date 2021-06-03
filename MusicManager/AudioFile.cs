@@ -9,12 +9,12 @@ namespace MusicManager
 {
     public class AudioFile
     {
-        private string _emPeeThree;
+        public string name;
         public TagLib.File tagLibFile;
         public AudioFile(string emPeeThree)
         {
-            _emPeeThree = emPeeThree;
-            tagLibFile = TagLib.File.Create(_emPeeThree);
+            name = emPeeThree;
+            tagLibFile = TagLib.File.Create(name);
         }
 
         public TagLib.File TitleTagChanger(string tagName, string tagType)
