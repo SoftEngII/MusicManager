@@ -13,7 +13,8 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
-        List<string> songsInFolder = new List<string>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
+        WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
+        //List<string> songsInFolder = new List<string>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
         List<AudioFile> songStorage = new List<AudioFile>();
 
         public FormMain()
@@ -32,7 +33,17 @@ namespace MusicManager
             //UI feature to make pause and play buttons overlap
             buttonPlay.Visible = false;
             buttonPause.Visible = true;
-            
+
+            if (listBoxSelectedFile.Items.Count != 0 && listBoxSelectedFile.SelectedIndex != -1)//songStorage[0].GetName() != null || songStorage[0].GetName() != ""
+            {
+                                // *****songStorage reference is BAD for sorting here. Needs changed!!******
+                string playPath = string.Format(@"{0}", songStorage[listBoxSelectedFile.SelectedIndex].GetName());
+
+                if (Player.URL != playPath)
+                { Player.URL = playPath; }
+            }
+            Player.controls.play();
+
         }
 
 
@@ -41,6 +52,8 @@ namespace MusicManager
             //UI feature to make pause and play buttons overlap
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
+
+            Player.controls.pause();
         }
 
         private void buttonFolder_Click(object sender, EventArgs e)
@@ -48,6 +61,7 @@ namespace MusicManager
 
 
             listBoxSelectedFile.Items.Clear();
+            songStorage.Clear();
             string folderpath;
             folderSelectDialogue = new FolderBrowserDialog();
             DialogResult dr = folderSelectDialogue.ShowDialog();
@@ -63,7 +77,7 @@ namespace MusicManager
                 {
                     if (file.Contains(".mp3"))
                     {
-                        var tfile = new AudioFile(file);
+                        AudioFile tfile = new AudioFile(file);
                         songStorage.Add(tfile);
                         listBoxSelectedFile.Items.Add(tfile.ToString());
                     }

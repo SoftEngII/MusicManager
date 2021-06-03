@@ -17,6 +17,9 @@ namespace MusicManager
             tagLibFile = TagLib.File.Create(emPeeThree);
         }
 
+        public string GetName()
+        { return _emPeeThree; }
+
         public TagLib.File TitleTagChanger(string tagName, string tagType)
         {
             tagType.ToLower();
