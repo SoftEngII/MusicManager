@@ -1,4 +1,4 @@
-﻿using TagLib;
+using TagLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
