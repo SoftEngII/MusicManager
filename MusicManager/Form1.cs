@@ -13,7 +13,7 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
-        List<string> songsInFolder = new List<string>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
+        //List<string> songsInFolder = new List<string>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
         List<AudioFile> songStorage = new List<AudioFile>();
 
         public FormMain()

@@ -1,4 +1,4 @@
-using TagLib;
+﻿using TagLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,61 +10,70 @@ namespace MusicManager
     public class AudioFile
     {
         private string _emPeeThree;
-        public TagLib.File tagLibFile;
+        private TagLib.File tagLibFile;
         public AudioFile(string emPeeThree)
         {
             _emPeeThree = emPeeThree;
-            tagLibFile = TagLib.File.Create(_emPeeThree);
+            tagLibFile = TagLib.File.Create(emPeeThree);
         }
 
-        public TagLib.File TitleTagChanger(string tagName, string tagType)
+        public TagLib.File SingleTagChanger(string tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("title"))
             {
-                tagLibFile.Tag.Title = tagName;
+                TitleTagChanger(tagName, tagType);
+            }           
+            if (tagType.Equals("album"))
+            {
+                AlbumTagChanger(tagName, tagType);
+            }           
+            if (tagType.Equals("comment"))
+            {
+                CommentTagChanger(tagName, tagType);    
             }
             tagLibFile.Save();
             return tagLibFile;
         }
-        public TagLib.File ArtistTagChanger(string[] tagName, string tagType)
+
+        public TagLib.File MultiTagChanger(string[] tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("artist"))
             {
-                tagLibFile.Tag.AlbumArtists = tagName;
+                ArtistTagChanger(tagName, tagType);
             }
-            tagLibFile.Save();
-            return tagLibFile;
-        }
-        public TagLib.File AlbumTagChanger(string tagName, string tagType)
-        {
-            tagType.ToLower();
-            if (tagType.Equals("album"))
-            {
-                tagLibFile.Tag.Album = tagName;
-            }
-            tagLibFile.Save();
-            return tagLibFile;
-        }
-        public TagLib.File GenreTagChanger(string[] tagName, string tagType)
-        {
-            tagType.ToLower();
             if (tagType.Equals("genre"))
             {
-                tagLibFile.Tag.Genres = tagName;
+                GenreTagChanger(tagName, tagType);
             }
             tagLibFile.Save();
             return tagLibFile;
         }
-        public TagLib.File CommentTagChanger(string tagName, string tagType)
+
+        private TagLib.File TitleTagChanger(string tagName, string tagType)
         {
-            tagType.ToLower();
-            if (tagType.Equals("comment"))
-            {
-                tagLibFile.Tag.Comment = tagName;
-            }
-            tagLibFile.Save();
+            tagLibFile.Tag.Title = tagName;           
+            return tagLibFile;
+        }
+        private TagLib.File ArtistTagChanger(string[] tagName, string tagType)
+        {
+            tagLibFile.Tag.AlbumArtists = tagName;
+            return tagLibFile;
+        }
+        private TagLib.File AlbumTagChanger(string tagName, string tagType)
+        {
+            tagLibFile.Tag.Album = tagName;
+            return tagLibFile;
+        }
+        private TagLib.File GenreTagChanger(string[] tagName, string tagType)
+        {
+            tagLibFile.Tag.Genres = tagName;
+            return tagLibFile;
+        }
+        private TagLib.File CommentTagChanger(string tagName, string tagType)
+        {
+            tagLibFile.Tag.Comment = tagName;
             return tagLibFile;
         }
 
