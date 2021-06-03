@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 ﻿using TagLib;
 using System;
-=======
-﻿using System;
->>>>>>> DevMain
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +9,6 @@ namespace MusicManager
 {
     public class AudioFile
     {
-<<<<<<< HEAD
         private string _emPeeThree;
         public TagLib.File tagLibFile;
         public AudioFile(string emPeeThree)
@@ -76,28 +71,10 @@ namespace MusicManager
         public override string ToString()
         {
             return $"Artist: {tagLibFile.Tag.Performers}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
-
-        }
-
-
-    }
-=======
-        public AudioFile(string name)
-        {
-            this.Name = name;
-        }
-
-        public string Name { get; set; }
-
-        // Meta-Data
-        public string Genre { get; set; }
-        public string Album { get; set; }
-        public List<string> Artist { get; set; }
-        public string Title { get; set; }
         
     }
 
 
->>>>>>> DevMain
+    }
 
 }
