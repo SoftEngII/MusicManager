@@ -150,5 +150,9 @@ namespace MusicManager
             Player.controls.play();
         }
 
+        private void listBoxSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

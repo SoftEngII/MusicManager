@@ -73,7 +73,9 @@ namespace MusicManager
 
         public override string ToString()
         {
-            return $"Artist: {tagLibFile.Tag.Performers}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
+            //The tag to get the artist returns a string[] not a string. 
+            return $"Artist: {tagLibFile.Tag.Performers[0]}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
+            
 
         }
 
