@@ -72,6 +72,7 @@ namespace MusicManager
             this.buttonForward.Size = new System.Drawing.Size(50, 38);
             this.buttonForward.TabIndex = 0;
             this.buttonForward.UseVisualStyleBackColor = true;
+            this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
             // 
             // buttonBack
             // 
@@ -86,6 +87,7 @@ namespace MusicManager
             this.buttonBack.Size = new System.Drawing.Size(50, 38);
             this.buttonBack.TabIndex = 0;
             this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // buttonPause
             // 
@@ -176,7 +178,7 @@ namespace MusicManager
             this.buttonSort.Size = new System.Drawing.Size(66, 50);
             this.buttonSort.TabIndex = 0;
             this.buttonSort.UseVisualStyleBackColor = true;
-            this.buttonSort.Click += new System.EventHandler(this.buttonPause_Click);
+            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
             // 
             // buttonTag
             // 
@@ -234,6 +236,7 @@ namespace MusicManager
             this.listBoxSelectedFile.Name = "listBoxSelectedFile";
             this.listBoxSelectedFile.Size = new System.Drawing.Size(664, 325);
             this.listBoxSelectedFile.TabIndex = 2;
+            this.listBoxSelectedFile.SelectedIndexChanged += new System.EventHandler(this.listBoxSelectedFile_SelectedIndexChanged);
             // 
             // FormMain
             // 

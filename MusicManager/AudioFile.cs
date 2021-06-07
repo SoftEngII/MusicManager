@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicManager
 {
-    public class AudioFile
+    public class AudioFile : IComparable<AudioFile>
     {
         private string _emPeeThree;
         private TagLib.File tagLibFile;
@@ -17,7 +17,14 @@ namespace MusicManager
             tagLibFile = TagLib.File.Create(emPeeThree);
         }
 
+<<<<<<< HEAD
         public TagLib.File SingleTagChanger(string tagName, string tagType)
+=======
+        public string GetName()
+        { return _emPeeThree; }
+
+        public TagLib.File TitleTagChanger(string tagName, string tagType)
+>>>>>>> origin/DevMain
         {
             tagType.ToLower();
             if (tagType.Equals("title"))
@@ -79,11 +86,33 @@ namespace MusicManager
 
         public override string ToString()
         {
+<<<<<<< HEAD
             return $"Artist: {tagLibFile.Tag.Performers}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
         
     }
+=======
+            //The tag to get the artist returns a string[] not a string. 
+            return $"Artist: {tagLibFile.Tag.Performers[0]}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
+            
+
+        }
+>>>>>>> origin/DevMain
 
 
+        public int CompareTo(AudioFile song2)
+        {
+            for (int i = 0; i < this.tagLibFile.Tag.Title.Length; i++)
+            {
+                if (song2.ToString().Length > i)
+                {
+                    if (this.tagLibFile.Tag.Title[i] > song2.tagLibFile.Tag.Title[i])
+                    { return -1; }
+                    else if (this.tagLibFile.Tag.Title[i] < song2.tagLibFile.Tag.Title[i])
+                    { return 1; }
+                }
+            }
+            return 0;
+        }
     }
 
 }
