@@ -17,6 +17,7 @@ namespace MusicManager
         private bool ascendingOrder;
         WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
         List<AudioFile> songStorage = new List<AudioFile>();
+        private bool ascSorted = false;
 
         public FormMain()
         {
@@ -29,16 +30,23 @@ namespace MusicManager
 
         }
 
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            
+        }
+
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             //UI feature to make pause and play buttons overlap
-            buttonPlay.Visible = false;
-            buttonPause.Visible = true;
+            
 
-            if (listBoxSelectedFile.Items.Count != 0 && listBoxSelectedFile.SelectedIndex != -1)
+            if (dataGridViewFileList.RowCount != 0 && dataGridViewFileList.SelectedRows.Count == 1)
             {
-                PlaySong(listBoxSelectedFile.SelectedIndex);
+                buttonPlay.Visible = false;
+                buttonPause.Visible = true;
+                PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
             }
+
             }
 
 
@@ -55,7 +63,8 @@ namespace MusicManager
         {
 
             ascendingOrder = false;
-            listBoxSelectedFile.Items.Clear();
+            dataGridViewFileList.Rows.Clear();
+            
             songStorage.Clear();
             string folderpath;
             folderSelectDialogue = new FolderBrowserDialog();
@@ -74,7 +83,8 @@ namespace MusicManager
                     {
                         AudioFile tfile = new AudioFile(file);
                         songStorage.Add(tfile);
-                        listBoxSelectedFile.Items.Add(tfile.ToString()); 
+                        dataGridViewFileList.Rows.Add(tfile.RowData());
+                         
                     }
                 }
                 Sort();
@@ -89,52 +99,52 @@ namespace MusicManager
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            if( currentsongIndex != 0)
+            //Back button to change song being played.
+            if (currentsongIndex != 0)
             {
                 currentsongIndex--;
                 PlaySong(currentsongIndex);
-                listBoxSelectedFile.SelectedIndex = currentsongIndex;
+                
+            }
+            //If song being played is the first song in the list. The index will be moved to the last song in the list.
+            else if (currentsongIndex == 0)
+            {
+                currentsongIndex = dataGridViewFileList.Rows.Count - 1;
+                PlaySong(currentsongIndex);
             }
         }
         private void buttonForward_Click(object sender, EventArgs e)
         {
-            // If you are on the last song on the list, press the sort button, then button forward, it resets you to the top of the list and continues playing the song, pressing it again fixes this. Not really a bug though.
-            if (currentsongIndex+1 < songStorage.Count)
+            //Plays next song in list
+            if (currentsongIndex != dataGridViewFileList.Rows.Count - 1)
             {
                 currentsongIndex++;
                 PlaySong(currentsongIndex);
-                listBoxSelectedFile.SelectedIndex = currentsongIndex;
-            } else
+
+            }
+            //If song being played is the last song in the list. Moves index to beginning of list.
+            else if (currentsongIndex == dataGridViewFileList.Rows.Count - 1)
             {
                 currentsongIndex = 0;
                 PlaySong(currentsongIndex);
-                listBoxSelectedFile.SelectedIndex = currentsongIndex;
             }
         }
 
         private void Sort()
         {
-            if (ascendingOrder == true)
+            
+            if (ascSorted == false)
             {
-                ascendingOrder = false;
-                songStorage.Sort();
-                listBoxSelectedFile.Items.Clear();
-                foreach (AudioFile tfile in songStorage)
-                {
-                    listBoxSelectedFile.Items.Add(tfile.ToString());
-                }
+                dataGridViewFileList.Sort(ArtistColumn, ListSortDirection.Ascending);
+                ascSorted = true;
             }
-            else
+            else if (ascSorted)
             {
-                ascendingOrder = true;
+                dataGridViewFileList.Sort(ArtistColumn, ListSortDirection.Descending);
+                ascSorted = false;
+            }
 
-                songStorage.Reverse();
-                listBoxSelectedFile.Items.Clear();
-                foreach (AudioFile tfile in songStorage)
-                {
-                    listBoxSelectedFile.Items.Add(tfile.ToString());
-                }
-            }
+
         }
         private void PlaySong(int index)
         {

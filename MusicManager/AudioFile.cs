@@ -74,9 +74,19 @@ namespace MusicManager
         public override string ToString()
         {
             //The tag to get the artist returns a string[] not a string. 
-            return $"Artist: {tagLibFile.Tag.Performers[0]}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
+            return FormattedString.AudioFileString(tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration);
+
+
+
+            //return $"Artist: {tagLibFile.Tag.Performers[0]}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
             
 
+        }
+
+        public string[] RowData()
+        {
+            string[] row = new string[] { tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss") };
+            return row;
         }
 
 
