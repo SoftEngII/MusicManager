@@ -14,9 +14,9 @@ namespace MusicManager
     public partial class FormMain : Form
     {
         private int currentsongIndex;
-        private bool ascendingOrder;
         WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
         List<AudioFile> songStorage = new List<AudioFile>();
+        private bool ascSorted = false;
 
         public FormMain()
         {
@@ -29,16 +29,36 @@ namespace MusicManager
 
         }
 
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            string nameOfAlbum = "test"; // Obvious Test Value
+
+
+            // All of this gets the path and formats
+            string path = Application.StartupPath;
+            int start = path.IndexOf(@"bin");
+            path = string.Format(@"{0}Albums\{1}.txt",path.Substring(0, start), nameOfAlbum);
+
+            // Takes User selected songs and places them into text file
+            StreamWriter newAlbum = System.IO.File.CreateText(path);
+
+        }
+
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             //UI feature to make pause and play buttons overlap
-            buttonPlay.Visible = false;
-            buttonPause.Visible = true;
 
-            if (listBoxSelectedFile.Items.Count != 0 && listBoxSelectedFile.SelectedIndex != -1)
+            if ( 
+                    //dataGridViewFileList.RowCount != 0 && dont think this is needed anymore
+                   dataGridViewFileList.SelectedCells.Count == 1 ||
+                   dataGridViewFileList.SelectedRows.Count == 1
+               )
             {
-                PlaySong(listBoxSelectedFile.SelectedIndex);
+                buttonPlay.Visible = false;
+                buttonPause.Visible = true;
+                PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
             }
+
             }
 
 
@@ -51,11 +71,13 @@ namespace MusicManager
             Player.controls.pause();
         }
 
+        // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
 
-            ascendingOrder = false;
-            listBoxSelectedFile.Items.Clear();
+            //ascendingOrder = false;
+            dataGridViewFileList.Rows.Clear();
+            
             songStorage.Clear();
             string folderpath;
             folderSelectDialogue = new FolderBrowserDialog();
@@ -74,7 +96,8 @@ namespace MusicManager
                     {
                         AudioFile tfile = new AudioFile(file);
                         songStorage.Add(tfile);
-                        listBoxSelectedFile.Items.Add(tfile.ToString()); 
+                        dataGridViewFileList.Rows.Add(tfile.RowData());
+                         
                     }
                 }
                 Sort();
@@ -82,60 +105,44 @@ namespace MusicManager
 
 
         }
-        private void buttonSort_Click(object sender, EventArgs e)
-        {
-            Sort();
-        }
+
+      
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            if( currentsongIndex != 0)
+            //Back button to change song being played.
+            if (currentsongIndex != 0)
             {
                 currentsongIndex--;
                 PlaySong(currentsongIndex);
-                listBoxSelectedFile.SelectedIndex = currentsongIndex;
+                
+            }
+            //If song being played is the first song in the list. The index will be moved to the last song in the list.
+            else if (currentsongIndex == 0)
+            {
+                currentsongIndex = dataGridViewFileList.Rows.Count - 1;
+                PlaySong(currentsongIndex);
             }
         }
         private void buttonForward_Click(object sender, EventArgs e)
         {
-            // If you are on the last song on the list, press the sort button, then button forward, it resets you to the top of the list and continues playing the song, pressing it again fixes this. Not really a bug though.
-            if (currentsongIndex+1 < songStorage.Count)
+            //Plays next song in list
+            if (currentsongIndex != dataGridViewFileList.Rows.Count - 1)
             {
                 currentsongIndex++;
                 PlaySong(currentsongIndex);
-                listBoxSelectedFile.SelectedIndex = currentsongIndex;
-            } else
+
+            }
+            //If song being played is the last song in the list. Moves index to beginning of list.
+            else if (currentsongIndex == dataGridViewFileList.Rows.Count - 1)
             {
                 currentsongIndex = 0;
                 PlaySong(currentsongIndex);
-                listBoxSelectedFile.SelectedIndex = currentsongIndex;
             }
         }
 
-        private void Sort()
-        {
-            if (ascendingOrder == true)
-            {
-                ascendingOrder = false;
-                songStorage.Sort();
-                listBoxSelectedFile.Items.Clear();
-                foreach (AudioFile tfile in songStorage)
-                {
-                    listBoxSelectedFile.Items.Add(tfile.ToString());
-                }
-            }
-            else
-            {
-                ascendingOrder = true;
 
-                songStorage.Reverse();
-                listBoxSelectedFile.Items.Clear();
-                foreach (AudioFile tfile in songStorage)
-                {
-                    listBoxSelectedFile.Items.Add(tfile.ToString());
-                }
-            }
-        }
+        // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
 
@@ -150,6 +157,7 @@ namespace MusicManager
             Player.controls.play();
         }
 
+        // can potentially be removed
         private void listBoxSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
         {
 
