@@ -1,4 +1,5 @@
-﻿using TagLib;
+﻿
+using TagLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,77 +18,68 @@ namespace MusicManager
             tagLibFile = TagLib.File.Create(emPeeThree);
         }
 
-        public string GetName()
-        { return _emPeeThree; }
+        public string GetName() { return _emPeeThree; }
 
-        public TagLib.File TitleTagChanger(string tagName, string tagType)
+        public TagLib.File SingleTagChanger(string tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("title"))
             {
-                tagLibFile.Tag.Title = tagName;
+                TitleTagChanger(tagName, tagType);
+            }
+            if (tagType.Equals("album"))
+            {
+                AlbumTagChanger(tagName, tagType);
+            }
+            if (tagType.Equals("comment"))
+            {
+                CommentTagChanger(tagName, tagType);
             }
             tagLibFile.Save();
             return tagLibFile;
         }
-        public TagLib.File ArtistTagChanger(string[] tagName, string tagType)
+
+        public TagLib.File MultiTagChanger(string[] tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("artist"))
             {
-                tagLibFile.Tag.AlbumArtists = tagName;
+                ArtistTagChanger(tagName, tagType);
             }
-            tagLibFile.Save();
-            return tagLibFile;
-        }
-        public TagLib.File AlbumTagChanger(string tagName, string tagType)
-        {
-            tagType.ToLower();
-            if (tagType.Equals("album"))
-            {
-                tagLibFile.Tag.Album = tagName;
-            }
-            tagLibFile.Save();
-            return tagLibFile;
-        }
-        public TagLib.File GenreTagChanger(string[] tagName, string tagType)
-        {
-            tagType.ToLower();
             if (tagType.Equals("genre"))
             {
-                tagLibFile.Tag.Genres = tagName;
-            }
-            tagLibFile.Save();
-            return tagLibFile;
-        }
-        public TagLib.File CommentTagChanger(string tagName, string tagType)
-        {
-            tagType.ToLower();
-            if (tagType.Equals("comment"))
-            {
-                tagLibFile.Tag.Comment = tagName;
+                GenreTagChanger(tagName, tagType);
             }
             tagLibFile.Save();
             return tagLibFile;
         }
 
-        public override string ToString()
+        private TagLib.File TitleTagChanger(string tagName, string tagType)
         {
-            //The tag to get the artist returns a string[] not a string. 
-            return FormattedString.AudioFileString(tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration);
-
-
-
-            //return $"Artist: {tagLibFile.Tag.Performers[0]}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
-            
-
+            tagLibFile.Tag.Title = tagName;
+            return tagLibFile;
+        }
+        private TagLib.File ArtistTagChanger(string[] tagName, string tagType)
+        {
+            tagLibFile.Tag.AlbumArtists = tagName;
+            return tagLibFile;
+        }
+        private TagLib.File AlbumTagChanger(string tagName, string tagType)
+        {
+            tagLibFile.Tag.Album = tagName;
+            return tagLibFile;
+        }
+        private TagLib.File GenreTagChanger(string[] tagName, string tagType)
+        {
+            tagLibFile.Tag.Genres = tagName;
+            return tagLibFile;
+        }
+        private TagLib.File CommentTagChanger(string tagName, string tagType)
+        {
+            tagLibFile.Tag.Comment = tagName;
+            return tagLibFile;
         }
 
-        public string[] RowData()
-        {
-            string[] row = new string[] { tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss") };
-            return row;
-        }
 
 
         public int CompareTo(AudioFile song2)
@@ -103,6 +95,12 @@ namespace MusicManager
                 }
             }
             return 0;
+        }
+
+        public string[] RowData()
+        {
+            string[] row = new string[] { tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss") };
+            return row;
         }
     }
 

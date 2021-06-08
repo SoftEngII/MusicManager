@@ -14,7 +14,6 @@ namespace MusicManager
     public partial class FormMain : Form
     {
         private int currentsongIndex;
-        //private bool ascendingOrder;
         WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
         List<AudioFile> songStorage = new List<AudioFile>();
         private bool ascSorted = false;
@@ -107,11 +106,7 @@ namespace MusicManager
 
         }
 
-        // May be able to be removed
-        private void buttonSort_Click(object sender, EventArgs e)
-        {
-            Sort();
-        }
+      
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
@@ -146,23 +141,6 @@ namespace MusicManager
             }
         }
 
-        // can potentially be removed
-        private void Sort()
-        {
-            
-            if (ascSorted == false)
-            {
-                dataGridViewFileList.Sort(ArtistColumn, ListSortDirection.Ascending);
-                ascSorted = true;
-            }
-            else if (ascSorted)
-            {
-                dataGridViewFileList.Sort(ArtistColumn, ListSortDirection.Descending);
-                ascSorted = false;
-            }
-
-
-        }
 
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
