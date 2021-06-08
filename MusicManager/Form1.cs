@@ -14,7 +14,7 @@ namespace MusicManager
     public partial class FormMain : Form
     {
         private int currentsongIndex;
-        private bool ascendingOrder;
+        //private bool ascendingOrder;
         WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
         List<AudioFile> songStorage = new List<AudioFile>();
         private bool ascSorted = false;
@@ -32,15 +32,28 @@ namespace MusicManager
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            
+            string nameOfAlbum = "test"; // Obvious Test Value
+
+
+            // All of this gets the path and formats
+            string path = Application.StartupPath;
+            int start = path.IndexOf(@"bin");
+            path = string.Format(@"{0}Albums\{1}.txt",path.Substring(0, start), nameOfAlbum);
+
+            // Takes User selected songs and places them into text file
+            StreamWriter newAlbum = System.IO.File.CreateText(path);
+
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             //UI feature to make pause and play buttons overlap
-            
 
-            if (dataGridViewFileList.RowCount != 0 && dataGridViewFileList.SelectedRows.Count == 1)
+            if ( 
+                    //dataGridViewFileList.RowCount != 0 && dont think this is needed anymore
+                   dataGridViewFileList.SelectedCells.Count == 1 ||
+                   dataGridViewFileList.SelectedRows.Count == 1
+               )
             {
                 buttonPlay.Visible = false;
                 buttonPause.Visible = true;
@@ -59,10 +72,11 @@ namespace MusicManager
             Player.controls.pause();
         }
 
+        // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
 
-            ascendingOrder = false;
+            //ascendingOrder = false;
             dataGridViewFileList.Rows.Clear();
             
             songStorage.Clear();
@@ -92,6 +106,8 @@ namespace MusicManager
 
 
         }
+
+        // May be able to be removed
         private void buttonSort_Click(object sender, EventArgs e)
         {
             Sort();
@@ -130,6 +146,7 @@ namespace MusicManager
             }
         }
 
+        // can potentially be removed
         private void Sort()
         {
             
@@ -146,6 +163,8 @@ namespace MusicManager
 
 
         }
+
+        // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
 
@@ -160,6 +179,7 @@ namespace MusicManager
             Player.controls.play();
         }
 
+        // can potentially be removed
         private void listBoxSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
         {
 
