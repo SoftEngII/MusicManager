@@ -17,14 +17,9 @@ namespace MusicManager
             tagLibFile = TagLib.File.Create(emPeeThree);
         }
 
-<<<<<<< HEAD
-        public TagLib.File SingleTagChanger(string tagName, string tagType)
-=======
-        public string GetName()
-        { return _emPeeThree; }
+        public string GetName() { return _emPeeThree; }
 
-        public TagLib.File TitleTagChanger(string tagName, string tagType)
->>>>>>> origin/DevMain
+        public TagLib.File SingleTagChanger(string tagName, string tagType)
         {
             tagType.ToLower();
             if (tagType.Equals("title"))
@@ -86,17 +81,9 @@ namespace MusicManager
 
         public override string ToString()
         {
-<<<<<<< HEAD
             return $"Artist: {tagLibFile.Tag.Performers}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
         
     }
-=======
-            //The tag to get the artist returns a string[] not a string. 
-            return $"Artist: {tagLibFile.Tag.Performers[0]}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
-            
-
-        }
->>>>>>> origin/DevMain
 
 
         public int CompareTo(AudioFile song2)

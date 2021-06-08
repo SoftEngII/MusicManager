@@ -13,13 +13,10 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
-<<<<<<< HEAD
-        //List<string> songsInFolder = new List<string>(); // Can be made into a list of a song class, which would have more info, or we can just store reference here as is done already
-=======
+        ContextMenuStrip rightClick = new ContextMenuStrip();
         private int currentsongIndex;
         private bool ascendingOrder;
         WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
->>>>>>> origin/DevMain
         List<AudioFile> songStorage = new List<AudioFile>();
 
         public FormMain()
@@ -155,6 +152,11 @@ namespace MusicManager
         }
 
         private void listBoxSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
 
         }
