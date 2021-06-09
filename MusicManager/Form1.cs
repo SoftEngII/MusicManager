@@ -8,14 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.Wave;
+
 
 namespace MusicManager
 {
     public partial class FormMain : Form
     {
+        private WaveOutEvent outputDevice = new WaveOutEvent();
+        private AudioFileReader audioFile;
         private int currentsongIndex;
         //private bool ascendingOrder;
-        WMPLib.WindowsMediaPlayer Player = new WMPLib.WindowsMediaPlayer();
+
         List<AudioFile> songStorage = new List<AudioFile>();
         private bool ascSorted = false;
 
@@ -47,10 +51,7 @@ namespace MusicManager
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            //UI feature to make pause and play buttons overlap
-
             if ( 
-                    //dataGridViewFileList.RowCount != 0 && dont think this is needed anymore
                    dataGridViewFileList.SelectedCells.Count == 1 ||
                    dataGridViewFileList.SelectedRows.Count == 1
                )
@@ -69,17 +70,16 @@ namespace MusicManager
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
 
-            Player.controls.pause();
+            outputDevice?.Stop();
         }
 
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
-
-            //ascendingOrder = false;
             dataGridViewFileList.Rows.Clear();
-            
             songStorage.Clear();
+            ClearSong();
+
             string folderpath;
             folderSelectDialogue = new FolderBrowserDialog();
             DialogResult dr = folderSelectDialogue.ShowDialog();
@@ -101,16 +101,10 @@ namespace MusicManager
                          
                     }
                 }
-                Sort();
+                
             }
 
 
-        }
-
-        // May be able to be removed
-        private void buttonSort_Click(object sender, EventArgs e)
-        {
-            Sort();
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
@@ -146,23 +140,6 @@ namespace MusicManager
             }
         }
 
-        // can potentially be removed
-        private void Sort()
-        {
-            
-            if (ascSorted == false)
-            {
-                dataGridViewFileList.Sort(ArtistColumn, ListSortDirection.Ascending);
-                ascSorted = true;
-            }
-            else if (ascSorted)
-            {
-                dataGridViewFileList.Sort(ArtistColumn, ListSortDirection.Descending);
-                ascSorted = false;
-            }
-
-
-        }
 
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
@@ -170,13 +147,31 @@ namespace MusicManager
 
             string playPath = string.Format(@"{0}", songStorage[index].GetName());
 
-            if (Player.URL != playPath)
+            if (audioFile == null || audioFile.FileName != playPath)
             {
-                Player.URL = playPath;
+                if(audioFile != null) 
+                { 
+                    audioFile.Dispose();
+                   
+                }
+                
+                audioFile = new AudioFileReader(playPath);
+                outputDevice.Stop();
+                outputDevice.Init(audioFile);
+                //Player.URL = playPath;
                 currentsongIndex = index;
             }
 
-            Player.controls.play();
+            outputDevice.Play();
+        }
+
+        private void ClearSong()
+        {
+            outputDevice.Stop();
+            if (audioFile != null)
+            { audioFile.Dispose(); }
+            buttonPause.Visible = false;
+            buttonPlay.Visible = true;
         }
 
         // can potentially be removed
