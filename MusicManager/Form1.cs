@@ -79,16 +79,16 @@ namespace MusicManager
             songStorage.Clear();
             ClearSong();
 
-            string folderpath;
-            folderSelectDialogue = new FolderBrowserDialog();
-            DialogResult dr = folderSelectDialogue.ShowDialog();
+            string[] files;
+            openFileDialog = new OpenFileDialog();
+            DialogResult dr = openFileDialog.ShowDialog();
 
             if (dr == DialogResult.OK)
             {
-                folderpath = folderSelectDialogue.SelectedPath;
+                files = openFileDialog.FileNames;
 
 
-                string[] files = Directory.GetFiles(folderpath);
+                //string[] files = Directory.GetFiles(folderpath);
 
                 foreach (string file in files)
                 {
@@ -179,12 +179,6 @@ namespace MusicManager
             { audioFile.Dispose(); }
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
-        }
-
-        // can potentially be removed
-        private void listBoxSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
