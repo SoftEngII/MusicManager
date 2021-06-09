@@ -186,5 +186,10 @@ namespace MusicManager
         {
 
         }
+
+        private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
     }
 }
