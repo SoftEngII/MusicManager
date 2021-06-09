@@ -29,6 +29,7 @@ namespace MusicManager
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelMusicControls = new System.Windows.Forms.Panel();
             this.buttonSort = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
@@ -46,6 +47,7 @@ namespace MusicManager
             this.TrackColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AlbumColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DurationColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.panelMusicControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
             this.SuspendLayout();
@@ -242,6 +244,7 @@ namespace MusicManager
             this.DurationColumn});
             this.dataGridViewFileList.Location = new System.Drawing.Point(-2, 65);
             this.dataGridViewFileList.Name = "dataGridViewFileList";
+            this.dataGridViewFileList.RowHeadersWidth = 51;
             this.dataGridViewFileList.RowTemplate.Height = 29;
             this.dataGridViewFileList.Size = new System.Drawing.Size(627, 299);
             this.dataGridViewFileList.TabIndex = 2;
@@ -250,12 +253,14 @@ namespace MusicManager
             // 
             this.ArtistColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ArtistColumn.HeaderText = "Artist";
+            this.ArtistColumn.MinimumWidth = 6;
             this.ArtistColumn.Name = "ArtistColumn";
             // 
             // TrackColumn
             // 
             this.TrackColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.TrackColumn.HeaderText = "Track";
+            this.TrackColumn.MinimumWidth = 6;
             this.TrackColumn.Name = "TrackColumn";
             this.TrackColumn.ReadOnly = true;
             // 
@@ -263,6 +268,7 @@ namespace MusicManager
             // 
             this.AlbumColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.AlbumColumn.HeaderText = "Album";
+            this.AlbumColumn.MinimumWidth = 6;
             this.AlbumColumn.Name = "AlbumColumn";
             this.AlbumColumn.ReadOnly = true;
             // 
@@ -270,8 +276,15 @@ namespace MusicManager
             // 
             this.DurationColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.DurationColumn.HeaderText = "Duration";
+            this.DurationColumn.MinimumWidth = 6;
             this.DurationColumn.Name = "DurationColumn";
             this.DurationColumn.ReadOnly = true;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // FormMain
             // 
@@ -313,6 +326,7 @@ namespace MusicManager
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn AlbumColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn DurationColumn;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }
 

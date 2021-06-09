@@ -101,6 +101,11 @@ namespace MusicManager
             }
             return 0;
         }
+        public string[] RowData()
+        {
+            string[] row = new string[] { tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss") };
+            return row;
+        }
     }
 
 }
