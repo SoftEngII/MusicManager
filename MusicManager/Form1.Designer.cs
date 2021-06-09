@@ -46,9 +46,18 @@ namespace MusicManager
             this.TrackColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AlbumColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DurationColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.rightClickMainForm = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addSongsToQueue = new System.Windows.Forms.ToolStripMenuItem();
+            this.tagChangeMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.albumTagChange = new System.Windows.Forms.ToolStripMenuItem();
+            this.artistTagChange = new System.Windows.Forms.ToolStripMenuItem();
+            this.genreTagChange = new System.Windows.Forms.ToolStripMenuItem();
+            this.sequenceTagChange = new System.Windows.Forms.ToolStripMenuItem();
+            this.titleTagChange = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.panelMusicControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
+            this.rightClickMainForm.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelMusicControls
@@ -262,11 +271,70 @@ namespace MusicManager
             this.DurationColumn.Name = "DurationColumn";
             this.DurationColumn.ReadOnly = true;
             // 
-            // contextMenuStrip1
+            // rightClickMainForm
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.rightClickMainForm.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.rightClickMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addSongsToQueue,
+            this.tagChangeMenu,
+            this.fileRename});
+            this.rightClickMainForm.Name = "contextMenuStrip1";
+            this.rightClickMainForm.Size = new System.Drawing.Size(218, 76);
+            this.rightClickMainForm.Opening += new System.ComponentModel.CancelEventHandler(this.rightClickMainForm_Opening);
+            // 
+            // addSongsToQueue
+            // 
+            this.addSongsToQueue.Name = "addSongsToQueue";
+            this.addSongsToQueue.Size = new System.Drawing.Size(217, 24);
+            this.addSongsToQueue.Text = "Add Songs To Queue";
+            // 
+            // tagChangeMenu
+            // 
+            this.tagChangeMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.albumTagChange,
+            this.artistTagChange,
+            this.genreTagChange,
+            this.sequenceTagChange,
+            this.titleTagChange});
+            this.tagChangeMenu.Name = "tagChangeMenu";
+            this.tagChangeMenu.Size = new System.Drawing.Size(217, 24);
+            this.tagChangeMenu.Text = "Change Tags of Song";
+            // 
+            // albumTagChange
+            // 
+            this.albumTagChange.Name = "albumTagChange";
+            this.albumTagChange.Size = new System.Drawing.Size(183, 26);
+            this.albumTagChange.Text = "Album Tag";
+            // 
+            // artistTagChange
+            // 
+            this.artistTagChange.Name = "artistTagChange";
+            this.artistTagChange.Size = new System.Drawing.Size(183, 26);
+            this.artistTagChange.Text = "Artist Tag";
+            // 
+            // genreTagChange
+            // 
+            this.genreTagChange.Name = "genreTagChange";
+            this.genreTagChange.Size = new System.Drawing.Size(183, 26);
+            this.genreTagChange.Text = "Genre Tag";
+            // 
+            // sequenceTagChange
+            // 
+            this.sequenceTagChange.Name = "sequenceTagChange";
+            this.sequenceTagChange.Size = new System.Drawing.Size(183, 26);
+            this.sequenceTagChange.Text = "Sequence Tag";
+            // 
+            // titleTagChange
+            // 
+            this.titleTagChange.Name = "titleTagChange";
+            this.titleTagChange.Size = new System.Drawing.Size(183, 26);
+            this.titleTagChange.Text = "Title Tag";
+            // 
+            // fileRename
+            // 
+            this.fileRename.Name = "fileRename";
+            this.fileRename.Size = new System.Drawing.Size(217, 24);
+            this.fileRename.Text = "Rename File";
             // 
             // FormMain
             // 
@@ -274,6 +342,7 @@ namespace MusicManager
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(11)))), ((int)(((byte)(173)))));
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.ContextMenuStrip = this.rightClickMainForm;
             this.Controls.Add(this.dataGridViewFileList);
             this.Controls.Add(this.panelMusicControls);
             this.ForeColor = System.Drawing.SystemColors.Desktop;
@@ -285,6 +354,7 @@ namespace MusicManager
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelMusicControls.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).EndInit();
+            this.rightClickMainForm.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -307,7 +377,15 @@ namespace MusicManager
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn AlbumColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn DurationColumn;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip rightClickMainForm;
+        private System.Windows.Forms.ToolStripMenuItem addSongsToQueue;
+        private System.Windows.Forms.ToolStripMenuItem tagChangeMenu;
+        private System.Windows.Forms.ToolStripMenuItem albumTagChange;
+        private System.Windows.Forms.ToolStripMenuItem artistTagChange;
+        private System.Windows.Forms.ToolStripMenuItem genreTagChange;
+        private System.Windows.Forms.ToolStripMenuItem sequenceTagChange;
+        private System.Windows.Forms.ToolStripMenuItem titleTagChange;
+        private System.Windows.Forms.ToolStripMenuItem fileRename;
     }
 }
 
