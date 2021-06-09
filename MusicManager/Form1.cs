@@ -18,7 +18,6 @@ namespace MusicManager
         private WaveOutEvent outputDevice = new WaveOutEvent();
         private AudioFileReader audioFile;
         private int currentsongIndex;
-        //private bool ascendingOrder;
 
         List<AudioFile> songStorage = new List<AudioFile>();
         private bool ascSorted = false;
@@ -36,16 +35,16 @@ namespace MusicManager
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            string nameOfAlbum = "test"; // Obvious Test Value
+            //string nameOfAlbum = "test"; // Obvious Test Value
 
 
-            // All of this gets the path and formats
-            string path = Application.StartupPath;
-            int start = path.IndexOf(@"bin");
-            path = string.Format(@"{0}Albums\{1}.txt",path.Substring(0, start), nameOfAlbum);
+            //// All of this gets the path and formats
+            //string path = Application.StartupPath;
+            //int start = path.IndexOf(@"bin");
+            //path = string.Format(@"{0}Albums\{1}.txt",path.Substring(0, start), nameOfAlbum);
 
-            // Takes User selected songs and places them into text file
-            StreamWriter newAlbum = System.IO.File.CreateText(path);
+            //// Takes User selected songs and places them into text file
+            //StreamWriter newAlbum = System.IO.File.CreateText(path);
 
         }
 
@@ -109,6 +108,9 @@ namespace MusicManager
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
+            if (dataGridViewFileList.Rows.Count < 1)
+            { return; } // if no folder has been selected, then this prevents out of bounds exceptions
+
             //Back button to change song being played.
             if (currentsongIndex != 0)
             {
@@ -116,6 +118,7 @@ namespace MusicManager
                 PlaySong(currentsongIndex);
                 
             }
+
             //If song being played is the first song in the list. The index will be moved to the last song in the list.
             else if (currentsongIndex == 0)
             {
@@ -125,6 +128,9 @@ namespace MusicManager
         }
         private void buttonForward_Click(object sender, EventArgs e)
         {
+            if (dataGridViewFileList.Rows.Count < 1)
+            { return; } // if no folder has been selected, then this prevents out of bounds exceptions
+
             //Plays next song in list
             if (currentsongIndex != dataGridViewFileList.Rows.Count - 1)
             {
@@ -132,6 +138,7 @@ namespace MusicManager
                 PlaySong(currentsongIndex);
 
             }
+
             //If song being played is the last song in the list. Moves index to beginning of list.
             else if (currentsongIndex == dataGridViewFileList.Rows.Count - 1)
             {

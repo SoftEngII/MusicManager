@@ -30,7 +30,6 @@ namespace MusicManager
         private void InitializeComponent()
         {
             this.panelMusicControls = new System.Windows.Forms.Panel();
-            this.buttonSort = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonTrash = new System.Windows.Forms.Button();
             this.buttonForward = new System.Windows.Forms.Button();
@@ -53,7 +52,6 @@ namespace MusicManager
             // panelMusicControls
             // 
             this.panelMusicControls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(97)))), ((int)(((byte)(238)))));
-            this.panelMusicControls.Controls.Add(this.buttonSort);
             this.panelMusicControls.Controls.Add(this.buttonSave);
             this.panelMusicControls.Controls.Add(this.buttonTrash);
             this.panelMusicControls.Controls.Add(this.buttonForward);
@@ -66,24 +64,8 @@ namespace MusicManager
             this.panelMusicControls.Location = new System.Drawing.Point(-5, 0);
             this.panelMusicControls.Margin = new System.Windows.Forms.Padding(2);
             this.panelMusicControls.Name = "panelMusicControls";
-            this.panelMusicControls.Size = new System.Drawing.Size(630, 69);
+            this.panelMusicControls.Size = new System.Drawing.Size(692, 69);
             this.panelMusicControls.TabIndex = 0;
-            // 
-            // buttonSort
-            // 
-            this.buttonSort.BackgroundImage = global::MusicManager.Properties.Resources.sort;
-            this.buttonSort.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonSort.FlatAppearance.BorderSize = 0;
-            this.buttonSort.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
-            this.buttonSort.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonSort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSort.Location = new System.Drawing.Point(162, 14);
-            this.buttonSort.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonSort.Name = "buttonSort";
-            this.buttonSort.Size = new System.Drawing.Size(53, 40);
-            this.buttonSort.TabIndex = 0;
-            this.buttonSort.UseVisualStyleBackColor = true;
-            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
             // 
             // buttonSave
             // 
@@ -93,7 +75,7 @@ namespace MusicManager
             this.buttonSave.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSave.Location = new System.Drawing.Point(490, 14);
+            this.buttonSave.Location = new System.Drawing.Point(568, 14);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(53, 40);
@@ -109,7 +91,7 @@ namespace MusicManager
             this.buttonTrash.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonTrash.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonTrash.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonTrash.Location = new System.Drawing.Point(568, 14);
+            this.buttonTrash.Location = new System.Drawing.Point(625, 14);
             this.buttonTrash.Margin = new System.Windows.Forms.Padding(2);
             this.buttonTrash.Name = "buttonTrash";
             this.buttonTrash.Size = new System.Drawing.Size(53, 40);
@@ -125,7 +107,7 @@ namespace MusicManager
             this.buttonForward.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonForward.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonForward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonForward.Location = new System.Drawing.Point(343, 19);
+            this.buttonForward.Location = new System.Drawing.Point(385, 19);
             this.buttonForward.Margin = new System.Windows.Forms.Padding(2);
             this.buttonForward.Name = "buttonForward";
             this.buttonForward.Size = new System.Drawing.Size(40, 30);
@@ -141,7 +123,7 @@ namespace MusicManager
             this.buttonBack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonBack.Location = new System.Drawing.Point(254, 19);
+            this.buttonBack.Location = new System.Drawing.Point(274, 20);
             this.buttonBack.Margin = new System.Windows.Forms.Padding(2);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(40, 30);
@@ -157,7 +139,7 @@ namespace MusicManager
             this.buttonTag.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonTag.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonTag.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonTag.Location = new System.Drawing.Point(88, 14);
+            this.buttonTag.Location = new System.Drawing.Point(454, 16);
             this.buttonTag.Margin = new System.Windows.Forms.Padding(2);
             this.buttonTag.Name = "buttonTag";
             this.buttonTag.Size = new System.Drawing.Size(53, 40);
@@ -173,7 +155,7 @@ namespace MusicManager
             this.buttonRename.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonRename.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonRename.Location = new System.Drawing.Point(424, 14);
+            this.buttonRename.Location = new System.Drawing.Point(511, 15);
             this.buttonRename.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRename.Name = "buttonRename";
             this.buttonRename.Size = new System.Drawing.Size(53, 40);
@@ -189,7 +171,7 @@ namespace MusicManager
             this.buttonPause.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonPause.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPause.Location = new System.Drawing.Point(298, 10);
+            this.buttonPause.Location = new System.Drawing.Point(328, 11);
             this.buttonPause.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(40, 50);
@@ -206,7 +188,7 @@ namespace MusicManager
             this.buttonPlay.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonPlay.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPlay.Location = new System.Drawing.Point(298, 10);
+            this.buttonPlay.Location = new System.Drawing.Point(328, 9);
             this.buttonPlay.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(40, 50);
@@ -243,7 +225,7 @@ namespace MusicManager
             this.dataGridViewFileList.Location = new System.Drawing.Point(-2, 65);
             this.dataGridViewFileList.Name = "dataGridViewFileList";
             this.dataGridViewFileList.RowTemplate.Height = 29;
-            this.dataGridViewFileList.Size = new System.Drawing.Size(627, 299);
+            this.dataGridViewFileList.Size = new System.Drawing.Size(689, 396);
             this.dataGridViewFileList.TabIndex = 2;
             // 
             // ArtistColumn
@@ -278,7 +260,7 @@ namespace MusicManager
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(11)))), ((int)(((byte)(173)))));
-            this.ClientSize = new System.Drawing.Size(625, 360);
+            this.ClientSize = new System.Drawing.Size(684, 461);
             this.Controls.Add(this.dataGridViewFileList);
             this.Controls.Add(this.panelMusicControls);
             this.ForeColor = System.Drawing.SystemColors.Desktop;
@@ -305,7 +287,6 @@ namespace MusicManager
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonTag;
         private System.Windows.Forms.Button buttonRename;
-        private System.Windows.Forms.Button buttonSort;
         private System.Windows.Forms.FolderBrowserDialog folderSelectDialogue;
         private System.Windows.Forms.Button buttonFolder;
         private System.Windows.Forms.DataGridView dataGridViewFileList;
