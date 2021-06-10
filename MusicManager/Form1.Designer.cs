@@ -41,10 +41,12 @@ namespace MusicManager
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonFolder = new System.Windows.Forms.Button();
             this.dataGridViewFileList = new System.Windows.Forms.DataGridView();
+            this.FileNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ArtistColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TrackColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AlbumColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DurationColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilePathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rightClickMainForm = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addSongsToQueue = new System.Windows.Forms.ToolStripMenuItem();
             this.tagChangeMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -230,10 +232,12 @@ namespace MusicManager
             this.dataGridViewFileList.AllowUserToDeleteRows = false;
             this.dataGridViewFileList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFileList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.FileNameColumn,
             this.ArtistColumn,
             this.TrackColumn,
             this.AlbumColumn,
-            this.DurationColumn});
+            this.DurationColumn,
+            this.FilePathColumn});
             this.dataGridViewFileList.Location = new System.Drawing.Point(-2, 49);
             this.dataGridViewFileList.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridViewFileList.Name = "dataGridViewFileList";
@@ -241,6 +245,11 @@ namespace MusicManager
             this.dataGridViewFileList.RowTemplate.Height = 29;
             this.dataGridViewFileList.Size = new System.Drawing.Size(603, 297);
             this.dataGridViewFileList.TabIndex = 2;
+            // 
+            // FileNameColumn
+            // 
+            this.FileNameColumn.HeaderText = "Name";
+            this.FileNameColumn.Name = "FileNameColumn";
             // 
             // ArtistColumn
             // 
@@ -272,6 +281,12 @@ namespace MusicManager
             this.DurationColumn.MinimumWidth = 6;
             this.DurationColumn.Name = "DurationColumn";
             this.DurationColumn.ReadOnly = true;
+            // 
+            // FilePathColumn
+            // 
+            this.FilePathColumn.HeaderText = "FilePath";
+            this.FilePathColumn.Name = "FilePathColumn";
+            this.FilePathColumn.Visible = false;
             // 
             // rightClickMainForm
             // 
@@ -383,10 +398,6 @@ namespace MusicManager
         private System.Windows.Forms.Button buttonRename;
         private System.Windows.Forms.Button buttonFolder;
         private System.Windows.Forms.DataGridView dataGridViewFileList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ArtistColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TrackColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AlbumColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DurationColumn;
         private System.Windows.Forms.ContextMenuStrip rightClickMainForm;
         private System.Windows.Forms.ToolStripMenuItem addSongsToQueue;
         private System.Windows.Forms.ToolStripMenuItem tagChangeMenu;
@@ -398,6 +409,12 @@ namespace MusicManager
         private System.Windows.Forms.ToolStripMenuItem fileRename;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FileNameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ArtistColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TrackColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AlbumColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DurationColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilePathColumn;
     }
 }
 

@@ -63,22 +63,15 @@ namespace MusicManager
                     
                 }
                 // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
-                int artistVal = 0;
-                int titleVal = 1;
+                int filePath = 5;
                 List<string> filePaths = new List<string>();
                 foreach (int row in allRows)
                 {
-                    string artist =  (string)dataGridViewFileList.Rows[row].Cells[artistVal].Value;
-                     string title =  (string)dataGridViewFileList.Rows[row].Cells[titleVal].Value;
+                    string FilePath =  (string)dataGridViewFileList.Rows[row].Cells[filePath].Value;
                     //AudioFile song =  (AudioFile)dataGridViewFileList.Rows[row].Cells[artistVal].Value;
-                    //filePaths.Add(song.GetName());
-                    foreach (AudioFile song in songStorage)
-                    {
-                        if (artist == song.RowData()[0] && title == song.RowData()[1])
-                        {
-                            filePaths.Add(song.GetName());
-                        }
-                    }
+                    //filePaths.Add(song.GetFilePath());
+                            filePaths.Add(FilePath);
+
                 }
 
                 // Write the song path into the text file on it's own line
@@ -89,7 +82,7 @@ namespace MusicManager
                         newAlbum.WriteLine(filepath);
                     
                     
-                    //newAlbum.WriteLine(songStorage[songRow].GetName());
+                    //newAlbum.WriteLine(songStorage[songRow].GetFilePath());
                 }
                 
 
@@ -209,7 +202,7 @@ namespace MusicManager
         private void PlaySong(int index)
         {
 
-            string playPath = string.Format(@"{0}", songStorage[index].GetName());
+            string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
 
             if (audioFile == null || audioFile.FileName != playPath)
             {
