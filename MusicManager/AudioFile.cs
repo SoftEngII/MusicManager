@@ -99,6 +99,13 @@ namespace MusicManager
 
         public string[] RowData()
         {
+            if (tagLibFile.Tag.Performers.Length == 0)
+            {
+                string tempTitle = tagLibFile.Name.Substring(tagLibFile.Name.LastIndexOf('\\') + 1);
+                string[] noData = new string[] { tempTitle, tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss") };
+                return noData;
+            }
+
             string[] row = new string[] { tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss") };
             return row;
         }
