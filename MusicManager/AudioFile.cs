@@ -18,8 +18,15 @@ namespace MusicManager
             tagLibFile = TagLib.File.Create(emPeeThree);
         }
 
-        public string GetName() { return _emPeeThree; }
-
+        public string GetFilePath() { return _emPeeThree; }
+        public string GetName()
+        {
+            string Name = _emPeeThree;
+            Name = Name.Substring(0, Name.LastIndexOf(@"."));
+            Name = Name.Remove( 0, Name.LastIndexOf(@"\") + 1);
+            return Name;
+            
+        }
         public TagLib.File SingleTagChanger(string tagName, string tagType)
         {
             tagType.ToLower();
@@ -80,6 +87,11 @@ namespace MusicManager
             return tagLibFile;
         }
 
+        public override string ToString()
+        {
+            return $"Artist: {tagLibFile.Tag.Performers}, Title: {tagLibFile.Tag.Title}, Album: {tagLibFile.Tag.Album}";
+
+        }
 
 
         public int CompareTo(AudioFile song2)
@@ -96,10 +108,9 @@ namespace MusicManager
             }
             return 0;
         }
-
         public string[] RowData()
         {
-            string[] row = new string[] { tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss") };
+            string[] row = new string[] { GetName(), tagLibFile.Tag.Performers[0], tagLibFile.Tag.Title, tagLibFile.Tag.Album, tagLibFile.Properties.Duration.ToString("mm':'ss"), GetFilePath()  };
             return row;
         }
     }
