@@ -25,7 +25,7 @@ namespace MusicManager
         public FormMain()
         {
             InitializeComponent();
-            
+            this.openFileDialog.Filter = "Albums&mp3s (*.mp3;*.Album)|*.mp3;*.Album" + "Mp3 (*.mp3)|*.mp3" + "Albums (*.Album)|*.Album";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -35,16 +35,69 @@ namespace MusicManager
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            //string nameOfAlbum = "test"; // Obvious Test Value
+            this.saveFileDialog = new SaveFileDialog();
+            this.saveFileDialog.DefaultExt = @".Album";
+            DialogResult dr = this.saveFileDialog.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                string saveLocation = this.saveFileDialog.FileName;
+                if (saveLocation.Substring(saveLocation.Length-6,6) != ".Album")
+                { saveLocation += ".Album"; }
+
+                //// All of this gets the path and formats
+                //string path = Application.StartupPath;
+                //int start = path.IndexOf(@"bin");
+                //path = string.Format(@"{0}Albums\{1}.txt", path.Substring(0, start), saveLocation);
+
+                // Takes User selected songs and places them into text file
+
+                StreamWriter newAlbum = System.IO.File.CreateText(saveLocation);
+                
+                // gets the selected rows index from selected cells and prevents duplicates.
+                List<int> allRows = new List<int>();
+                for(int i = 0; i  < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++) {
+                    if (!(allRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
+                    {
+                        allRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex);
+                    }
+                    
+                }
+                // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
+                int artistVal = 0;
+                int titleVal = 1;
+                List<string> filePaths = new List<string>();
+                foreach (int row in allRows)
+                {
+                    string artist =  (string)dataGridViewFileList.Rows[row].Cells[artistVal].Value;
+                     string title =  (string)dataGridViewFileList.Rows[row].Cells[titleVal].Value;
+                    //AudioFile song =  (AudioFile)dataGridViewFileList.Rows[row].Cells[artistVal].Value;
+                    //filePaths.Add(song.GetName());
+                    foreach (AudioFile song in songStorage)
+                    {
+                        if (artist == song.RowData()[0] && title == song.RowData()[1])
+                        {
+                            filePaths.Add(song.GetName());
+                        }
+                    }
+                }
+
+                // Write the song path into the text file on it's own line
+                foreach(string filepath in filePaths)
+                {
+                    //AudioFile song = (AudioFile)dataGridViewFileList.Rows[songRow].DataBoundItem;
+                    //dataGridViewFileList.Rows[songRow].DataBoundItem.ToString();
+                        newAlbum.WriteLine(filepath);
+                    
+                    
+                    //newAlbum.WriteLine(songStorage[songRow].GetName());
+                }
+                
+
+                newAlbum.Close();
+            }
 
 
-            //// All of this gets the path and formats
-            //string path = Application.StartupPath;
-            //int start = path.IndexOf(@"bin");
-            //path = string.Format(@"{0}Albums\{1}.txt",path.Substring(0, start), nameOfAlbum);
 
-            //// Takes User selected songs and places them into text file
-            //StreamWriter newAlbum = System.IO.File.CreateText(path);
 
         }
 
@@ -77,15 +130,18 @@ namespace MusicManager
         {
             dataGridViewFileList.Rows.Clear();
             songStorage.Clear();
-            ClearSong();
+            // Clear song is temporarily removed since we need to be able to make albums with more than just a specified set of songs
+            //ClearSong();
 
             string[] files;
-            openFileDialog = new OpenFileDialog();
-            DialogResult dr = openFileDialog.ShowDialog();
+
+            
+            //this.openFileDialog = new OpenFileDialog();
+            DialogResult dr = this.openFileDialog.ShowDialog();
 
             if (dr == DialogResult.OK)
             {
-                files = openFileDialog.FileNames;
+                files = this.openFileDialog.FileNames;
 
 
                 //string[] files = Directory.GetFiles(folderpath);
@@ -97,8 +153,9 @@ namespace MusicManager
                         AudioFile tfile = new AudioFile(file);
                         songStorage.Add(tfile);
                         dataGridViewFileList.Rows.Add(tfile.RowData());
-                         
+
                     }
+                    //this.dataGridViewFileList.DataSource = songStorage; not a functional alternative
                 }
                 
             }

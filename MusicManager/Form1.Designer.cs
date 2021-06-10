@@ -55,6 +55,7 @@ namespace MusicManager
             this.titleTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.fileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.panelMusicControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
             this.rightClickMainForm.SuspendLayout();
@@ -340,6 +341,11 @@ namespace MusicManager
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
+            this.openFileDialog.Multiselect = true;
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.DefaultExt = "Album";
             // 
             // FormMain
             // 
@@ -391,6 +397,7 @@ namespace MusicManager
         private System.Windows.Forms.ToolStripMenuItem titleTagChange;
         private System.Windows.Forms.ToolStripMenuItem fileRename;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 
