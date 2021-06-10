@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -191,5 +192,40 @@ namespace MusicManager
         {
 
         }
+        private void albumTagChange_Click(object sender, EventArgs e)
+        {
+            Process.Start("");
+        }
+
+        private void artistTagChange_Click(object sender, EventArgs e)
+        {
+            Process.Start("");
+        }
+
+        private void commentTagChange_Click(object sender, EventArgs e)
+        {
+            Process.Start("");
+        }
+
+        private void genreTagChange_Click(object sender, EventArgs e)
+        {
+            Process.Start("");
+        }
+        private void sequenceTagChange_Click(object sender, EventArgs e)
+        {
+            Process.Start("");
+        }
+
+        private void titleTagChange_Click(object sender, EventArgs e)
+        {
+            Process.Start("");
+        }
+        private void OnContextMenuItem_Clicked(object sender, EventArgs e)
+        {
+            //ToolStripItem clickedItem = e.ClickedItem;
+            //string itemName = clickedItem.Text;
+
+        }
+        
     }
 }

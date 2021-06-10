@@ -55,6 +55,7 @@ namespace MusicManager
             this.sequenceTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.titleTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.fileRename = new System.Windows.Forms.ToolStripMenuItem();
+            this.commentTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.panelMusicControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
             this.rightClickMainForm.SuspendLayout();
@@ -287,12 +288,14 @@ namespace MusicManager
             this.addSongsToQueue.Name = "addSongsToQueue";
             this.addSongsToQueue.Size = new System.Drawing.Size(217, 24);
             this.addSongsToQueue.Text = "Add Songs To Queue";
+            this.addSongsToQueue.ToolTipText = "This lets you add songs to the current queue";
             // 
             // tagChangeMenu
             // 
             this.tagChangeMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.albumTagChange,
             this.artistTagChange,
+            this.commentTagChange,
             this.genreTagChange,
             this.sequenceTagChange,
             this.titleTagChange});
@@ -335,6 +338,12 @@ namespace MusicManager
             this.fileRename.Name = "fileRename";
             this.fileRename.Size = new System.Drawing.Size(217, 24);
             this.fileRename.Text = "Rename File";
+            // 
+            // commentTagChange
+            // 
+            this.commentTagChange.Name = "commentTagChange";
+            this.commentTagChange.Size = new System.Drawing.Size(184, 26);
+            this.commentTagChange.Text = "Comment Tag";
             // 
             // FormMain
             // 
@@ -386,6 +395,7 @@ namespace MusicManager
         private System.Windows.Forms.ToolStripMenuItem sequenceTagChange;
         private System.Windows.Forms.ToolStripMenuItem titleTagChange;
         private System.Windows.Forms.ToolStripMenuItem fileRename;
+        private System.Windows.Forms.ToolStripMenuItem commentTagChange;
     }
 }
 
