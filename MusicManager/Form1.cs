@@ -8,24 +8,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NAudio.Wave;
+using LibVLCSharp.Shared;
 
 
 namespace MusicManager
 {
     public partial class FormMain : Form
     {
-        private WaveOutEvent outputDevice = new WaveOutEvent();
-        private AudioFileReader audioFile;
+        // VLC media player
+        private LibVLC _libVLC;
+        private MediaPlayer _mp;
+        private string _currentSongPlayingPath;
+
         private int currentsongIndex;
 
-        List<AudioFile> songStorage = new List<AudioFile>();
-        private bool ascSorted = false;
+        List<AudioFile> songStorage = new List<AudioFile>(); // this shouldn't be needed anymore, left in because I may be wrong
 
         public FormMain()
         {
             InitializeComponent();
-            this.openFileDialog.Filter = "Albums&mp3s (*.mp3;*.Album)|*.mp3;*.Album" + "Mp3 (*.mp3)|*.mp3" + "Albums (*.Album)|*.Album";
+            // VLC Media Player
+            LibVLCSharp.Shared.Core.Initialize();
+            _libVLC = new LibVLC();
+            _mp = new MediaPlayer(_libVLC);
+
+            this.openFileDialog.Filter = "Albums&mp3s |*.mp3;*.Album|" + "Albums |*.Album";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -44,13 +51,7 @@ namespace MusicManager
                 if (saveLocation.Substring(saveLocation.Length-6,6) != ".Album")
                 { saveLocation += ".Album"; }
 
-                //// All of this gets the path and formats
-                //string path = Application.StartupPath;
-                //int start = path.IndexOf(@"bin");
-                //path = string.Format(@"{0}Albums\{1}.txt", path.Substring(0, start), saveLocation);
-
-                // Takes User selected songs and places them into text file
-
+                // Takes User selected name and Creates a textFile with that name&extension
                 StreamWriter newAlbum = System.IO.File.CreateText(saveLocation);
                 
                 // gets the selected rows index from selected cells and prevents duplicates.
@@ -68,8 +69,6 @@ namespace MusicManager
                 foreach (int row in allRows)
                 {
                     string FilePath =  (string)dataGridViewFileList.Rows[row].Cells[filePath].Value;
-                    //AudioFile song =  (AudioFile)dataGridViewFileList.Rows[row].Cells[artistVal].Value;
-                    //filePaths.Add(song.GetFilePath());
                             filePaths.Add(FilePath);
 
                 }
@@ -77,12 +76,7 @@ namespace MusicManager
                 // Write the song path into the text file on it's own line
                 foreach(string filepath in filePaths)
                 {
-                    //AudioFile song = (AudioFile)dataGridViewFileList.Rows[songRow].DataBoundItem;
-                    //dataGridViewFileList.Rows[songRow].DataBoundItem.ToString();
                         newAlbum.WriteLine(filepath);
-                    
-                    
-                    //newAlbum.WriteLine(songStorage[songRow].GetFilePath());
                 }
                 
 
@@ -115,7 +109,7 @@ namespace MusicManager
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
 
-            outputDevice?.Stop();
+            _mp.Pause();
         }
 
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
@@ -127,15 +121,37 @@ namespace MusicManager
             //ClearSong();
 
             string[] files;
-
             
+
+
+
+
+
+
             //this.openFileDialog = new OpenFileDialog();
             DialogResult dr = this.openFileDialog.ShowDialog();
 
             if (dr == DialogResult.OK)
             {
                 files = this.openFileDialog.FileNames;
+                // This is for .Album files
+                if (files[0].Contains(".Album"))
+                {
+                    string Album = File.ReadAllText(files[0]);
+                    while (Album.Contains(@".mp3"))
+                    {
+                        AudioFile song = 
+                            new AudioFile(
+                                Album.Substring(Album.IndexOf(@":\")-1, Album.IndexOf(@".mp3")- (Album.IndexOf(@":\"))+5)
+                                        );
+                        Album = Album.Remove(Album.IndexOf(@":\") - 1, Album.IndexOf(@".mp3") - (Album.IndexOf(@":\")) + 5);
+                        //Album = Album.Remove(0, Album.IndexOf(@"\n"));
 
+                        dataGridViewFileList.Rows.Add(song.RowData());
+
+                    }
+                    
+                }
 
                 //string[] files = Directory.GetFiles(folderpath);
 
@@ -201,34 +217,35 @@ namespace MusicManager
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
+            string playPath = (string)dataGridViewFileList.Rows[index].Cells[5].Value; //5 is the same number from saveFile, so an enum or array may be nice soon
+            //string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
+            Media media;
 
-            string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
+            if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
+            { 
+                _currentSongPlayingPath = playPath;
+                media = new Media(_libVLC, playPath);
+                _mp.Play(media);
+                media.Dispose();
 
-            if (audioFile == null || audioFile.FileName != playPath)
-            {
-                if(audioFile != null) 
-                { 
-                    audioFile.Dispose();
-                   
-                }
-                
-                audioFile = new AudioFileReader(playPath);
-                outputDevice.Stop();
-                outputDevice.Init(audioFile);
-                //Player.URL = playPath;
+
                 currentsongIndex = index;
             }
 
-            outputDevice.Play();
+
+
+            _mp.Play();
+
         }
 
         private void ClearSong()
         {
-            outputDevice.Stop();
-            if (audioFile != null)
-            { audioFile.Dispose(); }
+            //outputDevice.Stop();
+            if (_currentSongPlayingPath != null)
+            { _currentSongPlayingPath = ""; }
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
+            _mp.Stop();
         }
 
         private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
