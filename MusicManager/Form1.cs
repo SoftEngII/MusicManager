@@ -132,12 +132,6 @@ namespace MusicManager
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
-            
-
-            // clearing is a no no, we need to have multiple folders of songs in our set
-            //
-            //dataGridViewFileList.Rows.Clear();
-            //songStorage.Clear();
 
             string[] selectedFiles;
 
@@ -302,8 +296,27 @@ namespace MusicManager
 
         }
 
-        private void buttonRename_Click(object sender, EventArgs e)
+        private void buttonSaveDVGFields_Click(object sender, EventArgs e)
         {
+            //name, artist, track, album, duration, filepath, trackid
+            var dataRowsInDGV = dataGridViewFileList.Rows;
+
+            _mp.Stop();
+            ClearSong();
+
+            for (int i = 0; i <= dataRowsInDGV.Count - 1; i++)
+            {
+                foreach (var track in songStorage)
+                {
+
+                    if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells[6].Value.ToString()))
+                    {
+                        track.Artist = dataRowsInDGV[i].Cells[1].Value.ToString();
+                        track.TrackTitle = dataRowsInDGV[i].Cells[2].Value.ToString();
+                        track.Album = dataRowsInDGV[i].Cells[3].Value.ToString();
+                    }
+                }
+            }
             
         }
 
@@ -344,6 +357,7 @@ namespace MusicManager
                 }
             }
         }
+
         private List<int> FindSelectedSongs()
         {
             List<int> selectedSongs = new List<int>(); 

@@ -18,7 +18,8 @@ namespace MusicManager
             get { return _metaData.Tag.Performers[0].ToString(); }
             set
             {
-                _metaData.Tag.Performers[0] = value;
+                _metaData.Tag.Performers = null;
+                _metaData.Tag.Performers = new string[] { value };
                 _metaData.Save();
             }
         }
@@ -59,10 +60,12 @@ namespace MusicManager
             _metaData = TagLib.File.Create(filePath);
             this.trackID = trackID;
         }
+
         public string GetFilePath()
         {
             return _filePath;
         }
+
         public string[] ReturnRowColumnData()
         {   
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
