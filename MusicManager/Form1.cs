@@ -15,6 +15,9 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
+
+        private List<List<AudioFile>> AudioBookSets = new List<List<AudioFile>>();
+
         // VLC media player
         private LibVLC _libVLC;
         private MediaPlayer _mp;
@@ -26,6 +29,7 @@ namespace MusicManager
 
         public FormMain()
         {
+            
             InitializeComponent();
             // VLC Media Player
             LibVLCSharp.Shared.Core.Initialize();
@@ -128,9 +132,12 @@ namespace MusicManager
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
-            dataGridViewFileList.Rows.Clear();
-            songStorage.Clear();
             trackID = 0;
+
+            // clearing is a no no, we need to have multiple folders of songs in our set
+            //
+            //dataGridViewFileList.Rows.Clear();
+            //songStorage.Clear();
 
             string[] selectedFiles;
 
@@ -144,11 +151,54 @@ namespace MusicManager
                 {
                     if (file.Contains(".mp3"))
                     {
+                        bool duplicate = false;
                         AudioFile tfile = new AudioFile(file, trackID++);
-                        songStorage.Add(tfile);
-                        dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
+                        // make sure we don't have that file already
+                        foreach(AudioFile song in songStorage)
+                        {
+                            if (song.CompareTo(tfile) == 0)
+                            { duplicate = true; }
+                        }
 
+                        if(!duplicate)
+                        {
+                            songStorage.Add(tfile);
+                            dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
+
+                            // check for track sequence
+                            if (tfile.Sequence != 0)
+                            {
+
+                                // loop through every set
+                                foreach (List<AudioFile> audioBookSeries in AudioBookSets)
+                                {
+                                    //if we find the same album name, add the audiobook and break out of the loop
+                                    if (audioBookSeries[0].Album == tfile.Album)
+                                    {
+                                        audioBookSeries.Add(tfile);
+                                        break;
+                                    }
+                                    // if we are on the last audioseries, and the previous line did not work, add a new set
+                                    if (audioBookSeries == AudioBookSets[AudioBookSets.Count - 1])
+                                    {
+                                        List<AudioFile> Series = new List<AudioFile>();
+                                        Series.Add(tfile);
+                                        AudioBookSets.Add(Series);
+                                        break;
+                                    }
+                                }
+
+                                // if there are no audiobooksets already, make a new one
+                                if (AudioBookSets.Count == 0)
+                                {
+                                    List<AudioFile> Series = new List<AudioFile>();
+                                    Series.Add(tfile);
+                                    AudioBookSets.Add(Series);
+                                }
+                            }
+                        }
                     }
+                    
                 }
             }
         }
@@ -340,6 +390,7 @@ namespace MusicManager
 
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
         {
+
             //songStorage.Clear();
             //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
             //{

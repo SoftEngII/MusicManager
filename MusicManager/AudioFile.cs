@@ -33,6 +33,7 @@ namespace MusicManager
                 _metaData.Save();
             }
         }
+        
 
         public string TrackTitle
         {
@@ -47,6 +48,10 @@ namespace MusicManager
         public string Duration
         {
             get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
+        }
+        public uint Sequence
+        {
+            get { return _metaData.Tag.Track; }
         }
 
         public AudioFile(string filePath, int trackID)
@@ -80,7 +85,11 @@ namespace MusicManager
 
         public int CompareTo(AudioFile other)
         {
-            throw new NotImplementedException();
+            if(other._filePath == this._filePath)
+            {
+                return 0;
+            }
+            return 1;
         }
     }
 }
