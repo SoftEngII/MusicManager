@@ -43,7 +43,6 @@ namespace MusicManager
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            this.saveFileDialog = new SaveFileDialog();
             this.saveFileDialog.DefaultExt = @"";
             DialogResult dr = this.saveFileDialog.ShowDialog();
             if (dr == DialogResult.OK)
@@ -306,7 +305,30 @@ namespace MusicManager
             }
             return -1;
         }
-        
+        private List<int> FindSelectedSongs()
+        {
+            List<int> selectedSongs = new List<int>(); 
+            List<int> selectedRows = new List<int>();
+
+            for (int i = 0; i < dataGridViewFileList.SelectedCells.Count; i++)
+            { selectedRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex); }
+
+            for (int x = 0; x < selectedRows.Count; x++)
+            {
+                string TrackId = dataGridViewFileList.Rows[selectedRows[x]].Cells[6].Value.ToString();
+                for (int i = 0; i < songStorage.Count; i++)
+                {
+                    //AudioFile tfile in songStorage
+                    if (songStorage[i].trackID.ToString() == TrackId)
+                    { 
+                        selectedSongs.Add(i);
+                        break;
+                    }
+                }
+            }
+            return selectedSongs;
+
+        }
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) // Track ID probably nullifies this.
         {
             //songStorage.Clear();
