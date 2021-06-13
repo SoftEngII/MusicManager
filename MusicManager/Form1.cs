@@ -44,17 +44,16 @@ namespace MusicManager
         private void buttonSave_Click(object sender, EventArgs e)
         {
             this.saveFileDialog = new SaveFileDialog();
-            this.saveFileDialog.DefaultExt = @".Album";
+            this.saveFileDialog.DefaultExt = @"";
             DialogResult dr = this.saveFileDialog.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 string saveLocation = this.saveFileDialog.FileName;
-                if (saveLocation.Substring(saveLocation.Length - 6, 6) != ".Album")
-                { saveLocation += ".Album"; }
 
-                // Takes User selected name and Creates a textFile with that name&extension
-                StreamWriter newAlbum = System.IO.File.CreateText(saveLocation);
 
+                // Creates folder
+                System.IO.Directory.CreateDirectory(saveLocation);
+                
                 // gets the selected rows index from selected cells and prevents duplicates.
                 List<int> allRows = new List<int>();
                 for (int i = 0; i < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++)
@@ -65,12 +64,14 @@ namespace MusicManager
                     }
 
                 }
+
+                
                 // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
-                int filePath = 5;
+                int filePathCollumn = 5;
                 List<string> filePaths = new List<string>();
                 foreach (int row in allRows)
                 {
-                    string FilePath = (string)dataGridViewFileList.Rows[row].Cells[filePath].Value;
+                    string FilePath = (string)dataGridViewFileList.Rows[row].Cells[filePathCollumn].Value;
                     filePaths.Add(FilePath);
 
                 }
@@ -78,11 +79,17 @@ namespace MusicManager
                 // Write the song path into the text file on it's own line
                 foreach (string filepath in filePaths)
                 {
-                    newAlbum.WriteLine(filepath);
+                    //I didn't wanna make a temp AudioFile just to access this function.
+                    string Name = filepath;
+                    Name = Name.Substring(0, Name.LastIndexOf(@"."));
+                    Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
+
+                    string copyLocation = saveLocation + @"\" + Name + @".mp3";
+                    File.Copy(filepath, copyLocation);
                 }
 
 
-                newAlbum.Close();
+                
             }
 
 
@@ -244,7 +251,7 @@ namespace MusicManager
             
         }
 
-        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e)
+        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) // Track ID probably nullifies this.
         {
             //songStorage.Clear();
             //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
