@@ -251,35 +251,28 @@ namespace MusicManager
 
         }
 
-        private void buttonRename_Click(object sender, EventArgs e)
+        private void buttonSaveDVGFields_Click(object sender, EventArgs e)
         {
-            //rows into list -> cols into list -> in dividual index of cols.
-            //name artist track album duration TrackID
             //name, artist, track, album, duration, filepath, trackid
+            var dataRowsInDGV = dataGridViewFileList.Rows;
 
-            var numOfColumns = dataGridViewFileList.ColumnCount;
-            var selCol = dataGridViewFileList.CurrentRow.Cells;
-            var trackID = selCol[numOfColumns - 1].Value.ToString();
-            var selectedTrackID = Int32.Parse(trackID);
-            //working here to access each column I want by it's name.
-            foreach (DataGridViewRow row in dataGridViewFileList.Rows)
+            _mp.Stop();
+            ClearSong();
+
+            for (int i = 0; i <= dataRowsInDGV.Count - 1; i++)
             {
-                if (object.Equals(row.Cells[ArtistColumn.Index].Value, 123))
+                foreach (var track in songStorage)
                 {
 
+                    if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells[6].Value.ToString()))
+                    {
+                        track.Artist = dataRowsInDGV[i].Cells[1].Value.ToString();
+                        track.TrackTitle = dataRowsInDGV[i].Cells[2].Value.ToString();
+                        track.Album = dataRowsInDGV[i].Cells[3].Value.ToString();
+                    }
                 }
-
-                //foreach (var item in songStorage)
-                //{
-                //    MessageBox.Show(item.trackID.ToString());
-                //    //if (item.trackID == selectedTrackID)
-                //    //{
-                //    //    item.Artist = "New Artist";
-                //    //    item.TrackTitle = "New Track Title";
-                //    //    item.Album = "New Album";
-                //    //}
-                //}
             }
+            
         }
 
         // no care for current selection because it is not mentioned on the sheet
@@ -319,6 +312,7 @@ namespace MusicManager
                 }
             }
         }
+
         private List<int> FindSelectedSongs()
         {
             List<int> selectedSongs = new List<int>(); 
@@ -343,6 +337,7 @@ namespace MusicManager
             return selectedSongs;
 
         }
+
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
         {
             //songStorage.Clear();
