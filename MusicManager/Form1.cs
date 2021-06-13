@@ -159,7 +159,7 @@ namespace MusicManager
                             songStorage.Add(tfile);
                             dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
                             
-                            if(tfile.ReturnFileName().Substring(0,Math.Min(3, tfile.ReturnFileName().Length)).Contains("0"))
+                            
                             // check for track sequence
                             if (tfile.Sequence != 0)
                             {
