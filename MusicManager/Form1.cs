@@ -291,12 +291,12 @@ namespace MusicManager
 
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) // Track ID probably nullifies this.
         {
-            //songStorage.Clear();
-            //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
-            //{
-            //    AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString());
-            //    songStorage.Add(tfile);
-            //}
+            songStorage.Clear();
+            for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
+            {
+                AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString(), 0);
+                songStorage.Add(tfile);
+            }
         }
     }
 }

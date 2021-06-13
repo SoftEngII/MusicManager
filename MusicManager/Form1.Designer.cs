@@ -245,7 +245,7 @@ namespace MusicManager
             this.dataGridViewFileList.Name = "dataGridViewFileList";
             this.dataGridViewFileList.RowHeadersWidth = 51;
             this.dataGridViewFileList.RowTemplate.Height = 29;
-            this.dataGridViewFileList.Size = new System.Drawing.Size(603, 297);
+            this.dataGridViewFileList.Size = new System.Drawing.Size(604, 297);
             this.dataGridViewFileList.TabIndex = 2;
             this.dataGridViewFileList.ColumnSortModeChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewFileList_ColumnSortModeChanged);
             // 
@@ -372,7 +372,7 @@ namespace MusicManager
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(11)))), ((int)(((byte)(173)))));
-            this.ClientSize = new System.Drawing.Size(598, 346);
+            this.ClientSize = new System.Drawing.Size(602, 346);
             this.ContextMenuStrip = this.rightClickMainForm;
             this.Controls.Add(this.dataGridViewFileList);
             this.Controls.Add(this.panelMusicControls);
