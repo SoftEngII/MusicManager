@@ -314,8 +314,10 @@ namespace MusicManager
             // 
             // FileNameColumn
             // 
+            this.FileNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.FileNameColumn.HeaderText = "Name";
             this.FileNameColumn.Name = "FileNameColumn";
+            this.FileNameColumn.ReadOnly = true;
             // 
             // ArtistColumn
             // 
@@ -330,7 +332,6 @@ namespace MusicManager
             this.TrackColumn.HeaderText = "Track";
             this.TrackColumn.MinimumWidth = 6;
             this.TrackColumn.Name = "TrackColumn";
-            this.TrackColumn.ReadOnly = true;
             // 
             // AlbumColumn
             // 
@@ -338,7 +339,6 @@ namespace MusicManager
             this.AlbumColumn.HeaderText = "Album";
             this.AlbumColumn.MinimumWidth = 6;
             this.AlbumColumn.Name = "AlbumColumn";
-            this.AlbumColumn.ReadOnly = true;
             // 
             // DurationColumn
             // 
@@ -352,12 +352,14 @@ namespace MusicManager
             // 
             this.FilePathColumn.HeaderText = "FilePath";
             this.FilePathColumn.Name = "FilePathColumn";
+            this.FilePathColumn.ReadOnly = true;
             this.FilePathColumn.Visible = false;
             // 
             // TrackIDColumn
             // 
             this.TrackIDColumn.HeaderText = "TrackID";
             this.TrackIDColumn.Name = "TrackIDColumn";
+            this.TrackIDColumn.ReadOnly = true;
             this.TrackIDColumn.Visible = false;
             // 
             // FormMain

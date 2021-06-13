@@ -118,6 +118,7 @@ namespace MusicManager
         {
             dataGridViewFileList.Rows.Clear();
             songStorage.Clear();
+            trackID = 0;
 
             string[] selectedFiles;
 
@@ -224,7 +225,33 @@ namespace MusicManager
 
         private void buttonRename_Click(object sender, EventArgs e)
         {
-            
+            //rows into list -> cols into list -> in dividual index of cols.
+            //name artist track album duration TrackID
+            //name, artist, track, album, duration, filepath, trackid
+
+            var numOfColumns = dataGridViewFileList.ColumnCount;
+            var selCol = dataGridViewFileList.CurrentRow.Cells;
+            var trackID = selCol[numOfColumns - 1].Value.ToString();
+            var selectedTrackID = Int32.Parse(trackID);
+            //working here to access each column I want by it's name.
+            foreach (DataGridViewRow row in dataGridViewFileList.Rows)
+            {
+                if (object.Equals(row.Cells[ArtistColumn.Index].Value, 123))
+                {
+
+                }
+
+                //foreach (var item in songStorage)
+                //{
+                //    MessageBox.Show(item.trackID.ToString());
+                //    //if (item.trackID == selectedTrackID)
+                //    //{
+                //    //    item.Artist = "New Artist";
+                //    //    item.TrackTitle = "New Track Title";
+                //    //    item.Album = "New Album";
+                //    //}
+                //}
+            }
         }
     }
 }

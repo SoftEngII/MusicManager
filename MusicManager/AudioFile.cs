@@ -18,7 +18,8 @@ namespace MusicManager
             get { return _metaData.Tag.Performers[0].ToString(); }
             set
             {
-                _metaData.Tag.Performers[0] = value;
+                _metaData.Tag.Performers = null;
+                _metaData.Tag.Performers = new string[] { value };
                 _metaData.Save();
             }
         }
