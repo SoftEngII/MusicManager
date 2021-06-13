@@ -32,6 +32,7 @@ namespace MusicManager
             _libVLC = new LibVLC();
             _mp = new MediaPlayer(_libVLC);
 
+            // setting the filter, | goes between definition and between different sorts
             this.openFileDialog.Filter = "Albums&mp3s |*.mp3;*.Album|" + "Albums |*.Album";
         }
 
@@ -142,13 +143,19 @@ namespace MusicManager
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
+            // if the song is not 0% played, reset to 0
+            if (_mp.Position != 0.0)
+            { _mp.Position = 0.0F; }
+
             if (dataGridViewFileList.Rows.Count < 1)
             { return; } // if no folder has been selected, then this prevents out of bounds exceptions
 
             //Back button to change song being played.
             if (currentsongIndex != 0)
             {
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex--;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
                 PlaySong(currentsongIndex);
 
             }
@@ -156,7 +163,10 @@ namespace MusicManager
             //If song being played is the first song in the list. The index will be moved to the last song in the list.
             else if (currentsongIndex == 0)
             {
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex = dataGridViewFileList.Rows.Count - 1;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
+
                 PlaySong(currentsongIndex);
             }
         }
@@ -169,7 +179,10 @@ namespace MusicManager
             //Plays next song in list
             if (currentsongIndex != dataGridViewFileList.Rows.Count - 1)
             {
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex++;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
+
                 PlaySong(currentsongIndex);
 
             }
@@ -177,7 +190,11 @@ namespace MusicManager
             //If song being played is the last song in the list. Moves index to beginning of list.
             else if (currentsongIndex == dataGridViewFileList.Rows.Count - 1)
             {
+
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex = 0;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
+
                 PlaySong(currentsongIndex);
             }
         }
@@ -225,6 +242,16 @@ namespace MusicManager
         private void buttonRename_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            //songStorage.Clear();
+            //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
+            //{
+            //    AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString());
+            //    songStorage.Add(tfile);
+            //}
         }
     }
 }
