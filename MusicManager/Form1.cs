@@ -288,15 +288,26 @@ namespace MusicManager
                 }
             }
         }
-
+        private int FindCurrentSong(int currentSongIndex)
+        {
+            int row = dataGridViewFileList.CurrentCell.RowIndex;
+            string TrackId = dataGridViewFileList.Rows[row].Cells[6].Value.ToString();
+            for (int i = 0; i < songStorage.Count; i++)
+            {
+                //AudioFile tfile in songStorage
+                if (songStorage[i].trackID.ToString() == TrackId)
+                { return i; }
+            }
+            return 1;
+        }
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) // Track ID probably nullifies this.
         {
-            songStorage.Clear();
-            for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
-            {
-                AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString(), 0);
-                songStorage.Add(tfile);
-            }
+            //songStorage.Clear();
+            //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
+            //{
+            //    AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString(), 0);
+            //    songStorage.Add(tfile);
+            //}
         }
     }
 }
