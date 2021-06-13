@@ -43,52 +43,57 @@ namespace MusicManager
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            this.saveFileDialog.DefaultExt = @"";
-            DialogResult dr = this.saveFileDialog.ShowDialog();
-            if (dr == DialogResult.OK)
+            List<int> allRows = FindSelectedSongs();
+
+            if (allRows.Count != 0)
             {
-                string saveLocation = this.saveFileDialog.FileName;
-
-
-                // Creates folder
-                System.IO.Directory.CreateDirectory(saveLocation);
-                
-                // gets the selected rows index from selected cells and prevents duplicates.
-                List<int> allRows = new List<int>();
-                for (int i = 0; i < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++)
+                this.saveFileDialog.DefaultExt = @"";
+                DialogResult dr = this.saveFileDialog.ShowDialog();
+                if (dr == DialogResult.OK)
                 {
-                    if (!(allRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
+                    string saveLocation = this.saveFileDialog.FileName;
+
+
+                    // Creates folder
+                    System.IO.Directory.CreateDirectory(saveLocation);
+
+                    //// gets the selected rows index from selected cells and prevents duplicates.
+
+                    //for (int i = 0; i < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++)
+                    //{
+                    //    if (!(allRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
+                    //    {
+                    //        allRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex);
+                    //    }
+
+                    //}
+
+
+                    // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
+                    int filePathCollumn = 5;
+                    List<string> filePaths = new List<string>();
+                    foreach (int row in allRows)
                     {
-                        allRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex);
+                        string FilePath = (string)dataGridViewFileList.Rows[row].Cells[filePathCollumn].Value;
+                        filePaths.Add(FilePath);
+
                     }
 
+                    // Write the song path into the text file on it's own line
+                    foreach (string filepath in filePaths)
+                    {
+                        //I didn't wanna make a temp AudioFile just to access this function.
+                        string Name = filepath;
+                        Name = Name.Substring(0, Name.LastIndexOf(@"."));
+                        Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
+
+                        string copyLocation = saveLocation + @"\" + Name + @".mp3";
+                        File.Copy(filepath, copyLocation);
+                    }
+
+
+
                 }
-
-                
-                // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
-                int filePathCollumn = 5;
-                List<string> filePaths = new List<string>();
-                foreach (int row in allRows)
-                {
-                    string FilePath = (string)dataGridViewFileList.Rows[row].Cells[filePathCollumn].Value;
-                    filePaths.Add(FilePath);
-
-                }
-
-                // Write the song path into the text file on it's own line
-                foreach (string filepath in filePaths)
-                {
-                    //I didn't wanna make a temp AudioFile just to access this function.
-                    string Name = filepath;
-                    Name = Name.Substring(0, Name.LastIndexOf(@"."));
-                    Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
-
-                    string copyLocation = saveLocation + @"\" + Name + @".mp3";
-                    File.Copy(filepath, copyLocation);
-                }
-
-
-                
             }
 
 
@@ -287,24 +292,6 @@ namespace MusicManager
                 }
             }
         }
-        private int FindCurrentSong()
-        {
-            if (
-                 dataGridViewFileList.SelectedCells.Count == 1 ||
-                 dataGridViewFileList.SelectedRows.Count == 1
-                )
-            {
-                int row = dataGridViewFileList.CurrentCell.RowIndex;
-                string TrackId = dataGridViewFileList.Rows[row].Cells[6].Value.ToString();
-                for (int i = 0; i < songStorage.Count; i++)
-                {
-                    //AudioFile tfile in songStorage
-                    if (songStorage[i].trackID.ToString() == TrackId)
-                    { return i; }
-                }
-            }
-            return -1;
-        }
         private List<int> FindSelectedSongs()
         {
             List<int> selectedSongs = new List<int>(); 
@@ -329,7 +316,7 @@ namespace MusicManager
             return selectedSongs;
 
         }
-        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) // Track ID probably nullifies this.
+        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
         {
             //songStorage.Clear();
             //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
