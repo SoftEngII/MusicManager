@@ -132,12 +132,6 @@ namespace MusicManager
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
-            trackID = 0;
-
-            // clearing is a no no, we need to have multiple folders of songs in our set
-            //
-            //dataGridViewFileList.Rows.Clear();
-            //songStorage.Clear();
 
             string[] selectedFiles;
 
