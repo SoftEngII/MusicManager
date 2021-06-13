@@ -9,24 +9,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NAudio.Wave;
+using LibVLCSharp.Shared;
 
 
 namespace MusicManager
 {
     public partial class FormMain : Form
     {
-        private WaveOutEvent outputDevice = new WaveOutEvent();
-        private AudioFileReader audioFile;
-        private int currentsongIndex;
 
-        List<AudioFile> songStorage = new List<AudioFile>();
-        private bool ascSorted = false;
+        private List<List<AudioFile>> AudioBookSets = new List<List<AudioFile>>();
+
+        // VLC media player
+        private LibVLC _libVLC;
+        private MediaPlayer _mp;
+        private string _currentSongPlayingPath;
+        private int currentsongIndex;
+        private int trackID = 0;
+
+        List<AudioFile> songStorage = new List<AudioFile>(); // this shouldn't be needed anymore, left in because I may be wrong
 
         public FormMain()
         {
+            
             InitializeComponent();
-            this.openFileDialog.Filter = "Albums&mp3s (*.mp3;*.Album)|*.mp3;*.Album" + "Mp3 (*.mp3)|*.mp3" + "Albums (*.Album)|*.Album";
+            // VLC Media Player
+            LibVLCSharp.Shared.Core.Initialize();
+            _libVLC = new LibVLC();
+            _mp = new MediaPlayer(_libVLC);
+
+            // setting the filter, | goes between definition and between different sorts
+            this.openFileDialog.Filter = "Albums&mp3s |*.mp3;*.Album|" + "Albums |*.Album";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -36,58 +48,57 @@ namespace MusicManager
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            this.saveFileDialog = new SaveFileDialog();
-            this.saveFileDialog.DefaultExt = @".Album";
-            DialogResult dr = this.saveFileDialog.ShowDialog();
-            if (dr == DialogResult.OK)
+            List<int> allRows = FindSelectedSongs();
+
+            if (allRows.Count != 0)
             {
-                string saveLocation = this.saveFileDialog.FileName;
-                if (saveLocation.Substring(saveLocation.Length-6,6) != ".Album")
-                { saveLocation += ".Album"; }
+                this.saveFileDialog.DefaultExt = @"";
+                DialogResult dr = this.saveFileDialog.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    string saveLocation = this.saveFileDialog.FileName;
 
-                //// All of this gets the path and formats
-                //string path = Application.StartupPath;
-                //int start = path.IndexOf(@"bin");
-                //path = string.Format(@"{0}Albums\{1}.txt", path.Substring(0, start), saveLocation);
 
-                // Takes User selected songs and places them into text file
+                    // Creates folder
+                    System.IO.Directory.CreateDirectory(saveLocation);
 
-                StreamWriter newAlbum = System.IO.File.CreateText(saveLocation);
-                
-                // gets the selected rows index from selected cells and prevents duplicates.
-                List<int> allRows = new List<int>();
-                for(int i = 0; i  < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++) {
-                    if (!(allRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
+                    //// gets the selected rows index from selected cells and prevents duplicates.
+
+                    //for (int i = 0; i < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++)
+                    //{
+                    //    if (!(allRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
+                    //    {
+                    //        allRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex);
+                    //    }
+
+                    //}
+
+
+                    // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
+                    int filePathCollumn = 5;
+                    List<string> filePaths = new List<string>();
+                    foreach (int row in allRows)
                     {
-                        allRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex);
+                        string FilePath = (string)dataGridViewFileList.Rows[row].Cells[filePathCollumn].Value;
+                        filePaths.Add(FilePath);
+
                     }
-                    
-                }
-                // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
-                int filePath = 5;
-                List<string> filePaths = new List<string>();
-                foreach (int row in allRows)
-                {
-                    string FilePath =  (string)dataGridViewFileList.Rows[row].Cells[filePath].Value;
-                    //AudioFile song =  (AudioFile)dataGridViewFileList.Rows[row].Cells[artistVal].Value;
-                    //filePaths.Add(song.GetFilePath());
-                            filePaths.Add(FilePath);
+
+                    // Write the song path into the text file on it's own line
+                    foreach (string filepath in filePaths)
+                    {
+                        //I didn't wanna make a temp AudioFile just to access this function.
+                        string Name = filepath;
+                        Name = Name.Substring(0, Name.LastIndexOf(@"."));
+                        Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
+
+                        string copyLocation = saveLocation + @"\" + Name + @".mp3";
+                        File.Copy(filepath, copyLocation);
+                    }
+
+
 
                 }
-
-                // Write the song path into the text file on it's own line
-                foreach(string filepath in filePaths)
-                {
-                    //AudioFile song = (AudioFile)dataGridViewFileList.Rows[songRow].DataBoundItem;
-                    //dataGridViewFileList.Rows[songRow].DataBoundItem.ToString();
-                        newAlbum.WriteLine(filepath);
-                    
-                    
-                    //newAlbum.WriteLine(songStorage[songRow].GetFilePath());
-                }
-                
-
-                newAlbum.Close();
             }
 
 
@@ -97,7 +108,7 @@ namespace MusicManager
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            if ( 
+            if (
                    dataGridViewFileList.SelectedCells.Count == 1 ||
                    dataGridViewFileList.SelectedRows.Count == 1
                )
@@ -107,7 +118,7 @@ namespace MusicManager
                 PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
             }
 
-            }
+        }
 
 
         private void buttonPause_Click(object sender, EventArgs e)
@@ -116,67 +127,107 @@ namespace MusicManager
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
 
-            outputDevice?.Stop();
+            _mp.Pause();
         }
 
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
-            dataGridViewFileList.Rows.Clear();
-            songStorage.Clear();
-            // Clear song is temporarily removed since we need to be able to make albums with more than just a specified set of songs
-            //ClearSong();
 
-            string[] files;
+            string[] selectedFiles;
 
-            
-            //this.openFileDialog = new OpenFileDialog();
-            DialogResult dr = this.openFileDialog.ShowDialog();
+            DialogResult dialogResult = this.openFileDialog.ShowDialog();
 
-            if (dr == DialogResult.OK)
+            if (dialogResult == DialogResult.OK)
             {
-                files = this.openFileDialog.FileNames;
+                selectedFiles = this.openFileDialog.FileNames;
 
-
-                //string[] files = Directory.GetFiles(folderpath);
-
-                foreach (string file in files)
+                foreach (string file in selectedFiles)
                 {
                     if (file.Contains(".mp3"))
                     {
-                        AudioFile tfile = new AudioFile(file);
-                        songStorage.Add(tfile);
-                        dataGridViewFileList.Rows.Add(tfile.RowData());
+                        bool duplicate = false;
+                        AudioFile tfile = new AudioFile(file, trackID++);
+                        // make sure we don't have that file already
+                        foreach(AudioFile song in songStorage)
+                        {
+                            if (song.CompareTo(tfile) == 0)
+                            { duplicate = true; }
+                        }
 
+                        if(!duplicate)
+                        {
+                            songStorage.Add(tfile);
+                            dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
+
+                            // check for track sequence
+                            if (tfile.Sequence != 0)
+                            {
+
+                                // loop through every set
+                                foreach (List<AudioFile> audioBookSeries in AudioBookSets)
+                                {
+                                    //if we find the same album name, add the audiobook and break out of the loop
+                                    if (audioBookSeries[0].Album == tfile.Album)
+                                    {
+                                        audioBookSeries.Add(tfile);
+                                        break;
+                                    }
+                                    // if we are on the last audioseries, and the previous line did not work, add a new set
+                                    if (audioBookSeries == AudioBookSets[AudioBookSets.Count - 1])
+                                    {
+                                        List<AudioFile> Series = new List<AudioFile>();
+                                        Series.Add(tfile);
+                                        AudioBookSets.Add(Series);
+                                        break;
+                                    }
+                                }
+
+                                // if there are no audiobooksets already, make a new one
+                                if (AudioBookSets.Count == 0)
+                                {
+                                    List<AudioFile> Series = new List<AudioFile>();
+                                    Series.Add(tfile);
+                                    AudioBookSets.Add(Series);
+                                }
+                            }
+                        }
                     }
-                    //this.dataGridViewFileList.DataSource = songStorage; not a functional alternative
+                    
                 }
-                
             }
-
-
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
+            // if the song is not 0% played, reset to 0
+            if (_mp.Position != 0.0)
+            { _mp.Position = 0.0F; }
+
             if (dataGridViewFileList.Rows.Count < 1)
             { return; } // if no folder has been selected, then this prevents out of bounds exceptions
 
             //Back button to change song being played.
             if (currentsongIndex != 0)
             {
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex--;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
                 PlaySong(currentsongIndex);
-                
+
             }
 
             //If song being played is the first song in the list. The index will be moved to the last song in the list.
             else if (currentsongIndex == 0)
             {
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex = dataGridViewFileList.Rows.Count - 1;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
+
                 PlaySong(currentsongIndex);
             }
         }
+
         private void buttonForward_Click(object sender, EventArgs e)
         {
             if (dataGridViewFileList.Rows.Count < 1)
@@ -185,7 +236,10 @@ namespace MusicManager
             //Plays next song in list
             if (currentsongIndex != dataGridViewFileList.Rows.Count - 1)
             {
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex++;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
+
                 PlaySong(currentsongIndex);
 
             }
@@ -193,7 +247,11 @@ namespace MusicManager
             //If song being played is the last song in the list. Moves index to beginning of list.
             else if (currentsongIndex == dataGridViewFileList.Rows.Count - 1)
             {
+
+                dataGridViewFileList.Rows[currentsongIndex].Selected = false;
                 currentsongIndex = 0;
+                dataGridViewFileList.Rows[currentsongIndex].Selected = true;
+
                 PlaySong(currentsongIndex);
             }
         }
@@ -202,39 +260,138 @@ namespace MusicManager
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
+            string playPath = (string)dataGridViewFileList.Rows[index].Cells[5].Value; //5 is the same number from saveFile, so an enum or array may be nice soon
+            //string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
+            Media media;
 
-            string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
-
-            if (audioFile == null || audioFile.FileName != playPath)
+            if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
             {
-                if(audioFile != null) 
-                { 
-                    audioFile.Dispose();
-                   
-                }
-                
-                audioFile = new AudioFileReader(playPath);
-                outputDevice.Stop();
-                outputDevice.Init(audioFile);
-                //Player.URL = playPath;
+                _currentSongPlayingPath = playPath;
+                media = new Media(_libVLC, playPath);
+                _mp.Play(media);
+                media.Dispose();
+
+
                 currentsongIndex = index;
             }
 
-            outputDevice.Play();
+
+
+            _mp.Play();
+
         }
 
         private void ClearSong()
         {
-            outputDevice.Stop();
-            if (audioFile != null)
-            { audioFile.Dispose(); }
+            //outputDevice.Stop();
+            if (_currentSongPlayingPath != null)
+            { _currentSongPlayingPath = ""; }
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
+            _mp.Stop();
         }
 
         private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
         {
 
+        }
+
+        private void buttonSaveDVGFields_Click(object sender, EventArgs e)
+        {
+            //name, artist, track, album, duration, filepath, trackid
+            var dataRowsInDGV = dataGridViewFileList.Rows;
+
+            _mp.Stop();
+            ClearSong();
+
+            for (int i = 0; i <= dataRowsInDGV.Count - 1; i++)
+            {
+                foreach (var track in songStorage)
+                {
+
+                    if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells[6].Value.ToString()))
+                    {
+                        track.Artist = dataRowsInDGV[i].Cells[1].Value.ToString();
+                        track.TrackTitle = dataRowsInDGV[i].Cells[2].Value.ToString();
+                        track.Album = dataRowsInDGV[i].Cells[3].Value.ToString();
+                    }
+                }
+            }
+            
+        }
+
+        // no care for current selection because it is not mentioned on the sheet
+        private void RemoveNameElement(string input)
+        { // Untested Code
+            foreach(AudioFile tfile in songStorage)
+            {
+                string name = tfile.ReturnFileName();
+                if(name.Contains(input))
+                {
+                    // while there is still more of the phrase to be removed
+                    while(name.IndexOf(input) != -1)
+                    {
+                        // remove it
+                        name = name.Remove(name.IndexOf(input), input.Length);
+                        //if nothing is left
+                        if(name == "" )
+                        {
+                            name = tfile.Artist + " - " + tfile.Album + " - " + tfile.TrackTitle;
+                            // if there are no tags
+                            if(name == "")
+                            {
+                                
+                                name = "Unknown " + "(" + tfile.ReturnFileName().Length + ")";
+                            }
+                        }
+                    }
+                    // create the paths
+                    string oldPath = tfile.GetFilePath();
+                    string newPath = oldPath
+                        .Remove(oldPath.IndexOf(tfile.ReturnFileName()),
+                                (oldPath.Length - oldPath.LastIndexOf(@"\"))
+                                );
+
+                    // "move" which usually is also rename
+                    System.IO.File.Move(oldPath, newPath);
+                }
+            }
+        }
+
+        private List<int> FindSelectedSongs()
+        {
+            List<int> selectedSongs = new List<int>(); 
+            List<int> selectedRows = new List<int>();
+
+            for (int i = 0; i < dataGridViewFileList.SelectedCells.Count; i++)
+            { selectedRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex); }
+
+            for (int x = 0; x < selectedRows.Count; x++)
+            {
+                string TrackId = dataGridViewFileList.Rows[selectedRows[x]].Cells[6].Value.ToString();
+                for (int i = 0; i < songStorage.Count; i++)
+                {
+                    //AudioFile tfile in songStorage
+                    if (songStorage[i].trackID.ToString() == TrackId)
+                    { 
+                        selectedSongs.Add(i);
+                        break;
+                    }
+                }
+            }
+            return selectedSongs;
+
+        }
+
+        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
+        {
+
+            //songStorage.Clear();
+            //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
+            //{
+            //    AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString(), 0);
+            //    songStorage.Add(tfile);
+            //}
         }
         private void albumTagChange_Click(object sender, EventArgs e)
         {
