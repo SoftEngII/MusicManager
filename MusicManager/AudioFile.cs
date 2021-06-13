@@ -54,7 +54,10 @@ namespace MusicManager
             _metaData = TagLib.File.Create(filePath);
             this.trackID = trackID;
         }
-
+        public string GetFilePath()
+        {
+            return _filePath;
+        }
         public string[] ReturnRowColumnData()
         {   
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.

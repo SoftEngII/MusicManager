@@ -251,6 +251,44 @@ namespace MusicManager
             
         }
 
+        // no care for current selection because it is not mentioned on the sheet
+        private void RemoveNameElement(string input)
+        { // Untested Code
+            foreach(AudioFile tfile in songStorage)
+            {
+                string name = tfile.ReturnFileName();
+                if(name.Contains(input))
+                {
+                    // while there is still more of the phrase to be removed
+                    while(name.IndexOf(input) != -1)
+                    {
+                        // remove it
+                        name = name.Remove(name.IndexOf(input), input.Length);
+                        //if nothing is left
+                        if(name == "" )
+                        {
+                            name = tfile.Artist + " - " + tfile.Album + " - " + tfile.TrackTitle;
+                            // if there are no tags
+                            if(name == "")
+                            {
+                                
+                                name = "Unknown " + "(" + tfile.ReturnFileName().Length + ")";
+                            }
+                        }
+                    }
+                    // create the paths
+                    string oldPath = tfile.GetFilePath();
+                    string newPath = oldPath
+                        .Remove(oldPath.IndexOf(tfile.ReturnFileName()),
+                                (oldPath.Length - oldPath.LastIndexOf(@"\"))
+                                );
+
+                    // "move" which usually is also rename
+                    System.IO.File.Move(oldPath, newPath);
+                }
+            }
+        }
+
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) // Track ID probably nullifies this.
         {
             //songStorage.Clear();
