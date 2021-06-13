@@ -247,6 +247,7 @@ namespace MusicManager
             this.dataGridViewFileList.RowTemplate.Height = 29;
             this.dataGridViewFileList.Size = new System.Drawing.Size(604, 297);
             this.dataGridViewFileList.TabIndex = 2;
+            this.dataGridViewFileList.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewFileList_ColumnHeaderMouseClick);
             this.dataGridViewFileList.ColumnSortModeChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewFileList_ColumnSortModeChanged);
             // 
             // FileNameColumn

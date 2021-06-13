@@ -37,7 +37,7 @@ namespace MusicManager
             _mp = new MediaPlayer(_libVLC);
 
             // setting the filter, | goes between definition and between different sorts
-            this.openFileDialog.Filter = "Albums&mp3s |*.mp3;*.Album|" + "Albums |*.Album";
+            this.openFileDialog.Filter = "mp3s |*.mp3;";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -164,7 +164,8 @@ namespace MusicManager
                         {
                             songStorage.Add(tfile);
                             dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
-
+                            
+                            if(tfile.ReturnFileName().Substring(0,Math.Min(3, tfile.ReturnFileName().Length)).Contains("0"))
                             // check for track sequence
                             if (tfile.Sequence != 0)
                             {
@@ -367,9 +368,27 @@ namespace MusicManager
             return selectedSongs;
 
         }
+        private List<int> FindSongsInDataGrid(List<AudioFile> audioSet)
+        {
+            List<int> SongRows = new List<int>();
+
+            for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
+            {
+                string TrackId = dataGridViewFileList.Rows[i].Cells[6].Value.ToString();
+                for (int x = 0; x < audioSet.Count; x++)
+                {
+                    if (audioSet[x].trackID.ToString() == TrackId)
+                    { SongRows.Add(i); }
+                }
+
+                
+            }
+            return SongRows;
+        }
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
         {
 
+            
             //songStorage.Clear();
             //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
             //{
@@ -377,5 +396,42 @@ namespace MusicManager
             //    songStorage.Add(tfile);
             //}
         }
+
+        private void dataGridViewFileList_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            for (int i = 0; i < AudioBookSets.Count; i++)
+            {
+                List<int> SongsToRemove = FindSongsInDataGrid(AudioBookSets[i]);
+                for (int x = 0; x < SongsToRemove.Count; x++)
+                {
+                    dataGridViewFileList.Rows
+                                    .Remove(dataGridViewFileList.Rows[SongsToRemove[x]]);
+
+                }
+                for (int x = 0; x < AudioBookSets[i].Count; x++)
+                {
+                    dataGridViewFileList.Rows.Add(AudioBookSets[i][x].ReturnRowColumnData());
+                }
+
+
+            }
+        }
+        //
+        //private static bool preventAudioBookswithSequenceInFileNameInsteadOfTheSequenceTagLikeItsSupposedToBe(string name)
+        //{
+        //    name = name.Substring(0, Math.Min(2, name.Length));
+        //    for (int i = 0; i < name.Length; i++)
+        //    {
+        //        if ((int)name[i] >= '0' && (int)name[i] <= '9')
+        //        {
+        //            for (int x = 0; x < name.Length; x++)
+        //            {
+
+        //            }
+        //            return true;
+        //        }
+        //    }
+
+        //}
     }
 }
