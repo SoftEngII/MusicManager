@@ -12,7 +12,17 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
-
+        enum cell
+        {
+            Sequence,
+            Name,
+            Artist,
+            Track,
+            Album,
+            Duration,
+            FilePath,
+            TrackID
+        }
         private List<List<AudioFile>> AudioBookSets = new List<List<AudioFile>>();
 
         // VLC media player
@@ -34,7 +44,7 @@ namespace MusicManager
             _mp = new MediaPlayer(_libVLC);
 
             // setting the filter, | goes between definition and between different sorts
-            this.openFileDialog.Filter = "Albums&mp3s |*.mp3;*.Album|" + "Albums |*.Album";
+            this.openFileDialog.Filter = "mp3s |*.mp3;";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -71,11 +81,10 @@ namespace MusicManager
 
 
                     // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
-                    int filePathCollumn = 5;
                     List<string> filePaths = new List<string>();
                     foreach (int row in allRows)
                     {
-                        string FilePath = (string)dataGridViewFileList.Rows[row].Cells[filePathCollumn].Value;
+                        string FilePath = (string)dataGridViewFileList.Rows[row].Cells[(int)cell.FilePath].Value;
                         filePaths.Add(FilePath);
 
                     }
@@ -188,7 +197,8 @@ namespace MusicManager
                         {
                             songStorage.Add(tfile);
                             dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
-
+                            
+                            
                             // check for track sequence
                             if (tfile.Sequence != 0)
                             {
@@ -289,7 +299,7 @@ namespace MusicManager
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
-            string playPath = (string)dataGridViewFileList.Rows[index].Cells[5].Value; //5 is the same number from saveFile, so an enum or array may be nice soon
+            string playPath = (string)dataGridViewFileList.Rows[index].Cells[(int)cell.FilePath].Value; //5 is the same number from saveFile, so an enum or array may be nice soon
             //string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
             Media media;
 
@@ -335,11 +345,11 @@ namespace MusicManager
                 foreach (var track in songStorage)
                 {
 
-                    if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells[6].Value.ToString()))
+                    if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells[(int)cell.TrackID].Value.ToString()))
                     {
-                        track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
-                        track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
-                        track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
+                        track.Artist = dataRowsInDGV[i].Cells[(int)cell.Artist].Value.ToString();
+                        track.TrackTitle = dataRowsInDGV[i].Cells[(int)cell.Track].Value.ToString();
+                        track.Album = dataRowsInDGV[i].Cells[(int)cell.Album].Value.ToString();
                     }
                 }
             }
@@ -394,7 +404,7 @@ namespace MusicManager
 
             for (int x = 0; x < selectedRows.Count; x++)
             {
-                string TrackId = dataGridViewFileList.Rows[selectedRows[x]].Cells[6].Value.ToString();
+                string TrackId = dataGridViewFileList.Rows[selectedRows[x]].Cells[(int)cell.TrackID].Value.ToString();
                 for (int i = 0; i < songStorage.Count; i++)
                 {
                     //AudioFile tfile in songStorage
@@ -408,10 +418,27 @@ namespace MusicManager
             return selectedSongs;
 
         }
+        private List<int> FindSongsInDataGrid(List<AudioFile> audioSet)
+        {
+            List<int> SongRows = new List<int>();
 
+            for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
+            {
+                string TrackId = dataGridViewFileList.Rows[i].Cells[(int)cell.TrackID].Value.ToString();
+                for (int x = 0; x < audioSet.Count; x++)
+                {
+                    if (audioSet[x].trackID.ToString() == TrackId)
+                    { SongRows.Add(i); }
+                }
+
+                
+            }
+            return SongRows;
+        }
         private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
         {
 
+            
             //songStorage.Clear();
             //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
             //{
@@ -499,6 +526,26 @@ namespace MusicManager
         private void deleteFile_Click(object sender, EventArgs e)
         {
             buttonDelete.PerformClick();
+        }
+
+        private void dataGridViewFileList_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            for (int i = 0; i < AudioBookSets.Count; i++)
+            {
+                List<int> SongsToRemove = FindSongsInDataGrid(AudioBookSets[i]);
+                for (int x = 0; x < SongsToRemove.Count; x++)
+                {
+                    dataGridViewFileList.Rows
+                                    .Remove(dataGridViewFileList.Rows[SongsToRemove[x]]);
+
+                }
+                for (int x = 0; x < AudioBookSets[i].Count; x++)
+                {
+                    dataGridViewFileList.Rows.Add(AudioBookSets[i][x].ReturnRowColumnData());
+                }
+
+
+            }
         }
     }
 }

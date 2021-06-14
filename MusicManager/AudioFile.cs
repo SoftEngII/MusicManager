@@ -13,6 +13,8 @@ namespace MusicManager
         private TagLib.File _metaData;
         public readonly int trackID;
 
+        public uint Sequence
+        { get { return _metaData.Tag.Track; } }
         public string Artist
         {
             get
@@ -95,6 +97,7 @@ namespace MusicManager
             get { return _metaData.Tag.Track; }
         }
 
+
         public AudioFile(string filePath, int trackID)
         {
             _filePath = filePath;
@@ -110,7 +113,7 @@ namespace MusicManager
         public string[] ReturnRowColumnData()
         {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
-            string[] rowData = new string[] { ReturnFileName(), Artist, TrackTitle, Album, Duration, _filePath, trackID.ToString() };
+            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, _filePath, trackID.ToString() };
             return rowData;
         }
 
