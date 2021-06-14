@@ -41,6 +41,7 @@ namespace MusicManager
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonFolder = new System.Windows.Forms.Button();
             this.dataGridViewFileList = new System.Windows.Forms.DataGridView();
+            this.Sequence = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ArtistColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TrackColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,7 +78,7 @@ namespace MusicManager
             this.panelMusicControls.Controls.Add(this.buttonPlay);
             this.panelMusicControls.Controls.Add(this.buttonFolder);
             this.panelMusicControls.Location = new System.Drawing.Point(-4, 0);
-            this.panelMusicControls.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelMusicControls.Margin = new System.Windows.Forms.Padding(2);
             this.panelMusicControls.Name = "panelMusicControls";
             this.panelMusicControls.Size = new System.Drawing.Size(606, 52);
             this.panelMusicControls.TabIndex = 0;
@@ -91,7 +92,7 @@ namespace MusicManager
             this.buttonSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Location = new System.Drawing.Point(508, 10);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(46, 30);
             this.buttonSave.TabIndex = 0;
@@ -107,7 +108,7 @@ namespace MusicManager
             this.buttonTrash.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonTrash.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTrash.Location = new System.Drawing.Point(558, 10);
-            this.buttonTrash.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonTrash.Margin = new System.Windows.Forms.Padding(2);
             this.buttonTrash.Name = "buttonTrash";
             this.buttonTrash.Size = new System.Drawing.Size(46, 30);
             this.buttonTrash.TabIndex = 0;
@@ -123,7 +124,7 @@ namespace MusicManager
             this.buttonForward.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonForward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonForward.Location = new System.Drawing.Point(326, 14);
-            this.buttonForward.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonForward.Margin = new System.Windows.Forms.Padding(2);
             this.buttonForward.Name = "buttonForward";
             this.buttonForward.Size = new System.Drawing.Size(35, 26);
             this.buttonForward.TabIndex = 0;
@@ -139,7 +140,7 @@ namespace MusicManager
             this.buttonBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonBack.Location = new System.Drawing.Point(248, 14);
-            this.buttonBack.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonBack.Margin = new System.Windows.Forms.Padding(2);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(35, 26);
             this.buttonBack.TabIndex = 0;
@@ -155,7 +156,7 @@ namespace MusicManager
             this.buttonTag.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonTag.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTag.Location = new System.Drawing.Point(376, 10);
-            this.buttonTag.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonTag.Margin = new System.Windows.Forms.Padding(2);
             this.buttonTag.Name = "buttonTag";
             this.buttonTag.Size = new System.Drawing.Size(46, 30);
             this.buttonTag.TabIndex = 0;
@@ -171,7 +172,7 @@ namespace MusicManager
             this.buttonSaveDGVFields.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonSaveDGVFields.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSaveDGVFields.Location = new System.Drawing.Point(435, 4);
-            this.buttonSaveDGVFields.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonSaveDGVFields.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSaveDGVFields.Name = "buttonSaveDGVFields";
             this.buttonSaveDGVFields.Size = new System.Drawing.Size(58, 41);
             this.buttonSaveDGVFields.TabIndex = 0;
@@ -187,7 +188,7 @@ namespace MusicManager
             this.buttonPause.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonPause.Location = new System.Drawing.Point(287, 8);
-            this.buttonPause.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonPause.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(35, 38);
             this.buttonPause.TabIndex = 0;
@@ -204,7 +205,7 @@ namespace MusicManager
             this.buttonPlay.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonPlay.Location = new System.Drawing.Point(287, 7);
-            this.buttonPlay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonPlay.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(35, 38);
             this.buttonPlay.TabIndex = 0;
@@ -220,7 +221,7 @@ namespace MusicManager
             this.buttonFolder.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonFolder.Location = new System.Drawing.Point(12, 10);
-            this.buttonFolder.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFolder.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFolder.Name = "buttonFolder";
             this.buttonFolder.Size = new System.Drawing.Size(46, 30);
             this.buttonFolder.TabIndex = 0;
@@ -233,6 +234,7 @@ namespace MusicManager
             this.dataGridViewFileList.AllowUserToDeleteRows = false;
             this.dataGridViewFileList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFileList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Sequence,
             this.FileNameColumn,
             this.ArtistColumn,
             this.TrackColumn,
@@ -243,12 +245,18 @@ namespace MusicManager
             this.dataGridViewFileList.Location = new System.Drawing.Point(-2, 49);
             this.dataGridViewFileList.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridViewFileList.Name = "dataGridViewFileList";
-            this.dataGridViewFileList.RowHeadersWidth = 51;
+            this.dataGridViewFileList.RowHeadersWidth = 20;
             this.dataGridViewFileList.RowTemplate.Height = 29;
             this.dataGridViewFileList.Size = new System.Drawing.Size(604, 297);
             this.dataGridViewFileList.TabIndex = 2;
             this.dataGridViewFileList.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewFileList_ColumnHeaderMouseClick);
             this.dataGridViewFileList.ColumnSortModeChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewFileList_ColumnSortModeChanged);
+            // 
+            // Sequence
+            // 
+            this.Sequence.HeaderText = "#";
+            this.Sequence.Name = "Sequence";
+            this.Sequence.Width = 25;
             // 
             // FileNameColumn
             // 
@@ -382,7 +390,7 @@ namespace MusicManager
             this.Controls.Add(this.panelMusicControls);
             this.ForeColor = System.Drawing.SystemColors.Desktop;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Music Manager";
@@ -418,6 +426,7 @@ namespace MusicManager
         private System.Windows.Forms.ToolStripMenuItem fileRename;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Sequence;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileNameColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArtistColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackColumn;
