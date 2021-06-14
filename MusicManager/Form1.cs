@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using System.Windows;
 
 
 namespace MusicManager
@@ -117,22 +118,33 @@ namespace MusicManager
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            var trackID = Int32.Parse(dataGridViewFileList.CurrentRow.Cells["TrackIDColumn"].Value.ToString());
-            var filePath = dataGridViewFileList.CurrentRow.Cells["FilePathColumn"].Value.ToString();
-            File.Delete(filePath);
-            dataGridViewFileList.CurrentRow.Visible = false;
-            int trackIndex = 0;
 
-            for (int i = 0; i <= songStorage.Count - 1; i++)
+          if (dataGridViewFileList.SelectedRows.Count == 1)
             {
-                if (songStorage[i].trackID == trackID)
+                DialogResult confirmResult = MessageBox.Show("Are you sure to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo);
+                
+                if (confirmResult == DialogResult.Yes)
                 {
-                    trackIndex = i;
+                    var trackID = Int32.Parse(dataGridViewFileList.CurrentRow.Cells["TrackIDColumn"].Value.ToString());
+                    var filePath = dataGridViewFileList.CurrentRow.Cells["FilePathColumn"].Value.ToString();
+                    File.Delete(filePath);
+                    dataGridViewFileList.CurrentRow.Visible = false;
+                    int trackIndex = 0;
+
+                    for (int i = 0; i <= songStorage.Count - 1; i++)
+                    {
+                        if (songStorage[i].trackID == trackID)
+                        {
+                            trackIndex = i;
+                        }
+                    }
+
+                    songStorage.RemoveAt(trackIndex);
                 }
+                
             }
 
-            songStorage.RemoveAt(trackIndex);
-            
+
         }
 
 
