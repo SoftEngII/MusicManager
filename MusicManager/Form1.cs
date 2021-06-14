@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LibVLCSharp.Shared;
+using System.Windows;
 
 
 namespace MusicManager
@@ -131,6 +132,37 @@ namespace MusicManager
                 buttonPlay.Visible = false;
                 _mp.Play();
             }
+
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+
+          if (dataGridViewFileList.SelectedRows.Count == 1)
+            {
+                DialogResult confirmResult = MessageBox.Show("Are you sure to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo);
+                
+                if (confirmResult == DialogResult.Yes)
+                {
+                    var trackID = Int32.Parse(dataGridViewFileList.CurrentRow.Cells["TrackIDColumn"].Value.ToString());
+                    var filePath = dataGridViewFileList.CurrentRow.Cells["FilePathColumn"].Value.ToString();
+                    File.Delete(filePath);
+                    dataGridViewFileList.CurrentRow.Visible = false;
+                    int trackIndex = 0;
+
+                    for (int i = 0; i <= songStorage.Count - 1; i++)
+                    {
+                        if (songStorage[i].trackID == trackID)
+                        {
+                            trackIndex = i;
+                        }
+                    }
+
+                    songStorage.RemoveAt(trackIndex);
+                }
+                
+            }
+
 
         }
 
