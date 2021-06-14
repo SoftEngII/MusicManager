@@ -103,16 +103,18 @@ namespace MusicManager
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            if (
-                   dataGridViewFileList.SelectedCells.Count == 1 ||
-                   dataGridViewFileList.SelectedRows.Count == 1
-               )
-            {
-                buttonPlay.Visible = false;
-                buttonPause.Visible = true;
-                PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
-            }
-
+            //if (
+            //       dataGridViewFileList.SelectedCells.Count == 1 ||
+            //       dataGridViewFileList.SelectedRows.Count == 1
+            //   )
+            //{
+                
+                
+            //    PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
+            //}
+            buttonPause.Visible = true;
+            buttonPlay.Visible = false;
+            _mp.Play();
         }
 
 
@@ -272,7 +274,7 @@ namespace MusicManager
 
 
 
-            _mp.Play();
+            buttonPlay.PerformClick();
 
         }
 
@@ -431,26 +433,35 @@ namespace MusicManager
 
         private void rightClickMainForm_MouseClick(object sender, MouseEventArgs e)
         {
-            FormMain_Click(sender, e);
+            
         }
-
 
         private void playFile_Click(object sender, EventArgs e)
         {
             PlaySong(FindSelectedSongs()[0]);
-            buttonPause.Visible = true;
-            buttonPlay.Visible = false;
         }
 
         private void pauseFile_Click(object sender, EventArgs e)
         {
             if (_mp.IsPlaying)
             {
-                _mp.Pause();
+                buttonPause.PerformClick();
             }
-            buttonPause.Visible = false;
-            buttonPlay.Visible = true;
         }
-        
+
+        private void dataGridViewFileList_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var hti = dataGridViewFileList.HitTest(e.X, e.Y);
+
+                if (hti.RowIndex != -1)
+                {
+                    dataGridViewFileList.ClearSelection();
+                    dataGridViewFileList.Rows[hti.RowIndex].Selected = true;
+                    dataGridViewFileList.CurrentCell = dataGridViewFileList.Rows[hti.RowIndex].Cells[0];
+                }
+            }
+        }
     }
 }

@@ -49,6 +49,8 @@ namespace MusicManager
             this.FilePathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TrackIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rightClickMainForm = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.playFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.pauseFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tagChangeMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.albumTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.artistTagChange = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,8 +60,6 @@ namespace MusicManager
             this.titleTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.playFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.pauseFile = new System.Windows.Forms.ToolStripMenuItem();
             this.panelMusicControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
             this.rightClickMainForm.SuspendLayout();
@@ -250,6 +250,7 @@ namespace MusicManager
             this.dataGridViewFileList.TabIndex = 2;
             this.dataGridViewFileList.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewFileList_CellMouseDoubleClick);
             this.dataGridViewFileList.ColumnSortModeChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewFileList_ColumnSortModeChanged);
+            this.dataGridViewFileList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewFileList_MouseDown);
             // 
             // FileNameColumn
             // 
@@ -315,10 +316,24 @@ namespace MusicManager
             this.pauseFile,
             this.tagChangeMenu});
             this.rightClickMainForm.Name = "contextMenuStrip1";
-            this.rightClickMainForm.Size = new System.Drawing.Size(218, 104);
+            this.rightClickMainForm.Size = new System.Drawing.Size(218, 76);
             this.rightClickMainForm.Opening += new System.ComponentModel.CancelEventHandler(this.rightClickMainForm_Opening);
-            this.rightClickMainForm.Click += new System.EventHandler(this.FormMain_Click);
+            this.rightClickMainForm.Click += new System.EventHandler(this.playFile_Click);
             this.rightClickMainForm.MouseClick += new System.Windows.Forms.MouseEventHandler(this.rightClickMainForm_MouseClick);
+            // 
+            // playFile
+            // 
+            this.playFile.Name = "playFile";
+            this.playFile.Size = new System.Drawing.Size(217, 24);
+            this.playFile.Text = "Play";
+            this.playFile.Click += new System.EventHandler(this.playFile_Click);
+            // 
+            // pauseFile
+            // 
+            this.pauseFile.Name = "pauseFile";
+            this.pauseFile.Size = new System.Drawing.Size(217, 24);
+            this.pauseFile.Text = "Pause";
+            this.pauseFile.Click += new System.EventHandler(this.pauseFile_Click);
             // 
             // tagChangeMenu
             // 
@@ -336,37 +351,37 @@ namespace MusicManager
             // albumTagChange
             // 
             this.albumTagChange.Name = "albumTagChange";
-            this.albumTagChange.Size = new System.Drawing.Size(224, 26);
+            this.albumTagChange.Size = new System.Drawing.Size(184, 26);
             this.albumTagChange.Text = "Album Tag";
             // 
             // artistTagChange
             // 
             this.artistTagChange.Name = "artistTagChange";
-            this.artistTagChange.Size = new System.Drawing.Size(224, 26);
+            this.artistTagChange.Size = new System.Drawing.Size(184, 26);
             this.artistTagChange.Text = "Artist Tag";
             // 
             // commentTagChange
             // 
             this.commentTagChange.Name = "commentTagChange";
-            this.commentTagChange.Size = new System.Drawing.Size(224, 26);
+            this.commentTagChange.Size = new System.Drawing.Size(184, 26);
             this.commentTagChange.Text = "Comment Tag";
             // 
             // genreTagChange
             // 
             this.genreTagChange.Name = "genreTagChange";
-            this.genreTagChange.Size = new System.Drawing.Size(224, 26);
+            this.genreTagChange.Size = new System.Drawing.Size(184, 26);
             this.genreTagChange.Text = "Genre Tag";
             // 
             // sequenceTagChange
             // 
             this.sequenceTagChange.Name = "sequenceTagChange";
-            this.sequenceTagChange.Size = new System.Drawing.Size(224, 26);
+            this.sequenceTagChange.Size = new System.Drawing.Size(184, 26);
             this.sequenceTagChange.Text = "Sequence Tag";
             // 
             // titleTagChange
             // 
             this.titleTagChange.Name = "titleTagChange";
-            this.titleTagChange.Size = new System.Drawing.Size(224, 26);
+            this.titleTagChange.Size = new System.Drawing.Size(184, 26);
             this.titleTagChange.Text = "Title Tag";
             // 
             // openFileDialog
@@ -377,20 +392,6 @@ namespace MusicManager
             // saveFileDialog
             // 
             this.saveFileDialog.DefaultExt = "Album";
-            // 
-            // playFile
-            // 
-            this.playFile.Name = "playFile";
-            this.playFile.Size = new System.Drawing.Size(217, 24);
-            this.playFile.Text = "Play";
-            this.playFile.Click += new System.EventHandler(this.playFile_Click);
-            // 
-            // pauseFile
-            // 
-            this.pauseFile.Name = "pauseFile";
-            this.pauseFile.Size = new System.Drawing.Size(217, 24);
-            this.pauseFile.Text = "Pause";
-            this.pauseFile.Click += new System.EventHandler(this.pauseFile_Click);
             // 
             // FormMain
             // 
@@ -448,6 +449,8 @@ namespace MusicManager
         private System.Windows.Forms.ToolStripMenuItem commentTagChange;
         private System.Windows.Forms.ToolStripMenuItem playFile;
         private System.Windows.Forms.ToolStripMenuItem pauseFile;
+
+        public object MyDataGridView { get; private set; }
     }
 }
 
