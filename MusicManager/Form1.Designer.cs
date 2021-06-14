@@ -351,9 +351,7 @@ namespace MusicManager
             // 
             // playFile
             // 
-            this.addSongsToQueue.Name = "addSongsToQueue";
-            this.addSongsToQueue.Size = new System.Drawing.Size(253, 30);
-            this.addSongsToQueue.Text = "Add Songs To Queue";
+
             // 
             // pauseFile
             // 
@@ -413,9 +411,7 @@ namespace MusicManager
             // 
             // fileRename
             // 
-            this.fileRename.Name = "fileRename";
-            this.fileRename.Size = new System.Drawing.Size(185, 22);
-            this.fileRename.Text = "Rename File";
+
             // 
             // openFileDialog
             // 

@@ -92,12 +92,6 @@ namespace MusicManager
             get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
         }
 
-        public uint Sequence
-        {
-            get { return _metaData.Tag.Track; }
-        }
-
-
         public AudioFile(string filePath, int trackID)
         {
             _filePath = filePath;
