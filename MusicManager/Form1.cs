@@ -1,15 +1,10 @@
-﻿using System;
+﻿using LibVLCSharp.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using LibVLCSharp.Shared;
 
 
 namespace MusicManager
@@ -291,10 +286,7 @@ namespace MusicManager
             _mp.Stop();
         }
 
-        private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
+        
 
         private void buttonSaveDVGFields_Click(object sender, EventArgs e)
         {
@@ -421,12 +413,39 @@ namespace MusicManager
         {
             Process.Start("");
         }
-        private void OnContextMenuItem_Clicked(object sender, EventArgs e)
+
+        private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
         {
-            //ToolStripItem clickedItem = e.ClickedItem;
-            //string itemName = clickedItem.Text;
+            FormMain_Click(sender, e);
+        }
+
+        private void dataGridViewFileList_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            PlaySong(FindSelectedSongs()[0]);
+        }
+
+        private void FormMain_Click(object sender, EventArgs e)
+        {
 
         }
-        
+
+        private void rightClickMainForm_MouseClick(object sender, MouseEventArgs e)
+        {
+            FormMain_Click(sender, e);
+        }
+
+
+        private void playFile_Click(object sender, EventArgs e)
+        {
+            PlaySong(FindSelectedSongs()[0]);
+        }
+
+        private void pauseFile_Click(object sender, EventArgs e)
+        {
+            if (_mp.IsPlaying)
+            {
+                _mp.Pause();
+            }
+        }
     }
 }
