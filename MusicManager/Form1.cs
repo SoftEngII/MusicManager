@@ -61,18 +61,6 @@ namespace MusicManager
                     // Creates folder
                     System.IO.Directory.CreateDirectory(saveLocation);
 
-                    //// gets the selected rows index from selected cells and prevents duplicates.
-
-                    //for (int i = 0; i < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++)
-                    //{
-                    //    if (!(allRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
-                    //    {
-                    //        allRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex);
-                    //    }
-
-                    //}
-
-
                     // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
                     List<string> filePaths = new List<string>();
                     foreach (int row in allRows)
@@ -106,15 +94,6 @@ namespace MusicManager
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            //if (
-            //       dataGridViewFileList.SelectedCells.Count == 1 ||
-            //       dataGridViewFileList.SelectedRows.Count == 1
-            //   )
-            //{
-
-
-            //    PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
-            //}
             string playPath = songStorage[FindSelectedSongs()[0]].GetFilePath();
             if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
             {
@@ -440,19 +419,9 @@ namespace MusicManager
             }
             return SongRows;
         }
-        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
-        {
 
-            
-            //songStorage.Clear();
-            //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
-            //{
-            //    AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString(), 0);
-            //    songStorage.Add(tfile);
-            //}
-        }
         private void albumTagChange_Click(object sender, EventArgs e)
-        { // were creating errors?
+        { 
             //Process.Start("");
         }
 
@@ -547,22 +516,5 @@ namespace MusicManager
 
             }
         }
-        //
-        //private static bool preventAudioBookswithSequenceInFileNameInsteadOfTheSequenceTagLikeItsSupposedToBe(string name)
-        //{
-        //    name = name.Substring(0, Math.Min(2, name.Length));
-        //    for (int i = 0; i < name.Length; i++)
-        //    {
-        //        if ((int)name[i] >= '0' && (int)name[i] <= '9')
-        //        {
-        //            for (int x = 0; x < name.Length; x++)
-        //            {
-
-        //            }
-        //            return true;
-        //        }
-        //    }
-
-        //}
     }
 }
