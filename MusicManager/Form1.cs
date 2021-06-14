@@ -483,5 +483,10 @@ namespace MusicManager
                 }
             }
         }
+
+        private void deleteFile_Click(object sender, EventArgs e)
+        {
+            buttonDelete.PerformClick();
+        }
     }
 }
