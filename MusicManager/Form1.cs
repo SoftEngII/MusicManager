@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -116,14 +116,20 @@ namespace MusicManager
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            if (
-                   dataGridViewFileList.SelectedCells.Count == 1 ||
-                   dataGridViewFileList.SelectedRows.Count == 1
-               )
+            //if (
+            //       dataGridViewFileList.SelectedCells.Count == 1 ||
+            //       dataGridViewFileList.SelectedRows.Count == 1
+            //   )
+            //{
+                
+                
+            //    PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
+            //}
+            if (_mp.Media != null)
             {
-                buttonPlay.Visible = false;
                 buttonPause.Visible = true;
-                PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
+                buttonPlay.Visible = false;
+                _mp.Play();
             }
 
         }
@@ -286,7 +292,7 @@ namespace MusicManager
 
 
 
-            _mp.Play();
+            buttonPlay.PerformClick();
 
         }
 
@@ -300,10 +306,7 @@ namespace MusicManager
             _mp.Stop();
         }
 
-        private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
+        
 
         private void buttonSaveDVGFields_Click(object sender, EventArgs e)
         {
@@ -418,6 +421,82 @@ namespace MusicManager
             //    AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString(), 0);
             //    songStorage.Add(tfile);
             //}
+        }
+        private void albumTagChange_Click(object sender, EventArgs e)
+        { // were creating errors?
+            //Process.Start("");
+        }
+
+        private void artistTagChange_Click(object sender, EventArgs e)
+        {
+            //Process.Start("");
+        }
+
+        private void commentTagChange_Click(object sender, EventArgs e)
+        {
+            //Process.Start("");
+        }
+
+        private void genreTagChange_Click(object sender, EventArgs e)
+        {
+            //Process.Start("");
+        }
+        private void sequenceTagChange_Click(object sender, EventArgs e)
+        {
+            //Process.Start("");
+        }
+
+        private void titleTagChange_Click(object sender, EventArgs e)
+        {
+            //Process.Start("");
+        }
+
+        private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
+        {
+            FormMain_Click(sender, e);
+        }
+
+        private void dataGridViewFileList_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            PlaySong(FindSelectedSongs()[0]);
+        }
+
+        private void FormMain_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rightClickMainForm_MouseClick(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void playFile_Click(object sender, EventArgs e)
+        {
+            PlaySong(FindSelectedSongs()[0]);
+        }
+
+        private void pauseFile_Click(object sender, EventArgs e)
+        {
+            if (_mp.IsPlaying)
+            {
+                buttonPause.PerformClick();
+            }
+        }
+
+        private void dataGridViewFileList_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var hti = dataGridViewFileList.HitTest(e.X, e.Y);
+
+                if (hti.RowIndex != -1)
+                {
+                    dataGridViewFileList.ClearSelection();
+                    dataGridViewFileList.Rows[hti.RowIndex].Selected = true;
+                    dataGridViewFileList.CurrentCell = dataGridViewFileList.Rows[hti.RowIndex].Cells[0];
+                }
+            }
         }
 
         private void dataGridViewFileList_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
