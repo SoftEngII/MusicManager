@@ -142,7 +142,7 @@ namespace MusicManager
             this.buttonPause.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(239)))));
             this.buttonPause.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPause.Location = new System.Drawing.Point(287, 7);
+            this.buttonPause.Location = new System.Drawing.Point(289, 7);
             this.buttonPause.Margin = new System.Windows.Forms.Padding(1);
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(35, 37);

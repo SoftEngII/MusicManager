@@ -16,17 +16,6 @@ namespace MusicManager
 {
     public partial class FormMain : Form
     {
-        enum cell
-        {
-            Sequence,
-            Name,
-            Artist,
-            Track,
-            Album,
-            Duration,
-            FilePath,
-            TrackID
-        }
         private List<List<AudioFile>> AudioBookSets = new List<List<AudioFile>>();
 
         // VLC media player
@@ -88,7 +77,7 @@ namespace MusicManager
                     List<string> filePaths = new List<string>();
                     foreach (int row in allRows)
                     {
-                        string FilePath = (string)dataGridViewFileList.Rows[row].Cells[(int)cell.FilePath].Value;
+                        string FilePath = (string)dataGridViewFileList.Rows[row].Cells["FilePathColumn"].Value;
                         filePaths.Add(FilePath);
 
                     }
@@ -122,13 +111,21 @@ namespace MusicManager
             //       dataGridViewFileList.SelectedRows.Count == 1
             //   )
             //{
-                
-                
+
+
             //    PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
             //}
+            string playPath = songStorage[FindSelectedSongs()[0]].GetFilePath();
+            if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
+            {
+                PlaySong(FindSelectedSongs()[0]);
+            }
+
             if (_mp.Media != null)
             {
-                buttonPause.Visible = true;
+
+                    
+                    buttonPause.Visible = true;
                 buttonPlay.Visible = false;
                 _mp.Play();
             }
@@ -307,7 +304,7 @@ namespace MusicManager
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
-            string playPath = (string)dataGridViewFileList.Rows[index].Cells[(int)cell.FilePath].Value; //5 is the same number from saveFile, so an enum or array may be nice soon
+            string playPath = (string)dataGridViewFileList.Rows[index].Cells["FilePathColumn"].Value;
             //string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
             Media media;
 
@@ -353,11 +350,11 @@ namespace MusicManager
                 foreach (var track in songStorage)
                 {
 
-                    if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells[(int)cell.TrackID].Value.ToString()))
+                    if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells["TrackIDColumn"].Value.ToString()))
                     {
-                        track.Artist = dataRowsInDGV[i].Cells[(int)cell.Artist].Value.ToString();
-                        track.TrackTitle = dataRowsInDGV[i].Cells[(int)cell.Track].Value.ToString();
-                        track.Album = dataRowsInDGV[i].Cells[(int)cell.Album].Value.ToString();
+                        track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
+                        track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
+                        track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
                     }
                 }
             }
@@ -412,7 +409,7 @@ namespace MusicManager
 
             for (int x = 0; x < selectedRows.Count; x++)
             {
-                string TrackId = dataGridViewFileList.Rows[selectedRows[x]].Cells[(int)cell.TrackID].Value.ToString();
+                string TrackId = dataGridViewFileList.Rows[selectedRows[x]].Cells["TrackIDColumn"].Value.ToString();
                 for (int i = 0; i < songStorage.Count; i++)
                 {
                     //AudioFile tfile in songStorage
@@ -432,7 +429,7 @@ namespace MusicManager
 
             for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
             {
-                string TrackId = dataGridViewFileList.Rows[i].Cells[(int)cell.TrackID].Value.ToString();
+                string TrackId = dataGridViewFileList.Rows[i].Cells["TrackIDColumn"].Value.ToString();
                 for (int x = 0; x < audioSet.Count; x++)
                 {
                     if (audioSet[x].trackID.ToString() == TrackId)
