@@ -61,6 +61,7 @@ namespace MusicManager
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.deleteFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelMusicControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
             this.rightClickMainForm.SuspendLayout();
@@ -113,6 +114,7 @@ namespace MusicManager
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(53, 40);
             this.buttonDelete.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.buttonDelete, "Highlight a single row for deletion.");
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
@@ -193,6 +195,7 @@ namespace MusicManager
             this.buttonSaveDGVFields.Name = "buttonSaveDGVFields";
             this.buttonSaveDGVFields.Size = new System.Drawing.Size(66, 54);
             this.buttonSaveDGVFields.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.buttonSaveDGVFields, "Saves all edits made in the table.");
             this.buttonSaveDGVFields.UseVisualStyleBackColor = true;
             this.buttonSaveDGVFields.Click += new System.EventHandler(this.buttonSaveDVGFields_Click);
             // 
@@ -456,9 +459,9 @@ namespace MusicManager
         private System.Windows.Forms.ToolStripMenuItem commentTagChange;
         private System.Windows.Forms.ToolStripMenuItem playFile;
         private System.Windows.Forms.ToolStripMenuItem pauseFile;
+        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem deleteFile;
 
-        public object MyDataGridView { get; private set; }
     }
 }
 

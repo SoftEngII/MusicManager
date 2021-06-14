@@ -25,8 +25,8 @@ namespace MusicManager
                 catch (Exception)
                 {
                     _metaData.Tag.Performers.Initialize();
-                    return "";
-                    
+                    return "None";
+
                 }
                 //if (_metaData.Tag.Performers != null)
                 //{
@@ -47,7 +47,17 @@ namespace MusicManager
 
         public string Album
         {
-            get { return _metaData.Tag.Album; }
+            get
+            {
+                if (_metaData.Tag.Album != null)
+                {
+                    return _metaData.Tag.Album;
+                }
+                else
+                {
+                    return "None";
+                }
+            }
             set
             {
                 _metaData.Tag.Album = value;
@@ -55,10 +65,19 @@ namespace MusicManager
             }
         }
 
-
         public string TrackTitle
         {
-            get { return _metaData.Tag.Title; }
+            get
+            {
+                if (_metaData.Tag.Title != null)
+                {
+                    return _metaData.Tag.Title;
+                }
+                else
+                {
+                    return "None";
+                }
+            }
             set
             {
                 _metaData.Tag.Title = value;
