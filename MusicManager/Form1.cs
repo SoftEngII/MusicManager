@@ -438,6 +438,8 @@ namespace MusicManager
         private void playFile_Click(object sender, EventArgs e)
         {
             PlaySong(FindSelectedSongs()[0]);
+            buttonPause.Visible = true;
+            buttonPlay.Visible = false;
         }
 
         private void pauseFile_Click(object sender, EventArgs e)
@@ -446,6 +448,9 @@ namespace MusicManager
             {
                 _mp.Pause();
             }
+            buttonPause.Visible = false;
+            buttonPlay.Visible = true;
         }
+        
     }
 }
