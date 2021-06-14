@@ -15,7 +15,28 @@ namespace MusicManager
 
         public string Artist
         {
-            get { return _metaData.Tag.Performers[0].ToString(); }
+            get
+            {
+                try
+                {
+                    return _metaData.Tag.Performers[0].ToString();
+
+                }
+                catch (Exception)
+                {
+                    _metaData.Tag.Performers.Initialize();
+                    return "";
+                    
+                }
+                //if (_metaData.Tag.Performers != null)
+                //{
+                //    return _metaData.Tag.Performers[0].ToString();
+                //}
+                //else
+                //{
+                //    return "None";
+                //}
+            }
             set
             {
                 _metaData.Tag.Performers = null;
@@ -33,7 +54,7 @@ namespace MusicManager
                 _metaData.Save();
             }
         }
-        
+
 
         public string TrackTitle
         {
@@ -49,6 +70,7 @@ namespace MusicManager
         {
             get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
         }
+
         public uint Sequence
         {
             get { return _metaData.Tag.Track; }
@@ -67,7 +89,7 @@ namespace MusicManager
         }
 
         public string[] ReturnRowColumnData()
-        {   
+        {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
             string[] rowData = new string[] { ReturnFileName(), Artist, TrackTitle, Album, Duration, _filePath, trackID.ToString() };
             return rowData;
@@ -85,7 +107,7 @@ namespace MusicManager
 
         public int CompareTo(AudioFile other)
         {
-            if(other._filePath == this._filePath)
+            if (other._filePath == this._filePath)
             {
                 return 0;
             }

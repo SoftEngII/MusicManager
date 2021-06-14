@@ -117,6 +117,26 @@ namespace MusicManager
             _mp.Play();
         }
 
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            var trackID = Int32.Parse(dataGridViewFileList.CurrentRow.Cells["TrackIDColumn"].Value.ToString());
+            var filePath = dataGridViewFileList.CurrentRow.Cells["FilePathColumn"].Value.ToString();
+            File.Delete(filePath);
+            dataGridViewFileList.CurrentRow.Visible = false;
+            int trackIndex = 0;
+
+            for (int i = 0; i <= songStorage.Count - 1; i++)
+            {
+                if (songStorage[i].trackID == trackID)
+                {
+                    trackIndex = i;
+                }
+            }
+
+            songStorage.RemoveAt(trackIndex);
+            
+        }
+
 
         private void buttonPause_Click(object sender, EventArgs e)
         {
@@ -305,9 +325,9 @@ namespace MusicManager
 
                     if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells[6].Value.ToString()))
                     {
-                        track.Artist = dataRowsInDGV[i].Cells[1].Value.ToString();
-                        track.TrackTitle = dataRowsInDGV[i].Cells[2].Value.ToString();
-                        track.Album = dataRowsInDGV[i].Cells[3].Value.ToString();
+                        track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
+                        track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
+                        track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
                     }
                 }
             }
