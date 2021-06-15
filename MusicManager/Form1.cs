@@ -119,6 +119,8 @@ namespace MusicManager
 
           if (dataGridViewFileList.SelectedRows.Count == 1)
             {
+                _mp.Stop();
+                ClearSong();
                 DialogResult confirmResult = MessageBox.Show("Are you sure to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo);
                 
                 if (confirmResult == DialogResult.Yes)

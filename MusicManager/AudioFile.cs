@@ -22,6 +22,7 @@ namespace MusicManager
                 _metaData.Save();
             }
         }
+
         public string Artist
         {
             get
@@ -99,6 +100,16 @@ namespace MusicManager
             get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
         }
 
+        public string DateModified
+        {
+            get
+            {
+                var lastModified = System.IO.File.GetLastWriteTime(GetFilePath());
+                return lastModified.ToString("dd/MM/yy HH:mm");
+
+            }
+        }
+
 
         public AudioFile(string filePath, int trackID)
         {
@@ -115,7 +126,7 @@ namespace MusicManager
         public string[] ReturnRowColumnData()
         {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
-            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, _filePath, trackID.ToString() };
+            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, _filePath, trackID.ToString(), DateModified };
             return rowData;
         }
 
