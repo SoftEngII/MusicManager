@@ -41,7 +41,7 @@ namespace MusicManager
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonFolder = new System.Windows.Forms.Button();
             this.dataGridViewFileList = new System.Windows.Forms.DataGridView();
-            this.Sequence = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SequenceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ArtistColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TrackColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -238,7 +238,7 @@ namespace MusicManager
             this.dataGridViewFileList.AllowUserToDeleteRows = false;
             this.dataGridViewFileList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFileList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Sequence,
+            this.SequenceColumn,
             this.FileNameColumn,
             this.ArtistColumn,
             this.TrackColumn,
@@ -254,13 +254,14 @@ namespace MusicManager
             this.dataGridViewFileList.Size = new System.Drawing.Size(603, 304);
             this.dataGridViewFileList.TabIndex = 2;
             this.dataGridViewFileList.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewFileList_CellMouseDoubleClick);
+            this.dataGridViewFileList.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewFileList_ColumnHeaderMouseClick);
             this.dataGridViewFileList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewFileList_MouseDown);
             // 
-            // Sequence
+            // SequenceColumn
             // 
-            this.Sequence.HeaderText = "#";
-            this.Sequence.Name = "Sequence";
-            this.Sequence.Width = 25;
+            this.SequenceColumn.HeaderText = "#";
+            this.SequenceColumn.Name = "SequenceColumn";
+            this.SequenceColumn.Width = 25;
             // 
             // FileNameColumn
             // 
@@ -396,7 +397,7 @@ namespace MusicManager
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog1";
+            this.openFileDialog.FileName = "Song";
             this.openFileDialog.Multiselect = true;
             // 
             // saveFileDialog
@@ -449,7 +450,11 @@ namespace MusicManager
         private System.Windows.Forms.ToolStripMenuItem titleTagChange;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Sequence;
+        private System.Windows.Forms.ToolStripMenuItem commentTagChange;
+        private System.Windows.Forms.ToolStripMenuItem playFile;
+        private System.Windows.Forms.ToolStripMenuItem pauseFile;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SequenceColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileNameColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArtistColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackColumn;
@@ -457,10 +462,6 @@ namespace MusicManager
         private System.Windows.Forms.DataGridViewTextBoxColumn DurationColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn FilePathColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackIDColumn;
-        private System.Windows.Forms.ToolStripMenuItem commentTagChange;
-        private System.Windows.Forms.ToolStripMenuItem playFile;
-        private System.Windows.Forms.ToolStripMenuItem pauseFile;
-        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

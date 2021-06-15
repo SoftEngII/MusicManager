@@ -194,6 +194,7 @@ namespace MusicManager
                                     if (audioBookSeries[0].Album == tfile.Album)
                                     {
                                         audioBookSeries.Add(tfile);
+                                        audioBookSeries.Sort((a,b) => { return a.Sequence.CompareTo(b.Sequence); }); // really doubt this is necessary, but there may be a chance.
                                         break;
                                     }
                                     // if we are on the last audioseries, and the previous line did not work, add a new set
@@ -216,7 +217,8 @@ namespace MusicManager
                             }
                         }
                     }
-                    
+                    dataGridViewFileList.Sort(dataGridViewFileList.Columns["SequenceColumn"], ListSortDirection.Ascending);
+
                 }
             }
         }
@@ -331,7 +333,16 @@ namespace MusicManager
 
                     if (track.trackID == Int32.Parse(dataRowsInDGV[i].Cells["TrackIDColumn"].Value.ToString()))
                     {
-                        track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
+                        try
+                        {
+                            track.Sequence = uint.Parse(dataRowsInDGV[i].Cells["SequenceColumn"].Value.ToString());
+                        }
+                        catch (System.FormatException) { }
+                        
+
+
+
+                    track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
                         track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
                         track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
                     }
@@ -499,14 +510,16 @@ namespace MusicManager
 
         private void dataGridViewFileList_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            
             for (int i = 0; i < AudioBookSets.Count; i++)
             {
                 List<int> SongsToRemove = FindSongsInDataGrid(AudioBookSets[i]);
+                SongsToRemove.Sort();
+                int offset = 0;
                 for (int x = 0; x < SongsToRemove.Count; x++)
                 {
-                    dataGridViewFileList.Rows
-                                    .Remove(dataGridViewFileList.Rows[SongsToRemove[x]]);
-
+                    dataGridViewFileList.Rows.RemoveAt(SongsToRemove[x] + offset);
+                    offset--;
                 }
                 for (int x = 0; x < AudioBookSets[i].Count; x++)
                 {
@@ -516,5 +529,7 @@ namespace MusicManager
 
             }
         }
+
+
     }
 }

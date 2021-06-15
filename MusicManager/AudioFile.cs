@@ -14,7 +14,14 @@ namespace MusicManager
         public readonly int trackID;
 
         public uint Sequence
-        { get { return _metaData.Tag.Track; } }
+        { 
+            get { return _metaData.Tag.Track; } 
+            set
+            {
+                _metaData.Tag.Track = value;
+                _metaData.Save();
+            }
+        }
         public string Artist
         {
             get
@@ -125,10 +132,8 @@ namespace MusicManager
         public int CompareTo(AudioFile other)
         {
             if (other._filePath == this._filePath)
-            {
-                return 0;
-            }
-            return 1;
+            { return 0; }
+              return 1;
         }
     }
 }
