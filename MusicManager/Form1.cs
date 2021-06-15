@@ -400,7 +400,9 @@ namespace MusicManager
 
         private void albumTagChange_Click(object sender, EventArgs e)
         {
-            using (TextInputForm tagPopup = new TextInputForm())
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            using (tagPopup)
             {
                 // Read the contents of testDialog's TextBox.
                 if (tagPopup.ShowDialog() == DialogResult.OK)
@@ -419,7 +421,9 @@ namespace MusicManager
 
         private void artistTagChange_Click(object sender, EventArgs e)
         {
-            using (TextInputForm tagPopup = new TextInputForm())
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            using (tagPopup)
             {
                 // Read the contents of testDialog's TextBox.
                 if (tagPopup.ShowDialog() == DialogResult.OK)
@@ -438,7 +442,9 @@ namespace MusicManager
 
         private void commentTagChange_Click(object sender, EventArgs e)
         {
-            using (TextInputForm tagPopup = new TextInputForm())
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            using (tagPopup)
             {
                 // Read the contents of testDialog's TextBox.
                 if (tagPopup.ShowDialog() == DialogResult.OK)
@@ -457,7 +463,9 @@ namespace MusicManager
 
         private void genreTagChange_Click(object sender, EventArgs e)
         {
-            using (TextInputForm tagPopup = new TextInputForm())
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            using (tagPopup)
             {
                 // Read the contents of testDialog's TextBox.
                 if (tagPopup.ShowDialog() == DialogResult.OK)
@@ -476,9 +484,12 @@ namespace MusicManager
 
         private void trackTagChange_Click(object sender, EventArgs e)
         {
-            using (TextInputForm tagPopup = new TextInputForm())
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            using (tagPopup)
             {
                 // Read the contents of testDialog's TextBox.
+                
                 if (tagPopup.ShowDialog() == DialogResult.OK)
                 {
                     this.Text = tagPopup.textFromBox;
