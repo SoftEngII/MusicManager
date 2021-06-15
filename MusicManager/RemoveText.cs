@@ -42,7 +42,7 @@ namespace MusicManager
                     if (confirmResult == DialogResult.Yes)
                     {
                         PrimaryForm.RemoveNameElement(this.RemoveBox.Text, songsToRemove);
-                        this.Dispose();
+                        //this.Dispose();
                     } 
                 break;
                 
@@ -56,11 +56,16 @@ namespace MusicManager
                         if (confirmResult == DialogResult.Yes)
                         {
                             PrimaryForm.RemoveNameElement(this.RemoveBox.Text, songsToRemove);
-                            this.Dispose();
+                            //this.Dispose();
                         }
                     }
                 break;
             }
+        }
+
+        private void RemoveText_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //this.Dispose();
         }
     }
 }

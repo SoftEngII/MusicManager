@@ -63,6 +63,7 @@ namespace MusicManager
             this.Controls.Add(this.RemoveButton);
             this.Name = "RemoveText";
             this.Text = "RemoveText";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RemoveText_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

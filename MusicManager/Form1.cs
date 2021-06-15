@@ -26,8 +26,10 @@ namespace MusicManager
         private string _currentSongPlayingPath;
         private int currentsongIndex;
         private int trackID = 0;
+        private string[] selectedFiles;
 
-        List<AudioFile> songStorage = new List<AudioFile>(); // this shouldn't be needed anymore, left in because I may be wrong
+
+        List<AudioFile> songStorage = new List<AudioFile>(); 
 
         public FormMain()
         {
@@ -63,6 +65,7 @@ namespace MusicManager
                     // Creates folder
                     System.IO.Directory.CreateDirectory(saveLocation);
 
+
                     // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
                     List<string> filePaths = new List<string>();
                     foreach (int row in allRows)
@@ -81,25 +84,17 @@ namespace MusicManager
                         Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
 
                         string copyLocation = saveLocation + @"\" + Name + @".mp3";
-                        File.Copy(filepath, copyLocation);
+                        System.IO.File.Copy(filepath, copyLocation);
                     }
-
-
-
                 }
             }
-
-
-
-
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             if(songStorage.Count == 0)
             { return; }
-            string playPath = songStorage[FindSelectedSongs()[0]].filePath; ;
-            
+            string playPath = songStorage[FindSelectedSongs()[0]].filePath;
             if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
             {
                 PlaySong(FindSelectedSongs()[0]);
@@ -125,7 +120,7 @@ namespace MusicManager
                 {
                     var trackID = Int32.Parse(dataGridViewFileList.CurrentRow.Cells["TrackIDColumn"].Value.ToString());
                     var filePath = dataGridViewFileList.CurrentRow.Cells["FilePathColumn"].Value.ToString();
-                    File.Delete(filePath);
+                    System.IO.File.Delete(filePath);
                     dataGridViewFileList.CurrentRow.Visible = false;
                     int trackIndex = 0;
 
@@ -146,7 +141,6 @@ namespace MusicManager
 
         }
 
-
         private void buttonPause_Click(object sender, EventArgs e)
         {
             //UI feature to make pause and play buttons overlap
@@ -157,20 +151,18 @@ namespace MusicManager
         }
         private void buttonTag_Click(object sender, EventArgs e)
         {
-            if (RemoveSelected == null)
-            {
-
-                RemoveSelected = new RemoveText(this);
-                RemoveSelected.StartPosition = FormStartPosition.CenterScreen;
-                RemoveSelected.Show();
-            }
+                using (RemoveSelected) {
+                    RemoveSelected = new RemoveText(this);
+                    RemoveSelected.StartPosition = FormStartPosition.CenterScreen;
+                    RemoveSelected.Show();
+                }
         }
 
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
         {
 
-            string[] selectedFiles;
+            //string[] selectedFiles;
 
             DialogResult dialogResult = this.openFileDialog.ShowDialog();
 
@@ -199,7 +191,6 @@ namespace MusicManager
                             // check for track sequence
                             if (tfile.Sequence != 0)
                             {
-
                                 // loop through every set
                                 foreach (List<AudioFile> audioBookSeries in AudioBookSets)
                                 {
@@ -304,7 +295,6 @@ namespace MusicManager
             }
         }
 
-
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
@@ -319,14 +309,9 @@ namespace MusicManager
                 _mp.Play(media);
                 media.Dispose();
 
-
                 currentsongIndex = index;
             }
-
-
-
             buttonPlay.PerformClick();
-
         }
 
         private void ClearSong()
@@ -338,9 +323,7 @@ namespace MusicManager
             buttonPlay.Visible = true;
             _mp.Stop();
         }
-
-        
-
+       
         private void buttonSaveDVGFields_Click(object sender, EventArgs e)
         {
             //name, artist, track, album, duration, filepath, trackid
@@ -368,10 +351,10 @@ namespace MusicManager
                     track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
                         track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
                         track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
+                        
                     }
                 }
-            }
-            
+            }            
         }
 
         // Can be used to mass rename tags as well
@@ -509,7 +492,10 @@ namespace MusicManager
             List<int> selectedRows = new List<int>();
 
             for (int i = 0; i < dataGridViewFileList.SelectedCells.Count; i++)
-            { selectedRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex); }
+            { 
+                if(!(selectedRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
+                { selectedRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex); }
+            }
 
             for (int x = 0; x < selectedRows.Count; x++)
             {
@@ -525,8 +511,8 @@ namespace MusicManager
                 }
             }
             return selectedSongs;
-
         }
+
         private List<int> FindSongsInDataGrid(List<AudioFile> audioSet)
         {
             List<int> SongRows = new List<int>();
@@ -538,40 +524,139 @@ namespace MusicManager
                 {
                     if (audioSet[x].trackID.ToString() == TrackId)
                     { SongRows.Add(i); }
-                }
-
-                
+                }                
             }
             return SongRows;
         }
 
         private void albumTagChange_Click(object sender, EventArgs e)
-        { 
-            //Process.Start("");
+        {
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            _mp.Stop();
+            using (tagPopup)
+            {
+                List<int> store = FindSelectedSongs();
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i < store.Count; i++)
+                {
+                    if (FindSelectedSongs().Count != 0)
+                    {
+                        songStorage[store[i]].Album = tagPopup.tagTextBox.Text;
+                    }
+                }
+
+                RefreshData();
+            }
         }
 
         private void artistTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            _mp.Stop();
+            using (tagPopup)
+            {
+                List<int> store = FindSelectedSongs();
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i < store.Count; i++)
+                {
+                    if (FindSelectedSongs().Count != 0)
+                    {
+                        songStorage[store[i]].Artist = tagPopup.tagTextBox.Text;
+                    }
+                }
+
+                RefreshData();
+            }
         }
 
         private void commentTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            _mp.Stop();
+            using (tagPopup)
+            {
+                List<int> store = FindSelectedSongs();
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i < store.Count; i++)
+                {
+                    if (FindSelectedSongs().Count != 0)
+                    {
+                        songStorage[store[i]].Comment = tagPopup.tagTextBox.Text;
+                    }
+                }
+
+                RefreshData();
+            }
         }
 
         private void genreTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
-        }
-        private void sequenceTagChange_Click(object sender, EventArgs e)
-        {
-            //Process.Start("");
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            _mp.Stop();
+            using (tagPopup)
+            {
+                List<int> store = FindSelectedSongs();
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i < store.Count; i++)
+                {
+                    if(FindSelectedSongs().Count != 0)
+                    {
+                        songStorage[store[i]].Genre = tagPopup.tagTextBox.Text;
+                    }
+                }
+
+                RefreshData();
+            }
         }
 
-        private void titleTagChange_Click(object sender, EventArgs e)
+        private void trackTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
+            TextInputForm tagPopup = new TextInputForm();
+            tagPopup.StartPosition = FormStartPosition.CenterScreen;
+            _mp.Stop();
+            using (tagPopup)
+            {
+                List<int> store = FindSelectedSongs();
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i < store.Count; i++)
+                {
+                    if (FindSelectedSongs().Count != 0)
+                    {
+                        songStorage[store[i]].TrackTitle = tagPopup.tagTextBox.Text;
+                    }
+                }
+
+                RefreshData();
+            }
         }
 
         private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
@@ -642,6 +727,11 @@ namespace MusicManager
                     dataGridViewFileList.CurrentCell = dataGridViewFileList.Rows[hti.RowIndex].Cells[0];
                 }
             }
+        }
+
+        private void deleteFile_Click(object sender, EventArgs e)
+        {
+            buttonDelete.PerformClick();
         }
 
         private void dataGridViewFileList_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)

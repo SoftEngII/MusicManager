@@ -14,6 +14,13 @@ namespace MusicManager
         private TagLib.File _metaData;
         public readonly int trackID;
 
+        
+
+        //public TagLib.File track
+        //{
+        //    get { return _metaData; }
+        //}
+
         public uint Sequence
         { 
             get { return _metaData.Tag.Track; } 
@@ -30,22 +37,12 @@ namespace MusicManager
                 try
                 {
                     return _metaData.Tag.Performers[0].ToString();
-
                 }
                 catch (Exception)
                 {
                     _metaData.Tag.Performers.Initialize();
                     return "None";
-
                 }
-                //if (_metaData.Tag.Performers != null)
-                //{
-                //    return _metaData.Tag.Performers[0].ToString();
-                //}
-                //else
-                //{
-                //    return "None";
-                //}
             }
             set
             {
@@ -94,7 +91,46 @@ namespace MusicManager
                 _metaData.Save();
             }
         }
-
+        public string Comment
+        {
+            get
+            {
+                if (_metaData.Tag.Comment != null)
+                {
+                    return _metaData.Tag.Comment;
+                }
+                else
+                {
+                    return "None";
+                }
+            }
+            set
+            {
+                _metaData.Tag.Comment = value;
+                _metaData.Save();
+            }
+        }
+        public string Genre
+        {
+            get
+            {
+                try
+                {
+                    return _metaData.Tag.Genres[0].ToString();
+                }
+                catch (Exception)
+                {
+                    _metaData.Tag.Genres.Initialize();
+                    return "None";
+                }
+            }
+            set
+            {
+                _metaData.Tag.Genres = null;
+                _metaData.Tag.Genres = new string[] { value };
+                _metaData.Save();
+            }
+        }
         public string Duration
         {
             get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
@@ -111,7 +147,7 @@ namespace MusicManager
         public string[] ReturnRowColumnData()
         {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
-            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, filePath, trackID.ToString() };
+            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, Genre , filePath, trackID.ToString() };
             return rowData;
         }
 
@@ -122,7 +158,6 @@ namespace MusicManager
             Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
             return Name;
         }
-
 
 
         public int CompareTo(AudioFile other)
