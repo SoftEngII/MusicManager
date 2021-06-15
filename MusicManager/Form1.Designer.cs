@@ -1,4 +1,5 @@
-﻿using TagLib;
+﻿using System;
+using TagLib;
 namespace MusicManager
 {
     partial class FormMain
@@ -59,6 +60,7 @@ namespace MusicManager
             this.genreTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.sequenceTagChange = new System.Windows.Forms.ToolStripMenuItem();
             this.titleTagChange = new System.Windows.Forms.ToolStripMenuItem();
+            this.ClearTable = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -325,9 +327,10 @@ namespace MusicManager
             this.rightClickMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playFile,
             this.pauseFile,
-            this.tagChangeMenu});
+            this.tagChangeMenu,
+            this.ClearTable});
             this.rightClickMainForm.Name = "contextMenuStrip1";
-            this.rightClickMainForm.Size = new System.Drawing.Size(186, 70);
+            this.rightClickMainForm.Size = new System.Drawing.Size(186, 92);
             this.rightClickMainForm.Opening += new System.ComponentModel.CancelEventHandler(this.rightClickMainForm_Opening);
             this.rightClickMainForm.Click += new System.EventHandler(this.playFile_Click);
             this.rightClickMainForm.MouseClick += new System.Windows.Forms.MouseEventHandler(this.rightClickMainForm_MouseClick);
@@ -395,6 +398,13 @@ namespace MusicManager
             this.titleTagChange.Size = new System.Drawing.Size(149, 22);
             this.titleTagChange.Text = "Title Tag";
             // 
+            // ClearTable
+            // 
+            this.ClearTable.Name = "ClearTable";
+            this.ClearTable.Size = new System.Drawing.Size(185, 22);
+            this.ClearTable.Text = "Clear Songs";
+            this.ClearTable.Click += new System.EventHandler(this.ClearTable_Click);
+            // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "Song";
@@ -427,6 +437,8 @@ namespace MusicManager
             this.ResumeLayout(false);
 
         }
+
+
 
         #endregion
 
@@ -462,6 +474,7 @@ namespace MusicManager
         private System.Windows.Forms.DataGridViewTextBoxColumn DurationColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn FilePathColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackIDColumn;
+        private System.Windows.Forms.ToolStripMenuItem ClearTable;
     }
 }
 

@@ -94,7 +94,10 @@ namespace MusicManager
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            string playPath = songStorage[FindSelectedSongs()[0]].GetFilePath();
+            if(songStorage.Count == 0)
+            { return; }
+            string playPath = songStorage[FindSelectedSongs()[0]].GetFilePath(); ;
+            
             if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
             {
                 PlaySong(FindSelectedSongs()[0]);
@@ -288,7 +291,7 @@ namespace MusicManager
             string playPath = (string)dataGridViewFileList.Rows[index].Cells["FilePathColumn"].Value;
             //string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
             Media media;
-
+           
             if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
             {
                 _currentSongPlayingPath = playPath;
@@ -482,6 +485,8 @@ namespace MusicManager
 
         private void playFile_Click(object sender, EventArgs e)
         {
+            if(songStorage.Count == 0)
+            { return; }
             PlaySong(FindSelectedSongs()[0]);
         }
 
@@ -490,6 +495,18 @@ namespace MusicManager
             if (_mp.IsPlaying)
             {
                 buttonPause.PerformClick();
+            }
+        }
+        private void ClearTable_Click(object sender, EventArgs e)
+        {
+            DialogResult confirmResult = MessageBox.Show("Are you sure to clear the table?", "Confirm Clear", MessageBoxButtons.YesNo);
+
+            if (confirmResult == DialogResult.Yes)
+            {
+                ClearSong();
+                _mp.Stop();
+                songStorage.Clear();
+                dataGridViewFileList.Rows.Clear();
             }
         }
 
