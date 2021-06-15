@@ -138,6 +138,7 @@ namespace MusicManager
                     }
 
                     songStorage.RemoveAt(trackIndex);
+                    RefreshData();
                 }
                 
             }
