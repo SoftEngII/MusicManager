@@ -9,7 +9,8 @@ namespace MusicManager
 {
     public class AudioFile : IComparable<AudioFile>
     {
-        private string _filePath;
+        public string filePath { get; set; }
+
         private TagLib.File _metaData;
         public readonly int trackID;
 
@@ -100,28 +101,23 @@ namespace MusicManager
         }
 
 
-        public AudioFile(string filePath, int trackID)
+        public AudioFile(string _filePath, int trackID)
         {
-            _filePath = filePath;
+            filePath = _filePath;
             _metaData = TagLib.File.Create(filePath);
             this.trackID = trackID;
-        }
-
-        public string GetFilePath()
-        {
-            return _filePath;
         }
 
         public string[] ReturnRowColumnData()
         {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
-            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, _filePath, trackID.ToString() };
+            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, filePath, trackID.ToString() };
             return rowData;
         }
 
         public string ReturnFileName()
         {
-            string Name = _filePath;
+            string Name = filePath;
             Name = Name.Substring(0, Name.LastIndexOf(@"."));
             Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
             return Name;
@@ -131,7 +127,7 @@ namespace MusicManager
 
         public int CompareTo(AudioFile other)
         {
-            if (other._filePath == this._filePath)
+            if (other.filePath == this.filePath)
             { return 0; }
               return 1;
         }
