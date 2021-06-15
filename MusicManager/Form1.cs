@@ -17,13 +17,14 @@ namespace MusicManager
     public partial class FormMain : Form
     {
         private List<List<AudioFile>> AudioBookSets = new List<List<AudioFile>>();
-
         // VLC media player
         private LibVLC _libVLC;
         private MediaPlayer _mp;
         private string _currentSongPlayingPath;
         private int currentsongIndex;
         private int trackID = 0;
+        private string[] selectedFiles;
+
 
         List<AudioFile> songStorage = new List<AudioFile>(); // this shouldn't be needed anymore, left in because I may be wrong
 
@@ -61,17 +62,6 @@ namespace MusicManager
                     // Creates folder
                     System.IO.Directory.CreateDirectory(saveLocation);
 
-                    //// gets the selected rows index from selected cells and prevents duplicates.
-
-                    //for (int i = 0; i < dataGridViewFileList.GetCellCount(DataGridViewElementStates.Selected); i++)
-                    //{
-                    //    if (!(allRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
-                    //    {
-                    //        allRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex);
-                    //    }
-
-                    //}
-
 
                     // pull data from dataGridViewFileList to compare to songStorage, since they may not be synchronized 
                     List<string> filePaths = new List<string>();
@@ -91,30 +81,14 @@ namespace MusicManager
                         Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
 
                         string copyLocation = saveLocation + @"\" + Name + @".mp3";
-                        File.Copy(filepath, copyLocation);
+                        System.IO.File.Copy(filepath, copyLocation);
                     }
-
-
-
                 }
             }
-
-
-
-
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            //if (
-            //       dataGridViewFileList.SelectedCells.Count == 1 ||
-            //       dataGridViewFileList.SelectedRows.Count == 1
-            //   )
-            //{
-
-
-            //    PlaySong(dataGridViewFileList.CurrentCell.RowIndex);
-            //}
             string playPath = songStorage[FindSelectedSongs()[0]].GetFilePath();
             if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
             {
@@ -122,10 +96,8 @@ namespace MusicManager
             }
 
             if (_mp.Media != null)
-            {
-
-                    
-                    buttonPause.Visible = true;
+            {                   
+                buttonPause.Visible = true;
                 buttonPlay.Visible = false;
                 _mp.Play();
             }
@@ -143,7 +115,7 @@ namespace MusicManager
                 {
                     var trackID = Int32.Parse(dataGridViewFileList.CurrentRow.Cells["TrackIDColumn"].Value.ToString());
                     var filePath = dataGridViewFileList.CurrentRow.Cells["FilePathColumn"].Value.ToString();
-                    File.Delete(filePath);
+                    System.IO.File.Delete(filePath);
                     dataGridViewFileList.CurrentRow.Visible = false;
                     int trackIndex = 0;
 
@@ -163,7 +135,6 @@ namespace MusicManager
 
         }
 
-
         private void buttonPause_Click(object sender, EventArgs e)
         {
             //UI feature to make pause and play buttons overlap
@@ -177,7 +148,7 @@ namespace MusicManager
         private void buttonFolder_Click(object sender, EventArgs e)
         {
 
-            string[] selectedFiles;
+            //string[] selectedFiles;
 
             DialogResult dialogResult = this.openFileDialog.ShowDialog();
 
@@ -202,12 +173,10 @@ namespace MusicManager
                         {
                             songStorage.Add(tfile);
                             dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
-                            
-                            
+                                                      
                             // check for track sequence
                             if (tfile.Sequence != 0)
                             {
-
                                 // loop through every set
                                 foreach (List<AudioFile> audioBookSeries in AudioBookSets)
                                 {
@@ -236,8 +205,7 @@ namespace MusicManager
                                 }
                             }
                         }
-                    }
-                    
+                    }                    
                 }
             }
         }
@@ -300,7 +268,6 @@ namespace MusicManager
             }
         }
 
-
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
@@ -315,14 +282,9 @@ namespace MusicManager
                 _mp.Play(media);
                 media.Dispose();
 
-
                 currentsongIndex = index;
             }
-
-
-
             buttonPlay.PerformClick();
-
         }
 
         private void ClearSong()
@@ -334,9 +296,7 @@ namespace MusicManager
             buttonPlay.Visible = true;
             _mp.Stop();
         }
-
-        
-
+       
         private void buttonSaveDVGFields_Click(object sender, EventArgs e)
         {
             //name, artist, track, album, duration, filepath, trackid
@@ -355,10 +315,10 @@ namespace MusicManager
                         track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
                         track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
                         track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
+                        
                     }
                 }
-            }
-            
+            }            
         }
 
         // no care for current selection because it is not mentioned on the sheet
@@ -380,8 +340,7 @@ namespace MusicManager
                             name = tfile.Artist + " - " + tfile.Album + " - " + tfile.TrackTitle;
                             // if there are no tags
                             if(name == "")
-                            {
-                                
+                            {                                
                                 name = "Unknown " + "(" + tfile.ReturnFileName().Length + ")";
                             }
                         }
@@ -421,8 +380,8 @@ namespace MusicManager
                 }
             }
             return selectedSongs;
-
         }
+
         private List<int> FindSongsInDataGrid(List<AudioFile> audioSet)
         {
             List<int> SongRows = new List<int>();
@@ -434,50 +393,104 @@ namespace MusicManager
                 {
                     if (audioSet[x].trackID.ToString() == TrackId)
                     { SongRows.Add(i); }
-                }
-
-                
+                }                
             }
             return SongRows;
         }
-        private void dataGridViewFileList_ColumnSortModeChanged(object sender, DataGridViewColumnEventArgs e) 
-        {
 
-            
-            //songStorage.Clear();
-            //for (int i = 0; i < dataGridViewFileList.Rows.Count; i++)
-            //{
-            //    AudioFile tfile = new AudioFile(dataGridViewFileList.Rows[i].Cells[5].Value.ToString(), 0);
-            //    songStorage.Add(tfile);
-            //}
-        }
         private void albumTagChange_Click(object sender, EventArgs e)
-        { // were creating errors?
-            //Process.Start("");
+        {
+            using (TextInputForm tagPopup = new TextInputForm())
+            {
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i <= songStorage.Count; i++)
+                {
+                    songStorage[FindSelectedSongs()[i]].Album = tagPopup.tagTextBox.Text;
+                }
+
+                RefreshData();
+            }
         }
 
         private void artistTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
+            using (TextInputForm tagPopup = new TextInputForm())
+            {
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;                  
+                }
+                
+                for (int i = 0; i <= songStorage.Count; i++)
+                {
+                    songStorage[FindSelectedSongs()[i]].Artist = tagPopup.tagTextBox.Text;
+                }
+                
+                RefreshData();
+            }
         }
 
         private void commentTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
+            using (TextInputForm tagPopup = new TextInputForm())
+            {
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i <= songStorage.Count; i++)
+                {
+                    songStorage[FindSelectedSongs()[i]].Comment = tagPopup.tagTextBox.Text;
+                }
+
+                RefreshData();
+            }
         }
 
         private void genreTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
-        }
-        private void sequenceTagChange_Click(object sender, EventArgs e)
-        {
-            //Process.Start("");
+            using (TextInputForm tagPopup = new TextInputForm())
+            {
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i <= songStorage.Count; i++)
+                {
+                    songStorage[FindSelectedSongs()[i]].Genre = tagPopup.tagTextBox.Text;
+                }
+
+                RefreshData();
+            }
         }
 
-        private void titleTagChange_Click(object sender, EventArgs e)
+        private void trackTagChange_Click(object sender, EventArgs e)
         {
-            //Process.Start("");
+            using (TextInputForm tagPopup = new TextInputForm())
+            {
+                // Read the contents of testDialog's TextBox.
+                if (tagPopup.ShowDialog() == DialogResult.OK)
+                {
+                    this.Text = tagPopup.textFromBox;
+                }
+
+                for (int i = 0; i <= songStorage.Count; i++)
+                {
+                    songStorage[FindSelectedSongs()[i]].TrackTitle = tagPopup.tagTextBox.Text;
+                }
+
+                RefreshData();
+            }
         }
 
         private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
@@ -553,24 +566,15 @@ namespace MusicManager
             }
         }
 
-        private void dataGridViewFileList_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void RefreshData()
         {
-            for (int i = 0; i < AudioBookSets.Count; i++)
+            dataGridViewFileList.Rows.Clear();
+            foreach (AudioFile tfile in songStorage)
             {
-                List<int> SongsToRemove = FindSongsInDataGrid(AudioBookSets[i]);
-                for (int x = 0; x < SongsToRemove.Count; x++)
-                {
-                    dataGridViewFileList.Rows
-                                    .Remove(dataGridViewFileList.Rows[SongsToRemove[x]]);
-
-                }
-                for (int x = 0; x < AudioBookSets[i].Count; x++)
-                {
-                    dataGridViewFileList.Rows.Add(AudioBookSets[i][x].ReturnRowColumnData());
-                }
-
-
+                dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
             }
         }
+        
+
     }
 }
