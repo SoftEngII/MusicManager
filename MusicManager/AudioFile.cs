@@ -136,6 +136,15 @@ namespace MusicManager
         {
             get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
         }
+        public string DateModified
+        {
+            get
+            {
+                var lastModified = System.IO.File.GetLastWriteTime(filePath);
+                return lastModified.ToString("dd/MM/yy HH:mm");
+
+            }
+        }
 
 
         public AudioFile(string _filePath, int trackID)
@@ -148,7 +157,7 @@ namespace MusicManager
         public string[] ReturnRowColumnData()
         {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
-            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, Genre , filePath, trackID.ToString() };
+            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, Genre , filePath, trackID.ToString(), DateModified };
             return rowData;
         }
 
