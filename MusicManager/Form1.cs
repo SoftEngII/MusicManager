@@ -406,20 +406,49 @@ namespace MusicManager
             }
             return tempName;
         }
+        public void ReplaceSelectedColumnData(string remove, string replace, string column)
+        {
+            List<int> songs = FindSelectedSongs();
+            for (int i = 0; i < songs.Count; i++)
+            {
 
-        public void RemoveNameElement(string input, List<int> Songs)
+                string toReplace = dataGridViewFileList.Rows[i]
+                                .Cells[column].Value.ToString();
+                if (remove == "")
+                {
+                    toReplace = replace + toReplace;
+                } else
+                {
+                    toReplace = toReplace.Replace(remove, replace);
+                }
+                
+
+                dataGridViewFileList.Rows[i].Cells[column].Value = toReplace;
+            }
+            buttonSaveDGVFields.PerformClick();
+        }
+
+        // this code is much to specific to generalize, I will make a replace tag element function
+        public void ReplaceNameElement(string remove,string replace, List<int> Songs)
         { 
             foreach(int songLocation in Songs)
             {
                 string name = dataGridViewFileList.Rows[songLocation]
                                 .Cells["FileNameColumn"].Value.ToString();
-                if (name.Contains(input))
+                if (name.Contains(remove))
                 {
                     // while there is still more of the phrase to be removed
-                    while(name.IndexOf(input) != -1)
-                    {
+                    //while(name.IndexOf(remove) != -1)
+                    //{
                         // remove it
-                        name = name.Remove(name.IndexOf(input), input.Length);
+                    if(remove == "")
+                    {
+                        name = replace + name;
+                    }else
+                    {
+                        name = name.Replace(remove, replace);
+                    }
+                        
                         //if nothing is left
                         if(name == "" )
                         { // generic naming system
@@ -436,7 +465,7 @@ namespace MusicManager
                                     ")";
                             }
                         }
-                    }
+                    //}
                     // copy out the old path
                     string oldPath = 
                         dataGridViewFileList.Rows[songLocation]
@@ -489,7 +518,7 @@ namespace MusicManager
             return edit;
         }
 
-        private List<int> FindSelectedSongs()
+        public List<int> FindSelectedSongs()
         {
             List<int> selectedSongs = new List<int>(); 
             List<int> selectedRows = new List<int>();
