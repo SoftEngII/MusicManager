@@ -84,6 +84,7 @@ namespace MusicManager
                         Name = Name.Remove(0, Name.LastIndexOf(@"\") + 1);
 
                         string copyLocation = saveLocation + @"\" + Name + @".mp3";
+                        copyLocation = CheckForNamingConflict(copyLocation);
                         System.IO.File.Copy(filepath, copyLocation);
                     }
                 }
@@ -383,6 +384,10 @@ namespace MusicManager
             bool repeat = true; ;
             int i = 0;
             string[] files = System.IO.Directory.GetFiles(newName.Substring(0,newName.LastIndexOf(@"\")));
+            if(files.Count() == 0)
+            {
+                repeat = false;
+            }
             while (repeat)
             {
                 foreach (string file in files)
