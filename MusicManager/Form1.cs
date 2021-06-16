@@ -225,10 +225,8 @@ namespace MusicManager
                             }
                         }
                     }
-                    RefreshData();
-                    
-
                 }
+                RefreshData();
             }
         }
         public void RefreshData()
@@ -352,7 +350,7 @@ namespace MusicManager
 
 
 
-                    track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
+                    track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString(); 
                         track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
                         track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
                         
@@ -703,7 +701,8 @@ namespace MusicManager
 
         private void dataGridViewFileList_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            
+            if(e.RowIndex == -1)
+            { return; }
             if (songStorage.Count == 0)
             { return; }
             // This line Errors because otherwise this can freeze the program

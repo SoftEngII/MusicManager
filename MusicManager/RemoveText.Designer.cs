@@ -45,7 +45,7 @@ namespace MusicManager
             this.RemoveButton.Location = new System.Drawing.Point(12, 66);
             this.RemoveButton.Name = "RemoveButton";
             this.RemoveButton.Size = new System.Drawing.Size(81, 23);
-            this.RemoveButton.TabIndex = 0;
+            this.RemoveButton.TabIndex = 4;
             this.RemoveButton.Text = "Replace";
             this.RemoveButton.UseVisualStyleBackColor = false;
             this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
@@ -72,7 +72,7 @@ namespace MusicManager
             this.ColumnComboBox.Location = new System.Drawing.Point(155, 66);
             this.ColumnComboBox.Name = "ColumnComboBox";
             this.ColumnComboBox.Size = new System.Drawing.Size(118, 23);
-            this.ColumnComboBox.TabIndex = 2;
+            this.ColumnComboBox.TabIndex = 3;
             // 
             // FindLabel
             // 
@@ -98,7 +98,7 @@ namespace MusicManager
             this.ReplaceBox.Location = new System.Drawing.Point(68, 37);
             this.ReplaceBox.Name = "ReplaceBox";
             this.ReplaceBox.Size = new System.Drawing.Size(205, 23);
-            this.ReplaceBox.TabIndex = 5;
+            this.ReplaceBox.TabIndex = 2;
             // 
             // ColumnLabel
             // 
