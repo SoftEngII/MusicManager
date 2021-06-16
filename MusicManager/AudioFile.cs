@@ -34,15 +34,11 @@ namespace MusicManager
         {
             get
             {
-                try
+                if (!(_metaData.Tag.Performers == null))
                 {
                     return _metaData.Tag.Performers[0].ToString();
                 }
-                catch (Exception)
-                {
-                    _metaData.Tag.Performers.Initialize();
-                    return "None";
-                }
+                return "";
             }
             set
             {
@@ -62,7 +58,7 @@ namespace MusicManager
                 }
                 else
                 {
-                    return "None";
+                    return "";
                 }
             }
             set
@@ -82,7 +78,7 @@ namespace MusicManager
                 }
                 else
                 {
-                    return "None";
+                    return "";
                 }
             }
             set
@@ -101,7 +97,7 @@ namespace MusicManager
                 }
                 else
                 {
-                    return "None";
+                    return "";
                 }
             }
             set
@@ -114,15 +110,20 @@ namespace MusicManager
         {
             get
             {
-                try
+                if(!(_metaData.Tag.Genres.Count() < 1))
                 {
                     return _metaData.Tag.Genres[0].ToString();
                 }
-                catch (Exception)
-                {
-                    _metaData.Tag.Genres.Initialize();
-                    return "None";
-                }
+                return "";
+                //try
+                //{
+                //    return _metaData.Tag.Genres[0].ToString();
+                //}
+                //catch (Exception)
+                //{
+                //    _metaData.Tag.Genres.Initialize();
+                //    return "";
+                //}
             }
             set
             {

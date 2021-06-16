@@ -112,12 +112,12 @@ namespace MusicManager
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-
+            DialogResult confirmResult;
           if (dataGridViewFileList.SelectedRows.Count == 1)
             {
                 _mp.Stop();
                 ClearSong();
-                DialogResult confirmResult = MessageBox.Show("Are you sure to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo);
+                confirmResult = MessageBox.Show("Are you sure to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo);
 
 
                 if (confirmResult == DialogResult.Yes)
@@ -138,9 +138,12 @@ namespace MusicManager
 
                     songStorage.RemoveAt(trackIndex);
                     RefreshData();
+                    return;
                 }
                 
             }
+
+            confirmResult = MessageBox.Show("Please Select A full Row(which can be done on the left.", "FileNotFound", MessageBoxButtons.OK);
 
 
         }
@@ -232,9 +235,9 @@ namespace MusicManager
         public void RefreshData()
         {
             dataGridViewFileList.Rows.Clear();
-            foreach (AudioFile tfile in songStorage)
+            for (int i = 0; i < songStorage.Count(); i++)
             {
-                dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
+                dataGridViewFileList.Rows.Add(songStorage[i].ReturnRowColumnData());
             }
             dataGridViewFileList.Sort(dataGridViewFileList.Columns["SequenceColumn"], ListSortDirection.Ascending);
         }
