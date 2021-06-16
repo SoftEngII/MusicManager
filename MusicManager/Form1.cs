@@ -436,8 +436,9 @@ namespace MusicManager
 
         // this code is much to specific to generalize, I will make a replace tag element function
         public void ReplaceNameElement(string remove,string replace, List<int> Songs)
-        { 
-            foreach(int songLocation in Songs)
+        {
+            List<int> find = FindSongsInDataGrid(songStorage);
+            foreach (int songLocation in Songs)
             {
                 string name = dataGridViewFileList.Rows[songLocation]
                                 .Cells["FileNameColumn"].Value.ToString();
@@ -489,7 +490,7 @@ namespace MusicManager
                     System.IO.File.Move(oldPath, newPath);
 
                     // this is to update the datagrid with the new filepath
-                    List<int> find = FindSongsInDataGrid(songStorage);
+                    
                     for (int i = 0; i < find.Count; i++)
                     {
                         if(songLocation == find[i])
