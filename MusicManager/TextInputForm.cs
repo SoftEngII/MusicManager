@@ -10,11 +10,17 @@ using System.Windows.Forms;
 
 namespace MusicManager
 {
-    public partial class FileSelect : Form
+    public partial class TextInputForm : Form
     {
-        public FileSelect()
+        public string textFromBox { get; set; }
+        public TextInputForm()
         {
             InitializeComponent();
+        }
+
+        private void enterButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
