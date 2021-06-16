@@ -23,11 +23,6 @@ namespace MusicManager
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
-            if(ReplaceBox.Text == "")
-            {
-                confirmResult = MessageBox.Show("Replace must not be empty", "Not Replacing Anything", MessageBoxButtons.OK);
-
-            }
             switch(ColumnComboBox.Text)
             {
                 case"Name":
