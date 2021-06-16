@@ -112,12 +112,12 @@ namespace MusicManager
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-
+            DialogResult confirmResult;
           if (dataGridViewFileList.SelectedRows.Count == 1)
             {
                 _mp.Stop();
                 ClearSong();
-                DialogResult confirmResult = MessageBox.Show("Are you sure to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo);
+                confirmResult = MessageBox.Show("Are you sure to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo);
 
 
                 if (confirmResult == DialogResult.Yes)
@@ -138,9 +138,12 @@ namespace MusicManager
 
                     songStorage.RemoveAt(trackIndex);
                     RefreshData();
+                    return;
                 }
                 
             }
+
+            confirmResult = MessageBox.Show("Please Select A full Row(which can be done on the left.", "FileNotFound", MessageBoxButtons.OK);
 
 
         }
@@ -225,18 +228,16 @@ namespace MusicManager
                             }
                         }
                     }
-                    RefreshData();
-                    
-
                 }
+                RefreshData();
             }
         }
         public void RefreshData()
         {
             dataGridViewFileList.Rows.Clear();
-            foreach (AudioFile tfile in songStorage)
+            for (int i = 0; i < songStorage.Count(); i++)
             {
-                dataGridViewFileList.Rows.Add(tfile.ReturnRowColumnData());
+                dataGridViewFileList.Rows.Add(songStorage[i].ReturnRowColumnData());
             }
             dataGridViewFileList.Sort(dataGridViewFileList.Columns["SequenceColumn"], ListSortDirection.Ascending);
         }
@@ -352,7 +353,7 @@ namespace MusicManager
 
 
 
-                    track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
+                    track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString(); 
                         track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
                         track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
                         
@@ -435,8 +436,9 @@ namespace MusicManager
 
         // this code is much to specific to generalize, I will make a replace tag element function
         public void ReplaceNameElement(string remove,string replace, List<int> Songs)
-        { 
-            foreach(int songLocation in Songs)
+        {
+            List<int> find = FindSongsInDataGrid(songStorage);
+            foreach (int songLocation in Songs)
             {
                 string name = dataGridViewFileList.Rows[songLocation]
                                 .Cells["FileNameColumn"].Value.ToString();
@@ -488,7 +490,7 @@ namespace MusicManager
                     System.IO.File.Move(oldPath, newPath);
 
                     // this is to update the datagrid with the new filepath
-                    List<int> find = FindSongsInDataGrid(songStorage);
+                    
                     for (int i = 0; i < find.Count; i++)
                     {
                         if(songLocation == find[i])
@@ -703,7 +705,8 @@ namespace MusicManager
 
         private void dataGridViewFileList_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            
+            if(e.RowIndex == -1)
+            { return; }
             if (songStorage.Count == 0)
             { return; }
             // This line Errors because otherwise this can freeze the program

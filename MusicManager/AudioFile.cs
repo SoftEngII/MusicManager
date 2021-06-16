@@ -34,15 +34,11 @@ namespace MusicManager
         {
             get
             {
-                try
+                if (!(_metaData.Tag.Performers == null))
                 {
                     return _metaData.Tag.Performers[0].ToString();
                 }
-                catch (Exception)
-                {
-                    _metaData.Tag.Performers.Initialize();
-                    return "None";
-                }
+                return "";
             }
             set
             {
@@ -62,7 +58,7 @@ namespace MusicManager
                 }
                 else
                 {
-                    return "None";
+                    return "";
                 }
             }
             set
@@ -82,7 +78,7 @@ namespace MusicManager
                 }
                 else
                 {
-                    return "None";
+                    return "";
                 }
             }
             set
@@ -101,7 +97,7 @@ namespace MusicManager
                 }
                 else
                 {
-                    return "None";
+                    return "";
                 }
             }
             set
@@ -114,15 +110,20 @@ namespace MusicManager
         {
             get
             {
-                try
+                if(!(_metaData.Tag.Genres.Count() < 1))
                 {
                     return _metaData.Tag.Genres[0].ToString();
                 }
-                catch (Exception)
-                {
-                    _metaData.Tag.Genres.Initialize();
-                    return "None";
-                }
+                return "";
+                //try
+                //{
+                //    return _metaData.Tag.Genres[0].ToString();
+                //}
+                //catch (Exception)
+                //{
+                //    _metaData.Tag.Genres.Initialize();
+                //    return "";
+                //}
             }
             set
             {
@@ -134,6 +135,15 @@ namespace MusicManager
         public string Duration
         {
             get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
+        }
+        public string DateModified
+        {
+            get
+            {
+                var lastModified = System.IO.File.GetLastWriteTime(filePath);
+                return lastModified.ToString("dd/MM/yy HH:mm");
+
+            }
         }
 
 
@@ -147,7 +157,7 @@ namespace MusicManager
         public string[] ReturnRowColumnData()
         {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
-            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, Genre , filePath, trackID.ToString() };
+            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, Genre , filePath, trackID.ToString(), DateModified };
             return rowData;
         }
 

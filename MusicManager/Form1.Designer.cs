@@ -51,6 +51,7 @@ namespace MusicManager
             this.GenreColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FilePathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TrackIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateModifiedColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rightClickMainForm = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.playFile = new System.Windows.Forms.ToolStripMenuItem();
             this.pauseFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -251,7 +252,8 @@ namespace MusicManager
             this.DurationColumn,
             this.GenreColumn,
             this.FilePathColumn,
-            this.TrackIDColumn});
+            this.TrackIDColumn,
+            this.DateModifiedColumn});
             this.dataGridViewFileList.Location = new System.Drawing.Point(-4, 48);
             this.dataGridViewFileList.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.dataGridViewFileList.Name = "dataGridViewFileList";
@@ -265,70 +267,87 @@ namespace MusicManager
             // 
             // SequenceColumn
             // 
+            this.SequenceColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.SequenceColumn.HeaderText = "#";
             this.SequenceColumn.Name = "SequenceColumn";
-            this.SequenceColumn.Width = 25;
+            this.SequenceColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.SequenceColumn.Width = 39;
             // 
             // FileNameColumn
             // 
-            this.FileNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FileNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.FileNameColumn.HeaderText = "Name";
-            this.FileNameColumn.MinimumWidth = 6;
+            this.FileNameColumn.MinimumWidth = 50;
             this.FileNameColumn.Name = "FileNameColumn";
             this.FileNameColumn.ReadOnly = true;
+            this.FileNameColumn.Width = 125;
             // 
             // ArtistColumn
             // 
-            this.ArtistColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ArtistColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.ArtistColumn.HeaderText = "Artist";
-            this.ArtistColumn.MinimumWidth = 6;
+            this.ArtistColumn.MinimumWidth = 50;
             this.ArtistColumn.Name = "ArtistColumn";
+            this.ArtistColumn.Width = 125;
             // 
             // TrackColumn
             // 
-            this.TrackColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.TrackColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.TrackColumn.HeaderText = "Track";
-            this.TrackColumn.MinimumWidth = 6;
+            this.TrackColumn.MinimumWidth = 50;
             this.TrackColumn.Name = "TrackColumn";
+            this.TrackColumn.Width = 125;
             // 
             // AlbumColumn
             // 
-            this.AlbumColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.AlbumColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.AlbumColumn.HeaderText = "Album";
-            this.AlbumColumn.MinimumWidth = 6;
+            this.AlbumColumn.MinimumWidth = 50;
             this.AlbumColumn.Name = "AlbumColumn";
+            this.AlbumColumn.Width = 150;
             // 
             // DurationColumn
             // 
-            this.DurationColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.DurationColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.DurationColumn.HeaderText = "Duration";
-            this.DurationColumn.MinimumWidth = 6;
+            this.DurationColumn.MinimumWidth = 50;
             this.DurationColumn.Name = "DurationColumn";
             this.DurationColumn.ReadOnly = true;
-            this.DurationColumn.Width = 78;
+            this.DurationColumn.Width = 90;
             // 
             // GenreColumn
             // 
+            this.GenreColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.GenreColumn.HeaderText = "Genre";
             this.GenreColumn.Name = "GenreColumn";
+            this.GenreColumn.Width = 63;
             // 
             // FilePathColumn
             // 
+            this.FilePathColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.FilePathColumn.HeaderText = "FilePath";
             this.FilePathColumn.MinimumWidth = 6;
             this.FilePathColumn.Name = "FilePathColumn";
             this.FilePathColumn.ReadOnly = true;
             this.FilePathColumn.Visible = false;
-            this.FilePathColumn.Width = 125;
             // 
             // TrackIDColumn
             // 
+            this.TrackIDColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.TrackIDColumn.HeaderText = "TrackID";
             this.TrackIDColumn.MinimumWidth = 6;
             this.TrackIDColumn.Name = "TrackIDColumn";
             this.TrackIDColumn.ReadOnly = true;
             this.TrackIDColumn.Visible = false;
-            this.TrackIDColumn.Width = 125;
+            // 
+            // DateModifiedColumn
+            // 
+            this.DateModifiedColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.DateModifiedColumn.HeaderText = "Date Modified";
+            this.DateModifiedColumn.MinimumWidth = 50;
+            this.DateModifiedColumn.Name = "DateModifiedColumn";
+            this.DateModifiedColumn.ReadOnly = true;
+            this.DateModifiedColumn.Width = 150;
             // 
             // rightClickMainForm
             // 
@@ -492,6 +511,7 @@ namespace MusicManager
         private System.Windows.Forms.DataGridViewTextBoxColumn GenreColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn FilePathColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackIDColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DateModifiedColumn;
     }
 }
 
