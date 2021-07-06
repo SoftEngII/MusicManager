@@ -19,7 +19,8 @@ namespace MusicManager
     {
         
         private List<List<AudioFile>> AudioBookSets = new List<List<AudioFile>>();
-        RemoveText RemoveSelected;
+        //RemoveText RemoveSelected;
+
         // VLC media player
         private LibVLC _libVLC;
         private MediaPlayer _mp;
@@ -27,6 +28,8 @@ namespace MusicManager
         private int currentsongIndex;
         private int trackID = 0;
         private string[] selectedFiles;
+
+        private bool FindAndReplaceShown = false;
 
 
         List<AudioFile> songStorage = new List<AudioFile>(); 
@@ -156,14 +159,7 @@ namespace MusicManager
 
             _mp.Pause();
         }
-        private void buttonTag_Click(object sender, EventArgs e)
-        {
-                using (RemoveSelected) {
-                    RemoveSelected = new RemoveText(this);
-                    RemoveSelected.StartPosition = FormStartPosition.CenterScreen;
-                    RemoveSelected.Show();
-                }
-        }
+
 
         // when adding custom albums, this will need a new form to go to, or we will have to display user made albums on screen in their own list.
         private void buttonFolder_Click(object sender, EventArgs e)
@@ -195,37 +191,37 @@ namespace MusicManager
                             songStorage.Add(tfile);
                             
                             
-                            // check for track sequence
-                            if (tfile.Sequence != 0)
-                            {
-                                // loop through every set
-                                foreach (List<AudioFile> audioBookSeries in AudioBookSets)
-                                {
-                                    //if we find the same album name, add the audiobook and break out of the loop
-                                    if (audioBookSeries[0].Album == tfile.Album)
-                                    {
-                                        audioBookSeries.Add(tfile);
-                                        audioBookSeries.Sort((a,b) => { return a.Sequence.CompareTo(b.Sequence); }); // really doubt this is necessary, but there may be a chance.
-                                        break;
-                                    }
-                                    // if we are on the last audioseries, and the previous line did not work, add a new set
-                                    if (audioBookSeries == AudioBookSets[AudioBookSets.Count - 1])
-                                    {
-                                        List<AudioFile> Series = new List<AudioFile>();
-                                        Series.Add(tfile);
-                                        AudioBookSets.Add(Series);
-                                        break;
-                                    }
-                                }
+                            //// check for track sequence
+                            //if (tfile.Sequence != 0)
+                            //{
+                            //    // loop through every set
+                            //    foreach (List<AudioFile> audioBookSeries in AudioBookSets)
+                            //    {
+                            //        //if we find the same album name, add the audiobook and break out of the loop
+                            //        if (audioBookSeries[0].Album == tfile.Album)
+                            //        {
+                            //            audioBookSeries.Add(tfile);
+                            //            audioBookSeries.Sort((a,b) => { return a.Sequence.CompareTo(b.Sequence); }); // really doubt this is necessary, but there may be a chance.
+                            //            break;
+                            //        }
+                            //        // if we are on the last audioseries, and the previous line did not work, add a new set
+                            //        if (audioBookSeries == AudioBookSets[AudioBookSets.Count - 1])
+                            //        {
+                            //            List<AudioFile> Series = new List<AudioFile>();
+                            //            Series.Add(tfile);
+                            //            AudioBookSets.Add(Series);
+                            //            break;
+                            //        }
+                            //    }
 
-                                // if there are no audiobooksets already, make a new one
-                                if (AudioBookSets.Count == 0)
-                                {
-                                    List<AudioFile> Series = new List<AudioFile>();
-                                    Series.Add(tfile);
-                                    AudioBookSets.Add(Series);
-                                }
-                            }
+                            //    // if there are no audiobooksets already, make a new one
+                            //    if (AudioBookSets.Count == 0)
+                            //    {
+                            //        List<AudioFile> Series = new List<AudioFile>();
+                            //        Series.Add(tfile);
+                            //        AudioBookSets.Add(Series);
+                            //    }
+                            //}
                         }
                     }
                 }
@@ -429,7 +425,7 @@ namespace MusicManager
                 }
                 
 
-                dataGridViewFileList.Rows[i].Cells[column].Value = toReplace;
+                dataGridViewFileList.Rows[songs[i]].Cells[column].Value = toReplace;
             }
             buttonSaveDGVFields.PerformClick();
         }
@@ -795,6 +791,149 @@ namespace MusicManager
 
             }
         }
+
+        private void FindAndReplacePanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
+
+        private void buttonTag_Click(object sender, EventArgs e)
+        {
+            //FindAndReplacePanel.Visible = true;
+            if (!FindAndReplaceShown)
+            {
+                FindAndReplaceShown = true;
+                FindAndReplacePanel.Show(); 
+            }
+            else
+            {
+                FindAndReplaceShown = false;
+                FindAndReplacePanel.Hide();
+            }
+
+        }
+
+        //
+        // FIND AND REPLACE PANEL CODE
+        //
+        private void ReplaceButton_Click(object sender, EventArgs e)
+        {
+            switch (ColumnComboBox.Text)
+            {
+                case "Name":
+                    replaceFileName();
+                    break;
+                case "Artist":
+                    replaceTag("ArtistColumn");
+                    break;
+                case "Track":
+                    replaceTag("TrackColumn");
+                    break;
+                case "Album":
+                    replaceTag("AlbumColumn");
+                    break;
+                case "Genre":
+                    replaceTag("GenreColumn");
+                    break;
+
+
+                default:
+                    replaceFileName();
+                    break;
+            }
+        }
+        private void replaceTag(string column)
+        {
+            DialogResult confirmResult;
+            List<int> songsWithText = FindAllWithString(this.FindBox.Text, column);
+            List<int> selected = FindSelectedSongs();
+            List<int> songsToReplace = new List<int>();
+
+            for (int i = 0; i < songsWithText.Count; i++)
+            {
+                if (selected.Contains(songsWithText[i]))
+                { songsToReplace.Add(i); }
+            }
+
+            switch (songsToReplace.Count)
+            {
+                case 0:
+                    confirmResult = MessageBox.Show("There are no selected  " + ColumnComboBox.Text + "s with the phrase: \"" + this.FindBox.Text + "\"", "Not Found", MessageBoxButtons.OK);
+                    break;
+
+                case 1:
+                    confirmResult = MessageBox.Show("There is " + songsToReplace.Count +
+                                            " " + ColumnComboBox.Text + " with the phrase:  \"" + this.FindBox.Text + "\"",
+                                            "Are you sure?", MessageBoxButtons.YesNo);
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        ReplaceSelectedColumnData(this.FindBox.Text, this.ReplaceBox.Text, column);
+                    }
+                    break;
+
+
+                // pretty sure there is no way for the count to be anything but these
+                default:
+                    confirmResult = MessageBox.Show("There are " + songsToReplace.Count + " " +
+                                                    ColumnComboBox.Text + "s with the phrase:  \"" + this.FindBox.Text + "\"",
+                                                    "Are you sure?", MessageBoxButtons.YesNo);
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        if (confirmResult == DialogResult.Yes)
+                        {
+                            ReplaceSelectedColumnData(this.FindBox.Text, this.ReplaceBox.Text, column);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void replaceFileName()
+        {
+            DialogResult confirmResult;
+            //if (this.FindBox.Text == "")
+            //{
+            //    confirmResult = MessageBox.Show("Deleting Hard Drive, please enter a value next time.", "Deleting All", MessageBoxButtons.OK);
+            //    return;
+            //}
+            List<int> songsToRemove = FindAllWithString(this.FindBox.Text, "FileNameColumn");
+            switch (songsToRemove.Count)
+            {
+                case 0:
+                    confirmResult = MessageBox.Show("There are no names with the phrase: \"" + this.FindBox.Text + "\"", "Not Found", MessageBoxButtons.OK);
+                    break;
+
+                case 1:
+                    confirmResult = MessageBox.Show("There is " + songsToRemove.Count +
+                                            " name with the phrase:  \"" + this.FindBox.Text + "\"",
+                                            "Are you sure?", MessageBoxButtons.YesNo);
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        ReplaceNameElement(this.FindBox.Text, this.ReplaceBox.Text, songsToRemove);
+                    }
+                    break;
+
+                // pretty sure there is no way for the count to be anything but these
+                default:
+                    confirmResult = MessageBox.Show("There are " + songsToRemove.Count +
+                                           " names with the phrase:  \"" + this.FindBox.Text + "\"",
+                                           "Are you sure?", MessageBoxButtons.YesNo);
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        if (confirmResult == DialogResult.Yes)
+                        {
+                            ReplaceNameElement(this.FindBox.Text, this.ReplaceBox.Text, songsToRemove);
+                        }
+                    }
+                    break;
+            }
+        }
+        //
+        //
+        //
+
 
 
     }

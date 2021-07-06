@@ -41,6 +41,14 @@ namespace MusicManager
             this.buttonSaveDGVFields = new System.Windows.Forms.Button();
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonFolder = new System.Windows.Forms.Button();
+            this.FindAndReplacePanel = new System.Windows.Forms.Panel();
+            this.ReplaceBox = new System.Windows.Forms.TextBox();
+            this.FindBox = new System.Windows.Forms.TextBox();
+            this.ColumnComboBox = new System.Windows.Forms.ComboBox();
+            this.collumnComboBoxLabel = new System.Windows.Forms.Label();
+            this.findLabel = new System.Windows.Forms.Label();
+            this.replaceLabel = new System.Windows.Forms.Label();
+            this.ReplaceButton = new System.Windows.Forms.Button();
             this.dataGridViewFileList = new System.Windows.Forms.DataGridView();
             this.SequenceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,6 +75,7 @@ namespace MusicManager
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelMusicControls.SuspendLayout();
+            this.FindAndReplacePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
             this.rightClickMainForm.SuspendLayout();
             this.SuspendLayout();
@@ -136,6 +145,7 @@ namespace MusicManager
             this.buttonForward.Name = "buttonForward";
             this.buttonForward.Size = new System.Drawing.Size(35, 25);
             this.buttonForward.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.buttonForward, "Next Song");
             this.buttonForward.UseVisualStyleBackColor = true;
             this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
             // 
@@ -152,6 +162,7 @@ namespace MusicManager
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(35, 37);
             this.buttonPause.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.buttonPause, "Pause Song");
             this.buttonPause.UseVisualStyleBackColor = true;
             this.buttonPause.Visible = false;
             this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
@@ -169,6 +180,7 @@ namespace MusicManager
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(35, 25);
             this.buttonBack.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.buttonBack, "Previous Song");
             this.buttonBack.UseVisualStyleBackColor = true;
             this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
@@ -185,6 +197,7 @@ namespace MusicManager
             this.buttonTag.Name = "buttonTag";
             this.buttonTag.Size = new System.Drawing.Size(46, 30);
             this.buttonTag.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.buttonTag, "Find & Replace");
             this.buttonTag.UseVisualStyleBackColor = true;
             this.buttonTag.Click += new System.EventHandler(this.buttonTag_Click);
             // 
@@ -237,6 +250,95 @@ namespace MusicManager
             this.toolTip1.SetToolTip(this.buttonFolder, "Select Songs to load");
             this.buttonFolder.UseVisualStyleBackColor = true;
             this.buttonFolder.Click += new System.EventHandler(this.buttonFolder_Click);
+            // 
+            // FindAndReplacePanel
+            // 
+            this.FindAndReplacePanel.BackColor = System.Drawing.Color.Gray;
+            this.FindAndReplacePanel.Controls.Add(this.ReplaceBox);
+            this.FindAndReplacePanel.Controls.Add(this.FindBox);
+            this.FindAndReplacePanel.Controls.Add(this.ColumnComboBox);
+            this.FindAndReplacePanel.Controls.Add(this.collumnComboBoxLabel);
+            this.FindAndReplacePanel.Controls.Add(this.findLabel);
+            this.FindAndReplacePanel.Controls.Add(this.replaceLabel);
+            this.FindAndReplacePanel.Controls.Add(this.ReplaceButton);
+            this.FindAndReplacePanel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.FindAndReplacePanel.Location = new System.Drawing.Point(372, 265);
+            this.FindAndReplacePanel.Name = "FindAndReplacePanel";
+            this.FindAndReplacePanel.Size = new System.Drawing.Size(229, 83);
+            this.FindAndReplacePanel.TabIndex = 3;
+            this.FindAndReplacePanel.Visible = false;
+            this.FindAndReplacePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.FindAndReplacePanel_Paint);
+            // 
+            // ReplaceBox
+            // 
+            this.ReplaceBox.BackColor = System.Drawing.SystemColors.Info;
+            this.ReplaceBox.Location = new System.Drawing.Point(55, 29);
+            this.ReplaceBox.Name = "ReplaceBox";
+            this.ReplaceBox.Size = new System.Drawing.Size(166, 23);
+            this.ReplaceBox.TabIndex = 6;
+            // 
+            // FindBox
+            // 
+            this.FindBox.BackColor = System.Drawing.SystemColors.Info;
+            this.FindBox.Location = new System.Drawing.Point(38, 4);
+            this.FindBox.Name = "FindBox";
+            this.FindBox.Size = new System.Drawing.Size(183, 23);
+            this.FindBox.TabIndex = 5;
+            // 
+            // ColumnComboBox
+            // 
+            this.ColumnComboBox.BackColor = System.Drawing.SystemColors.Info;
+            this.ColumnComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ColumnComboBox.FormattingEnabled = true;
+            this.ColumnComboBox.Items.AddRange(new object[] {
+            "Name",
+            "Artist",
+            "Track",
+            "Album",
+            "Genre"});
+            this.ColumnComboBox.Location = new System.Drawing.Point(137, 54);
+            this.ColumnComboBox.Name = "ColumnComboBox";
+            this.ColumnComboBox.Size = new System.Drawing.Size(84, 23);
+            this.ColumnComboBox.TabIndex = 4;
+            // 
+            // collumnComboBoxLabel
+            // 
+            this.collumnComboBoxLabel.AutoSize = true;
+            this.collumnComboBoxLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.collumnComboBoxLabel.Location = new System.Drawing.Point(78, 57);
+            this.collumnComboBoxLabel.Name = "collumnComboBoxLabel";
+            this.collumnComboBoxLabel.Size = new System.Drawing.Size(53, 15);
+            this.collumnComboBoxLabel.TabIndex = 3;
+            this.collumnComboBoxLabel.Text = "Column:";
+            // 
+            // findLabel
+            // 
+            this.findLabel.AutoSize = true;
+            this.findLabel.Location = new System.Drawing.Point(8, 7);
+            this.findLabel.Name = "findLabel";
+            this.findLabel.Size = new System.Drawing.Size(33, 15);
+            this.findLabel.TabIndex = 1;
+            this.findLabel.Text = "Find:";
+            // 
+            // replaceLabel
+            // 
+            this.replaceLabel.AutoSize = true;
+            this.replaceLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.replaceLabel.Location = new System.Drawing.Point(8, 32);
+            this.replaceLabel.Name = "replaceLabel";
+            this.replaceLabel.Size = new System.Drawing.Size(51, 15);
+            this.replaceLabel.TabIndex = 2;
+            this.replaceLabel.Text = "Replace:";
+            // 
+            // ReplaceButton
+            // 
+            this.ReplaceButton.Location = new System.Drawing.Point(8, 53);
+            this.ReplaceButton.Name = "ReplaceButton";
+            this.ReplaceButton.Size = new System.Drawing.Size(66, 23);
+            this.ReplaceButton.TabIndex = 0;
+            this.ReplaceButton.Text = "Replace";
+            this.ReplaceButton.UseVisualStyleBackColor = true;
+            this.ReplaceButton.Click += new System.EventHandler(this.ReplaceButton_Click);
             // 
             // dataGridViewFileList
             // 
@@ -455,6 +557,7 @@ namespace MusicManager
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(11)))), ((int)(((byte)(173)))));
             this.ClientSize = new System.Drawing.Size(602, 347);
             this.ContextMenuStrip = this.rightClickMainForm;
+            this.Controls.Add(this.FindAndReplacePanel);
             this.Controls.Add(this.dataGridViewFileList);
             this.Controls.Add(this.panelMusicControls);
             this.ForeColor = System.Drawing.SystemColors.Desktop;
@@ -466,6 +569,8 @@ namespace MusicManager
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Click += new System.EventHandler(this.FormMain_Click);
             this.panelMusicControls.ResumeLayout(false);
+            this.FindAndReplacePanel.ResumeLayout(false);
+            this.FindAndReplacePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).EndInit();
             this.rightClickMainForm.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -512,6 +617,14 @@ namespace MusicManager
         private System.Windows.Forms.DataGridViewTextBoxColumn FilePathColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackIDColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateModifiedColumn;
+        private System.Windows.Forms.Panel FindAndReplacePanel;
+        private System.Windows.Forms.TextBox FindBox;
+        private System.Windows.Forms.ComboBox ColumnComboBox;
+        private System.Windows.Forms.Label collumnComboBoxLabel;
+        private System.Windows.Forms.Label replaceLabel;
+        private System.Windows.Forms.Label findLabel;
+        private System.Windows.Forms.Button ReplaceButton;
+        private System.Windows.Forms.TextBox ReplaceBox;
     }
 }
 
