@@ -17,8 +17,8 @@ namespace MusicManager
     //private FileSelect
     public partial class FormMain : Form
     {
-        
-        private List<List<AudioFile>> AudioBookSets = new List<List<AudioFile>>();
+
+        private List<AudioFile> AudioBooks = new List<AudioFile>();
         //RemoveText RemoveSelected;
 
         // VLC media player
@@ -32,11 +32,11 @@ namespace MusicManager
         private bool FindAndReplaceShown = false;
 
 
-        List<AudioFile> songStorage = new List<AudioFile>(); 
+        List<AudioFile> songStorage = new List<AudioFile>();
 
         public FormMain()
         {
-            
+
             InitializeComponent();
             // VLC Media Player
             LibVLCSharp.Shared.Core.Initialize();
@@ -96,7 +96,7 @@ namespace MusicManager
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            if(songStorage.Count == 0)
+            if (songStorage.Count == 0)
             { return; }
             string playPath = songStorage[FindSelectedSongs()[0]].filePath;
             if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
@@ -105,7 +105,7 @@ namespace MusicManager
             }
 
             if (_mp.Media != null)
-            {    
+            {
                 buttonPause.Visible = true;
                 buttonPlay.Visible = false;
                 _mp.Play();
@@ -116,7 +116,7 @@ namespace MusicManager
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             DialogResult confirmResult;
-          if (dataGridViewFileList.SelectedRows.Count == 1)
+            if (dataGridViewFileList.SelectedRows.Count == 1)
             {
                 _mp.Stop();
                 ClearSong();
@@ -143,7 +143,7 @@ namespace MusicManager
                     RefreshData();
                     return;
                 }
-                
+
             }
 
             confirmResult = MessageBox.Show("Please Select A full Row(which can be done on the left.", "FileNotFound", MessageBoxButtons.OK);
@@ -156,7 +156,7 @@ namespace MusicManager
             //UI feature to make pause and play buttons overlap
             buttonPause.Visible = false;
             buttonPlay.Visible = true;
-
+            currentSongTimer.Stop();
             _mp.Pause();
         }
 
@@ -179,49 +179,23 @@ namespace MusicManager
                     {
                         bool duplicate = false;
                         AudioFile tfile = new AudioFile(file, trackID++);
+
+
                         // make sure we don't have that file already
-                        foreach(AudioFile song in songStorage)
-                        {
+                        foreach (AudioFile song in songStorage)
+                        { // inefficient, this is checking every new song against all current songs to see if they are duplicates
                             if (song.CompareTo(tfile) == 0)
                             { duplicate = true; }
                         }
 
-                        if(!duplicate)
-                        {
-                            songStorage.Add(tfile);
-                            
-                            
-                            //// check for track sequence
-                            //if (tfile.Sequence != 0)
-                            //{
-                            //    // loop through every set
-                            //    foreach (List<AudioFile> audioBookSeries in AudioBookSets)
-                            //    {
-                            //        //if we find the same album name, add the audiobook and break out of the loop
-                            //        if (audioBookSeries[0].Album == tfile.Album)
-                            //        {
-                            //            audioBookSeries.Add(tfile);
-                            //            audioBookSeries.Sort((a,b) => { return a.Sequence.CompareTo(b.Sequence); }); // really doubt this is necessary, but there may be a chance.
-                            //            break;
-                            //        }
-                            //        // if we are on the last audioseries, and the previous line did not work, add a new set
-                            //        if (audioBookSeries == AudioBookSets[AudioBookSets.Count - 1])
-                            //        {
-                            //            List<AudioFile> Series = new List<AudioFile>();
-                            //            Series.Add(tfile);
-                            //            AudioBookSets.Add(Series);
-                            //            break;
-                            //        }
-                            //    }
 
-                            //    // if there are no audiobooksets already, make a new one
-                            //    if (AudioBookSets.Count == 0)
-                            //    {
-                            //        List<AudioFile> Series = new List<AudioFile>();
-                            //        Series.Add(tfile);
-                            //        AudioBookSets.Add(Series);
-                            //    }
-                            //}
+
+                        if (!duplicate)
+                        { 
+                            songStorage.Add(tfile);
+                            if (tfile.Sequence != 0)
+                            { AudioBooks.Add(tfile); }
+
                         }
                     }
                 }
@@ -231,11 +205,14 @@ namespace MusicManager
         public void RefreshData()
         {
             dataGridViewFileList.Rows.Clear();
+            AudioBooks.Sort((a, b) => a.Sequence.CompareTo(b.Sequence));
+            songStorage.Sort((a, b) => a.Sequence.CompareTo(b.Sequence));
             for (int i = 0; i < songStorage.Count(); i++)
             {
                 dataGridViewFileList.Rows.Add(songStorage[i].ReturnRowColumnData());
             }
-            dataGridViewFileList.Sort(dataGridViewFileList.Columns["SequenceColumn"], ListSortDirection.Ascending);
+            //dataGridViewFileList.Sort((a, b) => a.Sequence.CompareTo(b.Sequence));
+            //dataGridViewFileList.Sort(dataGridViewFileList.Columns["SequenceColumn"], ListSortDirection.Ascending);
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
@@ -299,19 +276,27 @@ namespace MusicManager
         // We need some method to display to the user what song is being played and how long into the song they are. I have not since there is no room
         private void PlaySong(int index)
         {
-            string playPath = (string)dataGridViewFileList.Rows[index].Cells["FilePathColumn"].Value;
-            //string playPath = string.Format(@"{0}", songStorage[index].GetFilePath());
+            //int realIndex = FindSongsInDataGrid(songStorage[index]);
+            //string playPath = (string)dataGridViewFileList.Rows[realIndex].Cells["FilePathColumn"].Value;
+            string playPath = string.Format(@"{0}", songStorage[index].filePath);
             Media media;
-           
+
             if (_currentSongPlayingPath == null || _currentSongPlayingPath != playPath)
             {
                 _currentSongPlayingPath = playPath;
                 media = new Media(_libVLC, playPath);
                 _mp.Play(media);
+                TimeSpan duration = new TimeSpan(_mp.Length * 10000);
                 media.Dispose();
-
                 currentsongIndex = index;
+                timeProgressBar.Value = 0;
+                timeProgressBar.Maximum = (int)duration.TotalMilliseconds;
+                endTimeLabel.Text = duration.ToString("mm':'ss");
+                currentSongLabel.Text = songStorage[index].ReturnFileName();
+                //currentSongLabel.Text = (string)dataGridViewFileList.Rows[index].Cells["FileNameColumn"].Value;
             }
+
+            currentSongTimer.Start();
             buttonPlay.PerformClick();
         }
 
@@ -324,7 +309,7 @@ namespace MusicManager
             buttonPlay.Visible = true;
             _mp.Stop();
         }
-       
+
         private void buttonSaveDVGFields_Click(object sender, EventArgs e)
         {
             //name, artist, track, album, duration, filepath, trackid
@@ -345,17 +330,17 @@ namespace MusicManager
                             track.Sequence = uint.Parse(dataRowsInDGV[i].Cells["SequenceColumn"].Value.ToString());
                         }
                         catch (System.FormatException) { }
-                        
 
 
 
-                    track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString(); 
+
+                        track.Artist = dataRowsInDGV[i].Cells["ArtistColumn"].Value.ToString();
                         track.TrackTitle = dataRowsInDGV[i].Cells["TrackColumn"].Value.ToString();
                         track.Album = dataRowsInDGV[i].Cells["AlbumColumn"].Value.ToString();
-                        
+
                     }
                 }
-            }            
+            }
         }
 
         // Can be used to mass rename tags as well
@@ -377,11 +362,11 @@ namespace MusicManager
         {
             string tempName = newName;
             newName = newName.Substring(0, newName.LastIndexOf(@".mp3"));
-            
+
             bool repeat = true; ;
             int i = 0;
-            string[] files = System.IO.Directory.GetFiles(newName.Substring(0,newName.LastIndexOf(@"\")));
-            if(files.Count() == 0)
+            string[] files = System.IO.Directory.GetFiles(newName.Substring(0, newName.LastIndexOf(@"\")));
+            if (files.Count() == 0)
             {
                 repeat = false;
             }
@@ -398,9 +383,9 @@ namespace MusicManager
                     }
                     repeat = false;
                 }
-                
 
-                
+
+
             }
             if (!(tempName.Contains(".mp3")))
             {
@@ -419,19 +404,20 @@ namespace MusicManager
                 if (remove == "")
                 {
                     toReplace = replace + toReplace;
-                } else
+                }
+                else
                 {
                     toReplace = toReplace.Replace(remove, replace);
                 }
-                
+
 
                 dataGridViewFileList.Rows[songs[i]].Cells[column].Value = toReplace;
             }
             buttonSaveDGVFields.PerformClick();
         }
 
-        // this code is much to specific to generalize, I will make a replace tag element function
-        public void ReplaceNameElement(string remove,string replace, List<int> Songs)
+        // replaces a substring of the fileName of any song in the datagrid
+        public void ReplaceNameElement(string remove, string replace, List<int> Songs)
         {
             List<int> find = FindSongsInDataGrid(songStorage);
             foreach (int songLocation in Songs)
@@ -443,41 +429,42 @@ namespace MusicManager
                     // while there is still more of the phrase to be removed
                     //while(name.IndexOf(remove) != -1)
                     //{
-                        // remove it
-                    if(remove == "")
+                    // remove it
+                    if (remove == "")
                     {
                         name = replace + name;
-                    }else
+                    }
+                    else
                     {
                         name = name.Replace(remove, replace);
                     }
-                        
-                        //if nothing is left
-                        if(name == "" )
-                        { // generic naming system
-                            name = GetTagBasedName(songLocation);
 
-                            // if there are no tags
-                            if (name == "")
-                            {
-                                
-                                name = "Unknown " + 
-                                    "(" + 
-                                    dataGridViewFileList.Rows[songLocation]
-                                        .Cells["FileNameColumn"].Value.GetHashCode() + 
-                                    ")";
-                            }
+                    //if nothing is left
+                    if (name == "")
+                    { // generic naming system
+                        name = GetTagBasedName(songLocation);
+
+                        // if there are no tags
+                        if (name == "")
+                        {
+
+                            name = "Unknown " +
+                                "(" +
+                                dataGridViewFileList.Rows[songLocation]
+                                    .Cells["FileNameColumn"].Value.GetHashCode() +
+                                ")";
                         }
+                    }
                     //}
                     // copy out the old path
-                    string oldPath = 
+                    string oldPath =
                         dataGridViewFileList.Rows[songLocation]
                                 .Cells["FilePathColumn"].Value.ToString();
-                    
+
                     // get only the path
                     string newPath = oldPath.Substring(0, oldPath.LastIndexOf(@"\"));
                     // add the new name and .mp3 back in
-                     newPath = string.Format(@"{0}\{1}.mp3", newPath, name);
+                    newPath = string.Format(@"{0}\{1}.mp3", newPath, name);
 
                     buttonPause.PerformClick();
                     _mp.Stop();
@@ -486,20 +473,21 @@ namespace MusicManager
                     System.IO.File.Move(oldPath, newPath);
 
                     // this is to update the datagrid with the new filepath
-                    
+
                     for (int i = 0; i < find.Count; i++)
                     {
-                        if(songLocation == find[i])
+                        if (songLocation == find[i])
                         { songStorage[i].filePath = newPath; }
                     }
                 }
             }
             RefreshData();
         }
+        // capitalizes first character of the string
         public string TitleCase(string toTitle)
         {
             string First = toTitle[0].ToString().ToUpper();
-            toTitle = toTitle.Remove(0,1);
+            toTitle = toTitle.Remove(0, 1);
             toTitle = string.Format("{0}{1}", First, toTitle);
 
             return toTitle;
@@ -521,14 +509,15 @@ namespace MusicManager
             return edit;
         }
 
+        //takes the selected songs in datagrid, and gives their location in songStorage
         public List<int> FindSelectedSongs()
         {
-            List<int> selectedSongs = new List<int>(); 
+            List<int> selectedSongs = new List<int>();
             List<int> selectedRows = new List<int>();
 
             for (int i = 0; i < dataGridViewFileList.SelectedCells.Count; i++)
-            { 
-                if(!(selectedRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
+            {
+                if (!(selectedRows.Contains(dataGridViewFileList.SelectedCells[i].RowIndex)))
                 { selectedRows.Add(dataGridViewFileList.SelectedCells[i].RowIndex); }
             }
 
@@ -539,7 +528,7 @@ namespace MusicManager
                 {
                     //AudioFile tfile in songStorage
                     if (songStorage[i].trackID.ToString() == TrackId)
-                    { 
+                    {
                         selectedSongs.Add(i);
                         break;
                     }
@@ -548,6 +537,7 @@ namespace MusicManager
             return selectedSongs;
         }
 
+        // Takes a list of audioFiles, and returns the location of each song in the datagrid
         private List<int> FindSongsInDataGrid(List<AudioFile> audioSet)
         {
             List<int> SongRows = new List<int>();
@@ -559,7 +549,7 @@ namespace MusicManager
                 {
                     if (audioSet[x].trackID.ToString() == TrackId)
                     { SongRows.Add(i); }
-                }                
+                }
             }
             return SongRows;
         }
@@ -658,7 +648,7 @@ namespace MusicManager
 
                 for (int i = 0; i < store.Count; i++)
                 {
-                    if(FindSelectedSongs().Count != 0)
+                    if (FindSelectedSongs().Count != 0)
                     {
                         songStorage[store[i]].Genre = tagPopup.tagTextBox.Text;
                     }
@@ -696,12 +686,13 @@ namespace MusicManager
 
         private void rightClickMainForm_Opening(object sender, CancelEventArgs e)
         {
-            FormMain_Click(sender, e);
+            // not sure what this is for
+            //FormMain_Click(sender, e);
         }
 
         private void dataGridViewFileList_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if(e.RowIndex == -1)
+            if (e.RowIndex == -1)
             { return; }
             if (songStorage.Count == 0)
             { return; }
@@ -720,12 +711,12 @@ namespace MusicManager
 
         private void rightClickMainForm_MouseClick(object sender, MouseEventArgs e)
         {
-            
+
         }
 
         private void playFile_Click(object sender, EventArgs e)
         {
-            if(songStorage.Count == 0)
+            if (songStorage.Count == 0)
             { return; }
             PlaySong(FindSelectedSongs()[0]);
         }
@@ -754,7 +745,8 @@ namespace MusicManager
         {
             if (e.Button == MouseButtons.Right)
             {
-                var hti = dataGridViewFileList.HitTest(e.X, e.Y);
+                Point mousePos = new Point(e.X, e.Y);
+                var hti = dataGridViewFileList.HitTest(mousePos.X, mousePos.Y);
 
                 if (hti.RowIndex != -1)
                 {
@@ -772,10 +764,7 @@ namespace MusicManager
 
         private void dataGridViewFileList_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            
-            for (int i = 0; i < AudioBookSets.Count; i++)
-            {
-                List<int> SongsToRemove = FindSongsInDataGrid(AudioBookSets[i]);
+                List<int> SongsToRemove = FindSongsInDataGrid(AudioBooks);
                 SongsToRemove.Sort();
                 int offset = 0;
                 for (int x = 0; x < SongsToRemove.Count; x++)
@@ -783,13 +772,11 @@ namespace MusicManager
                     dataGridViewFileList.Rows.RemoveAt(SongsToRemove[x] + offset);
                     offset--;
                 }
-                for (int x = 0; x < AudioBookSets[i].Count; x++)
+                for (int x = 0; x < AudioBooks.Count; x++)
                 {
-                    dataGridViewFileList.Rows.Add(AudioBookSets[i][x].ReturnRowColumnData());
+                    dataGridViewFileList.Rows.Add(AudioBooks[x].ReturnRowColumnData());
                 }
 
-
-            }
         }
 
         private void FindAndReplacePanel_Paint(object sender, PaintEventArgs e)
@@ -805,7 +792,7 @@ namespace MusicManager
             if (!FindAndReplaceShown)
             {
                 FindAndReplaceShown = true;
-                FindAndReplacePanel.Show(); 
+                FindAndReplacePanel.Show();
             }
             else
             {
@@ -933,6 +920,26 @@ namespace MusicManager
         //
         //
         //
+        public int interval = 0;
+        // current song equipment and playing new songs at the end automatically
+        private void currentSongTimer_Tick(object sender, EventArgs e)
+        {
+            timeProgressBar.PerformStep();
+            interval++;
+            if (interval == 4)
+            {
+                TimeSpan currentTime = new TimeSpan(_mp.Time * 10000);
+                currentTimeLabel.Text = currentTime.ToString("mm':'ss");
+                interval = 0;
+                if (!_mp.IsPlaying)
+                {
+                    buttonForward.PerformClick();
+                }
+            }
+
+        }
+
+
 
 
 

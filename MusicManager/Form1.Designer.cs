@@ -32,6 +32,10 @@ namespace MusicManager
         {
             this.components = new System.ComponentModel.Container();
             this.panelMusicControls = new System.Windows.Forms.Panel();
+            this.currentSongLabel = new System.Windows.Forms.Label();
+            this.endTimeLabel = new System.Windows.Forms.Label();
+            this.currentTimeLabel = new System.Windows.Forms.Label();
+            this.timeProgressBar = new System.Windows.Forms.ProgressBar();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonForward = new System.Windows.Forms.Button();
@@ -74,6 +78,7 @@ namespace MusicManager
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.currentSongTimer = new System.Windows.Forms.Timer(this.components);
             this.panelMusicControls.SuspendLayout();
             this.FindAndReplacePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFileList)).BeginInit();
@@ -83,6 +88,10 @@ namespace MusicManager
             // panelMusicControls
             // 
             this.panelMusicControls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(97)))), ((int)(((byte)(238)))));
+            this.panelMusicControls.Controls.Add(this.currentSongLabel);
+            this.panelMusicControls.Controls.Add(this.endTimeLabel);
+            this.panelMusicControls.Controls.Add(this.currentTimeLabel);
+            this.panelMusicControls.Controls.Add(this.timeProgressBar);
             this.panelMusicControls.Controls.Add(this.buttonSave);
             this.panelMusicControls.Controls.Add(this.buttonDelete);
             this.panelMusicControls.Controls.Add(this.buttonForward);
@@ -97,6 +106,38 @@ namespace MusicManager
             this.panelMusicControls.Name = "panelMusicControls";
             this.panelMusicControls.Size = new System.Drawing.Size(606, 53);
             this.panelMusicControls.TabIndex = 0;
+            // 
+            // currentSongLabel
+            // 
+            this.currentSongLabel.Location = new System.Drawing.Point(72, 13);
+            this.currentSongLabel.Name = "currentSongLabel";
+            this.currentSongLabel.Size = new System.Drawing.Size(151, 20);
+            this.currentSongLabel.TabIndex = 5;
+            this.currentSongLabel.Text = "Select a song to play";
+            // 
+            // endTimeLabel
+            // 
+            this.endTimeLabel.Location = new System.Drawing.Point(199, 33);
+            this.endTimeLabel.Name = "endTimeLabel";
+            this.endTimeLabel.Size = new System.Drawing.Size(37, 15);
+            this.endTimeLabel.TabIndex = 4;
+            this.endTimeLabel.Text = "0:00";
+            // 
+            // currentTimeLabel
+            // 
+            this.currentTimeLabel.Location = new System.Drawing.Point(65, 33);
+            this.currentTimeLabel.Name = "currentTimeLabel";
+            this.currentTimeLabel.Size = new System.Drawing.Size(37, 15);
+            this.currentTimeLabel.TabIndex = 3;
+            this.currentTimeLabel.Text = "0:00";
+            // 
+            // timeProgressBar
+            // 
+            this.timeProgressBar.Location = new System.Drawing.Point(100, 33);
+            this.timeProgressBar.Name = "timeProgressBar";
+            this.timeProgressBar.Size = new System.Drawing.Size(102, 15);
+            this.timeProgressBar.Step = 250;
+            this.timeProgressBar.TabIndex = 1;
             // 
             // buttonSave
             // 
@@ -550,6 +591,11 @@ namespace MusicManager
             // 
             this.saveFileDialog.DefaultExt = "Album";
             // 
+            // currentSongTimer
+            // 
+            this.currentSongTimer.Interval = 250;
+            this.currentSongTimer.Tick += new System.EventHandler(this.currentSongTimer_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -561,7 +607,6 @@ namespace MusicManager
             this.Controls.Add(this.dataGridViewFileList);
             this.Controls.Add(this.panelMusicControls);
             this.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(1);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -625,6 +670,11 @@ namespace MusicManager
         private System.Windows.Forms.Label findLabel;
         private System.Windows.Forms.Button ReplaceButton;
         private System.Windows.Forms.TextBox ReplaceBox;
+        private System.Windows.Forms.ProgressBar timeProgressBar;
+        private System.Windows.Forms.Label endTimeLabel;
+        private System.Windows.Forms.Label currentTimeLabel;
+        private System.Windows.Forms.Label currentSongLabel;
+        private System.Windows.Forms.Timer currentSongTimer;
     }
 }
 

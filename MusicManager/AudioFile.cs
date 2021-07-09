@@ -132,9 +132,9 @@ namespace MusicManager
                 _metaData.Save();
             }
         }
-        public string Duration
+        public TimeSpan Duration
         {
-            get { return _metaData.Properties.Duration.ToString("mm':'ss"); }
+            get { return _metaData.Properties.Duration; }
         }
         public string DateModified
         {
@@ -157,7 +157,7 @@ namespace MusicManager
         public string[] ReturnRowColumnData()
         {
             //This returns data for each column in a row. It must be in order and account for columns that aren't visible.
-            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration, Genre , filePath, trackID.ToString(), DateModified };
+            string[] rowData = new string[] { Sequence.ToString() ,ReturnFileName(), Artist, TrackTitle, Album, Duration.ToString("mm':'ss"), Genre , filePath, trackID.ToString(), DateModified };
             return rowData;
         }
 
